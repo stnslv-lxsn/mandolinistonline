@@ -34,8 +34,8 @@ export default function Home() {
         </div>
         
         {/* Фотография в круге как на референсе */}
-        <div className="md:w-2/5 flex justify-center md:justify-end">
-          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl">
+        <div className="md:w-2/5 flex justify-center md:justify-end shrink-0">
+          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
             {/* Заглушка вместо реального фото, так как файла нет */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center text-gray-500 font-serif italic text-lg text-center p-4">
               [Место для<br/>фотографии]
