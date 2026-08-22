@@ -64,7 +64,7 @@ export default function Home() {
           
           <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
             <img 
-              src="https://media.discordapp.net/attachments/1110292850389659690/1183120616193134632/travis-scott-utopia.jpg" 
+              src="/photo.jpg" 
               alt="Егор" 
               className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
             />
