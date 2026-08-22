@@ -16,11 +16,26 @@ export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Оптимизация обработчика скролла: throttle/debounce не обязателен для простого boolean, 
+  // но лучше вызывать state update только если значение реально изменилось (уменьшает ререндеры)
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      // Проверяем пересечение границы в 50px, обновляем стейт только при переходе
+      if (currentScrollY > 50 && lastScrollY <= 50) {
+        setIsScrolled(true);
+      } else if (currentScrollY <= 50 && lastScrollY > 50) {
+        setIsScrolled(false);
+      }
+      lastScrollY = currentScrollY;
     };
-    window.addEventListener('scroll', handleScroll);
+    
+    // Инициализация при монтировании
+    handleScroll();
+    
+    window.addEventListener('scroll', handleScroll, { passive: true }); // passive: true улучшает производительность скролла
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -61,18 +76,23 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobile Menu Button */}
           <button 
-            className="lg:hidden text-[#222222] relative z-50"
+            className="lg:hidden text-[#222222] relative z-50 p-2 -mr-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Mobile Menu Dropdown */}
-        <div className={cn(
-          "fixed inset-0 h-screen w-screen bg-[#F7F5F0] flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden",
-          mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
-        )}>
+        <div 
+          className={cn(
+            "fixed inset-0 h-[100dvh] w-screen bg-[#F7F5F0] flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden",
+            mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+          )}
+          aria-hidden={!mobileMenuOpen}
+        >
           <nav className="flex flex-col items-center space-y-8 text-lg font-medium uppercase tracking-[0.2em]">
             {menuItems.map((item) => (
               <a 

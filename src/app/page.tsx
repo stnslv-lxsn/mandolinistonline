@@ -66,6 +66,9 @@ export default function Home() {
             <img 
               src="/photo.jpg" 
               alt="Егор" 
+              width={500}
+              height={500}
+              loading="eager"
               className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
             />
           </div>
@@ -97,7 +100,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           
           {/* Карточка 1 */}
-          <div className="group border-t-2 border-transparent hover:border-[#222222] transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
+          <div className="group border-t-2 border-transparent hover:border-black/20 transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
             <h3 className="font-serif text-3xl italic mb-6 text-[#222222] break-words hyphens-auto">
               <Balancer>{formatTypography("Стратегические сессии")}</Balancer>
             </h3>
@@ -110,7 +113,7 @@ export default function Home() {
           </div>
 
           {/* Карточка 2 */}
-          <div className="group border-t-2 border-transparent hover:border-[#222222] transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
+          <div className="group border-t-2 border-transparent hover:border-black/20 transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
             <h3 className="font-serif text-3xl italic mb-6 text-[#222222] break-words hyphens-auto">
               <Balancer>{formatTypography("Аудит управления")}</Balancer>
             </h3>
@@ -123,7 +126,7 @@ export default function Home() {
           </div>
 
           {/* Карточка 3 */}
-          <div className="group border-t-2 border-transparent hover:border-[#222222] transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
+          <div className="group border-t-2 border-transparent hover:border-black/20 transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
             <h3 className="font-serif text-3xl italic mb-6 text-[#222222] break-words hyphens-auto">
               <Balancer>{formatTypography("Личное менторство")}</Balancer>
             </h3>
