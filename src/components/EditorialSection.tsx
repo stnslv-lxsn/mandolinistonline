@@ -14,7 +14,7 @@ export default function EditorialSection({ id, number, title, children, classNam
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
         
         {/* Левая колонка (Навигация/Заголовок) */}
-        <div className="md:col-span-3 lg:col-span-2">
+        <div className="md:col-span-3 lg:col-span-2 xl:col-span-3 shrink-0">
           <div className="md:sticky md:top-32 flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-[#666666] mb-8 md:mb-0">
             <span className="w-6 h-[1px] bg-[#666666]/50"></span>
             {number} / {title}
@@ -22,7 +22,7 @@ export default function EditorialSection({ id, number, title, children, classNam
         </div>
 
         {/* Правая колонка (Контент) */}
-        <div className="md:col-span-9 lg:col-span-10">
+        <div className="md:col-span-9 lg:col-span-10 xl:col-span-9 min-w-0">
           {children}
         </div>
         
