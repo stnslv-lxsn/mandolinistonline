@@ -15,7 +15,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Юлия | Бизнес-консультант",
+  title: "Егор | Бизнес-консультант",
   description: "Помогаю компаниям проходить через кризисы управления и масштабирования.",
 };
 

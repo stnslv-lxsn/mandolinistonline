@@ -18,7 +18,7 @@ export default function Home() {
               Бизнес-консультант, исследователь
             </p>
             <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-none text-[#222222] tracking-tight mb-8">
-              Юлия
+              Егор
             </h1>
             <p className="font-sans text-lg md:text-xl text-[#666666] max-w-2xl leading-relaxed">
               Помогаю компаниям проходить через кризисы управления и масштабирования. 
@@ -114,7 +114,7 @@ export default function Home() {
             Напишите мне, чтобы запланировать ознакомительную встречу. Мы обсудим вашу текущую ситуацию и определим формат работы.
           </p>
           <a href="mailto:hello@example.com" className="text-2xl md:text-3xl font-serif text-[#222222] hover:text-[#666666] transition-colors border-b border-[#222222] pb-2">
-            hello@yulia-consulting.com
+            hello@egor-consulting.com
           </a>
         </div>
       </EditorialSection>
