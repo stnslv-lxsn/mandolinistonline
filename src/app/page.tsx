@@ -94,7 +94,7 @@ export default function Home() {
 
       {/* СЕКЦИЯ 02: ЭКСПЕРТИЗА */}
       <EditorialSection id="expertise" number="02" title="Продукты">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           
           {/* Карточка 1 */}
           <div className="group border-t-2 border-transparent hover:border-[#222222] transition-colors pt-6 cursor-pointer flex flex-col h-full min-w-0">
