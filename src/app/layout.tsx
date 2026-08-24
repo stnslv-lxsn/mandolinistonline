@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant, Montserrat } from "next/font/google";
 import "./globals.css";
+import { portrait, siteMeta } from "@/content/site";
 
 const cormorant = Cormorant({
   subsets: ["cyrillic", "latin"],
@@ -14,9 +15,30 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const title = `${siteMeta.name} | ${siteMeta.role}`;
+
 export const metadata: Metadata = {
-  title: "Юлия Радионова | Консультант по развитию бизнес-вертикали",
-  description: "Работаю с предпринимателями, руководителями и экспертами, которые развивают новое направление или переходят на новый масштаб.",
+  metadataBase: new URL(siteMeta.url),
+  title,
+  description: siteMeta.description,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: siteMeta.url,
+    siteName: siteMeta.name,
+    title,
+    description: siteMeta.description,
+    images: [{ url: portrait.src, alt: portrait.alt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: siteMeta.description,
+    images: [portrait.src],
+  },
 };
 
 export default function RootLayout({

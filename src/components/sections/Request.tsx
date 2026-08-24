@@ -1,15 +1,12 @@
-import EditorialSection from '@/components/EditorialSection';
+import EditorialSection from '@/components/ui/EditorialSection';
+import { requestSection } from '@/content/site';
 import { formatTypography } from '@/lib/typography';
 
-const moments = [
-  "Прежних способов управления уже недостаточно",
-  "Важные решения откладываются",
-  "Ключевые бизнес-процессы держатся на одном человеке",
-];
-
 export default function Request() {
+  const { id, number, title, moments } = requestSection;
+
   return (
-    <EditorialSection id="request" number="01" title="С чем обращаются">
+    <EditorialSection id={id} number={number} title={title}>
       <div className="flex flex-col max-w-4xl">
         {moments.map((moment, index) => (
           <div key={moment} className="border-t border-black/10 py-8 flex gap-6 md:gap-12 min-w-0">

@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout';
+import SiteShell from '@/components/layout/SiteShell';
 import Hero from '@/components/sections/Hero';
 import Request from '@/components/sections/Request';
 import About from '@/components/sections/About';
@@ -7,12 +7,12 @@ import Contact from '@/components/sections/Contact';
 
 export default function Home() {
   return (
-    <Layout>
+    <SiteShell>
       <Hero />
       <Request />
       <About />
       <Facts />
       <Contact />
-    </Layout>
+    </SiteShell>
   );
 }

@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mandolinistonline
 
-## Getting Started
+Одностраничный сайт-визитка Юлии Радионовой, консультанта по развитию бизнес-вертикали.
 
-First, run the development server:
+Статический сайт на Next.js (App Router) с экспортом в HTML — `output: 'export'` в [next.config.ts](next.config.ts). Хостится на Cloudflare Pages: пуш в `master` уходит в production, любая другая ветка собирается как preview.
+
+## Разработка
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Команда | Что делает |
+|---|---|
+| `npm run dev` | Дев-сервер на http://localhost:3000 |
+| `npm run build` | Продакшн-сборка и статический экспорт в `out/` |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Проверка типов без сборки |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Не запускайте `npm run build` одновременно с `npm run dev`: обе команды пишут в `.next` и мешают друг другу.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Структура
 
-## Learn More
+```
+src/
+  app/            маршрут, root layout, глобальные стили, robots.ts, sitemap.ts
+  components/
+    layout/       каркас страницы: Header, Footer, SiteShell
+    sections/     секции лендинга: Hero, Request, About, Facts, Contact
+    ui/           переиспользуемые примитивы: EditorialSection
+  content/        весь текст сайта — site.ts
+  lib/            утилиты: cn, типографика
+public/           статика: фотография
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Текст правится в [src/content/site.ts](src/content/site.ts)**, а не в компонентах. Там же лежат контактная почта, ссылки меню и данные секций.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Цвета заданы токенами в [globals.css](src/app/globals.css) и доступны как обычные классы Tailwind: `bg-paper`, `text-ink`, `text-muted`, `bg-forest`, `bg-forest-dark`. Хардкодить hex-значения в компонентах не нужно.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Русская типографика (неразрывные пробелы после предлогов) — [src/lib/typography.ts](src/lib/typography.ts), функция `formatTypography`.
 
-## Deploy on Vercel
+## Что ещё не сделано
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- в контактах стоит заглушка `hello@example.com`;
+- `public/photo.jpg` — временное изображение, а не портрет Юлии.

@@ -1,5 +1,10 @@
 import Image from 'next/image';
+import { ctaLabel, hero, portrait } from '@/content/site';
 import { formatTypography } from '@/lib/typography';
+
+// Ступенчатое появление при загрузке; animate-rise отключается
+// при prefers-reduced-motion — правило в globals.css
+const rise = 'animate-rise';
 
 export default function Hero() {
   // overflow-x-clip: размытый ореол шире своей колонки и иначе растягивает страницу
@@ -8,34 +13,40 @@ export default function Hero() {
 
       <div className="md:w-3/5 flex flex-col gap-8 md:gap-10">
         <div>
-          <p className="font-serif italic text-xl md:text-2xl text-muted mb-4 text-balance">
-            {formatTypography("Консультант по развитию бизнес-вертикали")}
+          <p className={`font-serif italic text-xl md:text-2xl text-muted mb-4 text-balance ${rise}`}>
+            {formatTypography(hero.role)}
           </p>
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-none text-ink tracking-tight mb-8">
-            Юлия<br />Радионова
+          <h1
+            className={`font-serif text-5xl md:text-7xl lg:text-8xl leading-none text-ink tracking-tight mb-8 ${rise}`}
+            style={{ animationDelay: '80ms' }}
+          >
+            {hero.firstName}<br />{hero.lastName}
           </h1>
-          <p className="font-sans text-lg md:text-xl text-muted max-w-2xl leading-relaxed text-pretty">
-            {formatTypography("Работаю с предпринимателями, руководителями и экспертами, которые развивают новое направление или переходят на новый масштаб.")}
+          <p
+            className={`font-sans text-lg md:text-xl text-muted max-w-2xl leading-relaxed text-pretty ${rise}`}
+            style={{ animationDelay: '160ms' }}
+          >
+            {formatTypography(hero.lead)}
           </p>
         </div>
 
-        <div className="hidden md:block pt-8">
+        <div className={`hidden md:block pt-8 ${rise}`} style={{ animationDelay: '240ms' }}>
           <a href="#contact" className="inline-flex bg-forest text-white px-8 py-4 font-medium text-sm hover:bg-forest-dark transition-colors uppercase tracking-[0.2em]">
-            Обсудить задачу
+            {ctaLabel}
           </a>
         </div>
       </div>
 
       {/* Фотография в круге */}
-      <div className="md:w-2/5 flex justify-center md:justify-end shrink-0 relative">
+      <div className={`md:w-2/5 flex justify-center md:justify-end shrink-0 relative ${rise}`} style={{ animationDelay: '120ms' }}>
         {/* Приятный ореол (Glow effect) */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] bg-forest/5 rounded-full blur-3xl -z-10"></div>
 
         <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
           {/* LCP-изображение: грузим сразу, без ленивой загрузки */}
           <Image
-            src="/photo.jpg"
-            alt="Юлия Радионова"
+            src={portrait.src}
+            alt={portrait.alt}
             fill
             sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
             loading="eager"

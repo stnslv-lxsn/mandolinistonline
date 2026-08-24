@@ -1,37 +1,13 @@
-import EditorialSection from '@/components/EditorialSection';
+import EditorialSection from '@/components/ui/EditorialSection';
+import { factsSection } from '@/content/site';
 import { formatTypography } from '@/lib/typography';
 
-// Числовые факты: значение крупно, единица измерения рядом мелким капсом.
-// Порядок подобран так, чтобы тяжёлые блоки шли по ходу чтения — слева сверху
-// и справа снизу, — а не наперекор ему
-const numbers = [
-  {
-    value: "900+ млн ₽",
-    unit: "в год",
-    caption: "оборот канала сбыта на маркетплейсах, которым управляла в найме",
-  },
-  {
-    value: "20+",
-    unit: "лет",
-    caption: "управленческого опыта",
-  },
-];
-
-// Факты, которые не сводятся к цифре — тот же ритм, меньший кегль
-const qualities = [
-  {
-    value: "Аспирантура",
-    caption: "исследовательская работа",
-  },
-  {
-    value: "Психология + управленческий опыт + коучинг",
-    caption: "три компонента, помогающие в работе с предпринимателями",
-  },
-];
-
 export default function Facts() {
+  const { id, number, title, numbers, qualities } = factsSection;
+
   return (
-    <EditorialSection id="facts" number="03" title="Опыт в фактах">
+    <EditorialSection id={id} number={number} title={title}>
+      {/* Числовые факты: значение крупно, единица измерения рядом мелким капсом */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 mb-12 md:mb-16">
         {numbers.map((fact) => (
           <div key={fact.value} className="border-t border-black/10 pt-6 min-w-0">
@@ -48,6 +24,7 @@ export default function Facts() {
         ))}
       </div>
 
+      {/* Факты, которые не сводятся к цифре — тот же ритм, меньший кегль */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
         {qualities.map((fact) => (
           <div key={fact.value} className="border-t border-black/10 pt-6 min-w-0">
