@@ -103,7 +103,8 @@ export default function Layout({ children }: LayoutProps) {
         {/* inert убирает скрытое меню и из a11y-дерева, и из таб-порядка */}
         <div
           className={cn(
-            "fixed inset-0 h-[100dvh] w-screen bg-paper flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden",
+            // без w-screen: 100vw включает ширину скроллбара и даёт горизонтальный скролл
+            "fixed inset-0 h-[100dvh] bg-paper flex flex-col justify-center items-center transition-all duration-500 ease-in-out lg:hidden",
             mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
           )}
           inert={!mobileMenuOpen}

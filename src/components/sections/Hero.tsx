@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
+  // overflow-x-clip: размытый ореол шире своей колонки и иначе растягивает страницу
   return (
-    <section className="px-6 md:px-12 pt-32 pb-24 md:pt-48 md:pb-32 max-w-[1400px] mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-16 md:gap-12 min-h-[90vh]">
+    <section className="px-6 md:px-12 pt-32 pb-24 md:pt-48 md:pb-32 max-w-[1400px] mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-16 md:gap-12 min-h-[90vh] overflow-x-clip">
 
       <div className="md:w-3/5 flex flex-col gap-8 md:gap-10">
         <div>
