@@ -9,10 +9,9 @@ interface LayoutProps {
 }
 
 const menuItems = [
+  { name: 'Когда приходят', href: '#when' },
   { name: 'Обо мне', href: '#profile' },
-  { name: 'Авторские продукты', href: '#expertise' },
-  { name: 'Работа', href: '#work' },
-  { name: 'Исследования', href: '#research' },
+  { name: 'Опыт', href: '#facts' },
   { name: 'Контакты', href: '#contact' },
 ];
 
@@ -76,8 +75,8 @@ export default function Layout({ children }: LayoutProps) {
           "px-6 py-5 md:px-12 flex justify-between items-center transition-all duration-300",
           isScrolled && !mobileMenuOpen ? "py-4" : ""
         )}>
-          <div className="font-serif text-2xl font-bold tracking-wide relative z-50">
-            СТАС
+          <div className="font-serif text-lg md:text-2xl font-bold tracking-wide relative z-50 whitespace-nowrap">
+            ЮЛИЯ РАДИОНОВА
           </div>
 
           {/* Desktop Menu */}

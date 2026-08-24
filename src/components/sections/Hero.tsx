@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Balancer from 'react-wrap-balancer';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
@@ -8,16 +7,14 @@ export default function Hero() {
 
       <div className="md:w-3/5 flex flex-col gap-8 md:gap-10">
         <div>
-          <p className="font-serif italic text-xl md:text-2xl text-muted mb-4">
-            Бизнес-консультант, исследователь
+          <p className="font-serif italic text-xl md:text-2xl text-muted mb-4 text-balance">
+            {formatTypography("Консультант по развитию бизнес-вертикали")}
           </p>
-          <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-none text-ink tracking-tight mb-8">
-            Стас
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-none text-ink tracking-tight mb-8">
+            Юлия<br />Радионова
           </h1>
-          <p className="font-sans text-lg md:text-xl text-muted max-w-2xl leading-relaxed">
-            <Balancer>
-              {formatTypography("Помогаю компаниям проходить через кризисы управления и масштабирования. Соединяю 20-летний опыт в бизнесе с глубоким пониманием психологии систем.")}
-            </Balancer>
+          <p className="font-sans text-lg md:text-xl text-muted max-w-2xl leading-relaxed text-pretty">
+            {formatTypography("Работаю с предпринимателями, руководителями и экспертами, которые развивают новое направление или переходят на новый масштаб.")}
           </p>
         </div>
 
@@ -37,7 +34,7 @@ export default function Hero() {
           {/* LCP-изображение: грузим сразу, без ленивой загрузки */}
           <Image
             src="/photo.jpg"
-            alt="Стас"
+            alt="Юлия Радионова"
             fill
             sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
             loading="eager"

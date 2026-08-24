@@ -1,19 +1,17 @@
 import Layout from '@/components/Layout';
 import Hero from '@/components/sections/Hero';
+import When from '@/components/sections/When';
 import About from '@/components/sections/About';
-import Products from '@/components/sections/Products';
-import Work from '@/components/sections/Work';
-import Research from '@/components/sections/Research';
+import Facts from '@/components/sections/Facts';
 import Contact from '@/components/sections/Contact';
 
 export default function Home() {
   return (
     <Layout>
       <Hero />
+      <When />
       <About />
-      <Products />
-      <Work />
-      <Research />
+      <Facts />
       <Contact />
     </Layout>
   );
