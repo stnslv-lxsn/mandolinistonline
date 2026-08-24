@@ -62,7 +62,7 @@ export default function Layout({ children }: LayoutProps) {
           isScrolled && !mobileMenuOpen ? "py-4" : ""
         )}>
           <div className="font-serif text-2xl font-bold tracking-wide relative z-50">
-            ЕГОР
+            ВЕЛИКИЙ ЕГОР
           </div>
           
           {/* Desktop Menu */}

@@ -41,7 +41,7 @@ export default function Home() {
               Бизнес-консультант, исследователь
             </p>
             <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-none text-[#222222] tracking-tight mb-8">
-              Егор
+              ВЕЛИКИЙ ЕГОР
             </h1>
             <p className="font-sans text-lg md:text-xl text-[#666666] max-w-2xl leading-relaxed">
               <Balancer>
@@ -65,7 +65,7 @@ export default function Home() {
           <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
             <img 
               src="/photo.jpg" 
-              alt="Егор" 
+              alt="ВЕЛИКИЙ ЕГОР"
               width={500}
               height={500}
               loading="eager"
