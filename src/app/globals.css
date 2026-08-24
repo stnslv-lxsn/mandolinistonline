@@ -1,28 +1,21 @@
 @import "tailwindcss";
 
-
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Палитра проекта: доступна как bg-paper, text-ink, bg-forest и т.д. */
+@theme {
+  --color-paper: #f7f5f0;
+  --color-ink: #222222;
+  --color-muted: #666666;
+  --color-forest: #1d332d;
+  --color-forest-dark: #11201c;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-montserrat), sans-serif;
   --font-serif: var(--font-cormorant), serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
 }
