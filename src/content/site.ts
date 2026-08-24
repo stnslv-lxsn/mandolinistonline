@@ -14,10 +14,20 @@ export const siteMeta = {
 // TODO: заменить на реальный контакт Юлии (почта или Telegram)
 export const contactEmail = 'hello@example.com';
 
-// TODO: заменить на портрет Юлии, сейчас лежит временное изображение
+/**
+ * TODO: заменить на портрет Юлии, сейчас лежит временное изображение.
+ * Исходник — assets/photo.jpg (вне public, в сборку не идёт), варианты
+ * для отдачи генерирует `npm run images`.
+ */
 export const portrait = {
-  src: '/photo.jpg',
   alt: 'Юлия Радионова',
+  sizes: '(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px',
+  avif: '/photo-448.avif 448w, /photo-600.avif 600w',
+  webp: '/photo-448.webp 448w, /photo-600.webp 600w',
+  jpeg: '/photo-448.jpg 448w, /photo-600.jpg 600w',
+  fallback: '/photo-448.jpg',
+  // Для превью ссылки: JPEG понимают все парсеры, AVIF — не все
+  ogImage: '/photo-600.jpg',
 };
 
 export const ctaLabel = 'Обсудить задачу';

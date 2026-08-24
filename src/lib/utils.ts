@@ -1,7 +1,12 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+type ClassValue = string | false | null | undefined;
 
-// Объединяет классы и разрешает конфликты Tailwind (последний выигрывает)
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+/**
+ * Склеивает классы, отбрасывая пустые значения.
+ *
+ * Намеренно без clsx/tailwind-merge: обе библиотеки уезжали в клиентский
+ * бандл ради одной функции. Взаимоисключающие классы (например py-5 / py-4)
+ * выбирайте тернарником, а не наслаивайте — разрешать конфликты тут некому.
+ */
+export function cn(...classes: ClassValue[]): string {
+  return classes.filter(Boolean).join(' ');
 }

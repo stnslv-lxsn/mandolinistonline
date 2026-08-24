@@ -1,9 +1,26 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { nav, siteMeta } from '@/content/site';
+
+// Иконки нарисованы вручную: ради двух штук lucide-react тянул в бандл
+// собственный рантайм создания иконок
+function BurgerIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -48,16 +65,18 @@ export default function Header() {
     };
   }, [mobileMenuOpen]);
 
+  const condensed = isScrolled && !mobileMenuOpen;
+
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled && !mobileMenuOpen ? 'bg-paper/90 backdrop-blur-md border-b border-black/5 shadow-sm' : 'bg-transparent'
+        condensed ? 'bg-paper/90 backdrop-blur-md border-b border-black/5 shadow-sm' : 'bg-transparent'
       )}
     >
       <div className={cn(
-        'px-6 py-5 md:px-12 flex justify-between items-center transition-all duration-300',
-        isScrolled && !mobileMenuOpen ? 'py-4' : ''
+        'px-6 md:px-12 flex justify-between items-center transition-all duration-300',
+        condensed ? 'py-4' : 'py-5'
       )}>
         <span className="font-serif text-lg md:text-2xl font-bold tracking-wide relative z-50 whitespace-nowrap">
           {siteMeta.name.toUpperCase()}
@@ -83,7 +102,7 @@ export default function Header() {
           aria-label={mobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
           aria-expanded={mobileMenuOpen}
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}
         </button>
       </div>
 

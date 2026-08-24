@@ -1,0 +1,29 @@
+# Заголовки кэширования для Cloudflare Pages.
+# При output: 'export' next.config.headers() недоступен, поэтому правила живут здесь.
+# Файл копируется в out/ как есть.
+
+# Ассеты Next содержат хэш содержимого в имени: меняется файл — меняется имя,
+# поэтому их можно кэшировать навсегда и больше не перепроверять
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Портрет: имя содержит размер. При замене фотографии либо меняем имена файлов,
+# либо ждём месяц, пока истечёт кэш у вернувшихся посетителей
+/photo-*
+  Cache-Control: public, max-age=2592000
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+
+# HTML перепроверяем всегда, иначе посетители залипнут на старой версии сайта
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
