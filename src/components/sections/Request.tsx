@@ -7,9 +7,9 @@ const moments = [
   "Ключевые бизнес-процессы держатся на одном человеке",
 ];
 
-export default function When() {
+export default function Request() {
   return (
-    <EditorialSection id="when" number="01" title="Когда приходят">
+    <EditorialSection id="request" number="01" title="Контекст запроса">
       <p className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
         {formatTypography("Обычно работа начинается в один из таких моментов.")}
       </p>

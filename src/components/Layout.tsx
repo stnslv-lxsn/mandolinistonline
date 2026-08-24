@@ -9,7 +9,7 @@ interface LayoutProps {
 }
 
 const menuItems = [
-  { name: 'Когда приходят', href: '#when' },
+  { name: 'Контекст', href: '#request' },
   { name: 'Обо мне', href: '#profile' },
   { name: 'Опыт', href: '#facts' },
   { name: 'Контакты', href: '#contact' },
