@@ -9,7 +9,7 @@ const moments = [
 
 export default function Request() {
   return (
-    <EditorialSection id="request" number="01" title="Контекст запроса">
+    <EditorialSection id="request" number="01" title="С чем обращаются">
       <p className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
         {formatTypography("Обычно работа начинается в один из таких моментов.")}
       </p>
