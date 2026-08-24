@@ -10,10 +10,6 @@ const moments = [
 export default function Request() {
   return (
     <EditorialSection id="request" number="01" title="С чем обращаются">
-      <p className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
-        {formatTypography("Обычно работа начинается в один из таких моментов.")}
-      </p>
-
       <div className="flex flex-col max-w-4xl">
         {moments.map((moment, index) => (
           <div key={moment} className="border-t border-black/10 py-8 flex gap-6 md:gap-12 min-w-0">
