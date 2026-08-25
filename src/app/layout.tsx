@@ -15,7 +15,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "ВЕЛИКИЙ ЕГОР | Бизнес-консультант",
+  title: "Юлия Радионова | Бизнес-консультант",
   description: "Помогаю компаниям проходить через кризисы управления и масштабирования.",
 };
 

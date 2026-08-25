@@ -76,14 +76,23 @@ export default function Layout({ children }: LayoutProps) {
           "px-6 py-5 md:px-12 flex justify-between items-center transition-all duration-300",
           isScrolled && !mobileMenuOpen ? "py-4" : ""
         )}>
-          <div className="font-serif text-2xl font-bold tracking-wide relative z-50">
-            ВЕЛИКИЙ ЕГОР
+          <div className={cn(
+            "font-serif text-2xl font-bold tracking-wide relative z-50",
+            isScrolled || mobileMenuOpen ? "text-ink" : "text-white md:text-ink"
+          )}>
+            ЮЛИЯ РАДИОНОВА
           </div>
 
           {/* Desktop Menu */}
-          <nav className="hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+          <nav className={cn(
+            "hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em]",
+            isScrolled || mobileMenuOpen ? "text-muted" : "text-white md:text-muted"
+          )}>
             {menuItems.map((item) => (
-              <a key={item.name} href={item.href} className="hover:text-ink transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-ink hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap">
+              <a key={item.name} href={item.href} className={cn(
+                "transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap",
+                isScrolled || mobileMenuOpen ? "hover:text-ink after:bg-ink" : "hover:text-white md:hover:text-ink after:bg-white md:after:bg-ink"
+              )}>
                 {item.name}
               </a>
             ))}
@@ -91,7 +100,10 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-ink relative z-50 p-2 -mr-2"
+            className={cn(
+              "lg:hidden relative z-50 p-2 -mr-2",
+              isScrolled || mobileMenuOpen ? "text-ink" : "text-white md:text-ink"
+            )}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
             aria-expanded={mobileMenuOpen}
