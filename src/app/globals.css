@@ -8,6 +8,18 @@
   --color-forest: #1d332d;
   --color-forest-dark: #11201c;
 
+  /* Вариант II «Ночь»: кинематографичный тёмный */
+  --color-noir: #0c0d0b;
+  --color-noir-soft: #161714;
+  --color-bone: #e8e4db;
+  --color-brass: #b08d57;
+
+  /* Вариант III «Досье»: строгий типографический документ */
+  --color-sheet: #fbfbf9;
+  --color-graphite: #131313;
+  --color-slate: #6b6b6b;
+  --color-marker: #8c2f21;
+
   /* Появление контента при загрузке страницы */
   --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 
@@ -32,6 +44,16 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Варианты дизайна перекрашивают и подложку body, иначе при оттягивании
+   страницы из-под неё выглядывает фон основного макета */
+body:has(.theme-noir) {
+  background-color: var(--color-noir);
+}
+
+body:has(.theme-studio) {
+  background-color: var(--color-sheet);
 }
 
 /* Уважаем системную настройку «уменьшить движение» */

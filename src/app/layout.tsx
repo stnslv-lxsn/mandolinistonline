@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant, Montserrat } from "next/font/google";
 import "./globals.css";
-import { portrait, siteMeta } from "@/content/site";
+import { images, ogImage, siteMeta } from "@/content/site";
 
 const cormorant = Cormorant({
   subsets: ["cyrillic", "latin"],
@@ -31,13 +31,13 @@ export const metadata: Metadata = {
     siteName: siteMeta.name,
     title,
     description: siteMeta.description,
-    images: [{ url: portrait.ogImage, alt: portrait.alt }],
+    images: [{ url: ogImage, alt: images.square.alt }],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description: siteMeta.description,
-    images: [portrait.ogImage],
+    images: [ogImage],
   },
 };
 

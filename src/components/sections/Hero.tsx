@@ -1,4 +1,5 @@
-import { ctaLabel, hero, portrait } from '@/content/site';
+import Picture from '@/components/ui/Picture';
+import { ctaLabel, hero, images } from '@/content/site';
 import { formatTypography } from '@/lib/typography';
 
 // Ступенчатое появление при загрузке; animate-rise отключается
@@ -42,25 +43,12 @@ export default function Hero() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] bg-forest/5 rounded-full blur-3xl -z-10"></div>
 
         <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
-          {/* LCP-изображение: грузим сразу и в самом лёгком формате, который
-              поймёт браузер. next/image здесь не нужен — при output: 'export'
-              он всё равно отдаёт файл как есть, а <picture> даёт AVIF/WebP */}
-          <picture>
-            <source type="image/avif" srcSet={portrait.avif} sizes={portrait.sizes} />
-            <source type="image/webp" srcSet={portrait.webp} sizes={portrait.sizes} />
-            <img
-              src={portrait.fallback}
-              srcSet={portrait.jpeg}
-              sizes={portrait.sizes}
-              alt={portrait.alt}
-              width={448}
-              height={448}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
-            />
-          </picture>
+          <Picture
+            image={images.square}
+            sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
+            priority
+            imgClassName="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
+          />
         </div>
       </div>
     </section>

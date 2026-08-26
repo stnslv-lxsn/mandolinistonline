@@ -1,45 +1,89 @@
 /**
- * Готовит портрет для круга в hero: квадратная обрезка по верхнему краю
- * плюс AVIF/WebP/JPEG в двух размерах (1x и 2x).
+ * Готовит все изображения сайта: кадрирует под нужную пропорцию и пишет
+ * AVIF/WebP/JPEG в нескольких ширинах.
  *
  * Запуск: npm run images
- * Исходник лежит в assets/ и намеренно вне public/, иначе оригинал
- * попал бы в сборку и уехал на хостинг лишним весом.
+ * Исходники лежат в assets/ и намеренно вне public/, иначе оригиналы
+ * попали бы в сборку и уехали на хостинг лишним весом.
  */
 import { stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const SOURCE = 'assets/photo.jpg';
 const OUT_DIR = 'public';
-const SIZES = [448, 896];
 
-if (!existsSync(SOURCE)) {
-  console.error(`Нет исходника: ${SOURCE}`);
-  process.exit(1);
-}
+/** aspect — ширина/высота итогового кадра; widths — ширины для srcset */
+const JOBS = [
+  {
+    source: 'assets/portrait-editorial.jpg',
+    name: 'portrait-square',
+    aspect: 1,
+    position: 'top',
+    widths: [448, 640, 896],
+  },
+  {
+    source: 'assets/portrait-window.jpg',
+    name: 'portrait-window',
+    aspect: 2 / 3,
+    position: 'center',
+    widths: [640, 1000, 1400],
+  },
+  {
+    source: 'assets/portrait-studio.jpg',
+    name: 'portrait-studio',
+    aspect: 3 / 4,
+    position: 'top',
+    widths: [520, 800, 1100],
+  },
+  {
+    source: 'assets/portrait-wide.jpg',
+    name: 'portrait-wide',
+    aspect: 16 / 9,
+    position: 'center',
+    widths: [900, 1440],
+  },
+  {
+    source: 'assets/portrait-warm.jpg',
+    name: 'portrait-warm',
+    aspect: 4 / 5,
+    position: 'top',
+    widths: [480, 760],
+  },
+];
 
-const meta = await sharp(SOURCE).metadata();
-const shortestSide = Math.min(meta.width, meta.height);
-console.log(`Исходник: ${meta.width}x${meta.height}, ${((await stat(SOURCE)).size / 1024).toFixed(0)} KB\n`);
+const FORMATS = [
+  ['avif', (p) => p.avif({ quality: 52 })],
+  ['webp', (p) => p.webp({ quality: 72 })],
+  ['jpg', (p) => p.jpeg({ quality: 76, mozjpeg: true })],
+];
 
-for (const size of SIZES) {
-  // Апскейл бессмысленен: больше короткой стороны оригинала не рисуем
-  const target = Math.min(size, shortestSide);
-  const base = sharp(SOURCE).resize(target, target, { fit: 'cover', position: 'top' });
+for (const job of JOBS) {
+  if (!existsSync(job.source)) {
+    console.error(`Нет исходника: ${job.source}`);
+    process.exitCode = 1;
+    continue;
+  }
 
-  const variants = [
-    ['avif', base.clone().avif({ quality: 55 })],
-    ['webp', base.clone().webp({ quality: 72 })],
-    ['jpg', base.clone().jpeg({ quality: 76, mozjpeg: true })],
-  ];
+  const meta = await sharp(job.source).metadata();
+  console.log(`\n${job.name}  <- ${path.basename(job.source)} (${meta.width}x${meta.height})`);
 
-  // Имя по фактическому размеру: srcset обязан соответствовать реальной ширине
-  for (const [ext, pipeline] of variants) {
-    const file = path.join(OUT_DIR, `photo-${target}.${ext}`);
-    await pipeline.toFile(file);
-    const { size: bytes } = await stat(file);
-    console.log(`photo-${target}.${ext.padEnd(4)} ${target}x${target}  ${(bytes / 1024).toFixed(1)} KB`);
+  for (const width of job.widths) {
+    const height = Math.round(width / job.aspect);
+
+    // Апскейл бессмысленен: кадр не может быть больше исходника
+    if (width > meta.width || height > meta.height) {
+      console.log(`  ${width}px пропущен — исходник меньше`);
+      continue;
+    }
+
+    for (const [ext, apply] of FORMATS) {
+      const file = path.join(OUT_DIR, `${job.name}-${width}.${ext}`);
+      await apply(
+        sharp(job.source).resize(width, height, { fit: 'cover', position: job.position })
+      ).toFile(file);
+      const { size } = await stat(file);
+      console.log(`  ${job.name}-${width}.${ext.padEnd(4)} ${width}x${height}  ${(size / 1024).toFixed(1)} KB`);
+    }
   }
 }

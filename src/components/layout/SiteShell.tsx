@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import VariantSwitcher from '@/components/ui/VariantSwitcher';
 import { ctaLabel } from '@/content/site';
 
 interface SiteShellProps {
@@ -35,7 +36,7 @@ export default function SiteShell({ children }: SiteShellProps) {
       </div>
 
       {/* ФИКСИРОВАННАЯ КНОПКА (Мобайл — прилипает к низу) */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40">
+      <div className="md:hidden fixed bottom-20 left-4 right-4 z-40">
         <a
           href="#contact"
           className="flex items-center justify-center w-full bg-forest text-white py-4 rounded-md font-medium text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-forest-dark transition-colors"
@@ -43,6 +44,8 @@ export default function SiteShell({ children }: SiteShellProps) {
           {ctaLabel}
         </a>
       </div>
+
+      <VariantSwitcher current="I" />
     </div>
   );
 }

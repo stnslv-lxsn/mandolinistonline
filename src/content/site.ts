@@ -14,21 +14,66 @@ export const siteMeta = {
 // TODO: заменить на реальный контакт Юлии (почта или Telegram)
 export const contactEmail = 'hello@example.com';
 
-/**
- * TODO: заменить на портрет Юлии, сейчас лежит временное изображение.
- * Исходник — assets/photo.jpg (вне public, в сборку не идёт), варианты
- * для отдачи генерирует `npm run images`.
- */
-export const portrait = {
-  alt: 'Юлия Радионова',
-  sizes: '(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px',
-  avif: '/photo-448.avif 448w, /photo-600.avif 600w',
-  webp: '/photo-448.webp 448w, /photo-600.webp 600w',
-  jpeg: '/photo-448.jpg 448w, /photo-600.jpg 600w',
-  fallback: '/photo-448.jpg',
-  // Для превью ссылки: JPEG понимают все парсеры, AVIF — не все
-  ogImage: '/photo-600.jpg',
+/** Подпись разработчика в футере */
+export const author = {
+  name: 'Станислав',
+  role: 'Разработка и вёрстка',
+  year: 2026,
 };
+
+export interface ImageSet {
+  /** Базовое имя файлов в public: <name>-<width>.<ext> */
+  name: string;
+  widths: number[];
+  /** Ширина / высота кадра */
+  ratio: number;
+  alt: string;
+}
+
+/**
+ * Кадры портрета под разные раскладки. Исходники лежат в assets/ (вне public,
+ * в сборку не идут), сами файлы генерирует `npm run images`.
+ */
+export const images = {
+  /** Квадрат под круглый портрет */
+  square: {
+    name: 'portrait-square',
+    widths: [448, 640, 896],
+    ratio: 1,
+    alt: 'Юлия Радионова',
+  },
+  /** Вертикальный кадр у панорамного окна — под полноэкранный первый экран */
+  window: {
+    name: 'portrait-window',
+    widths: [640, 1000],
+    ratio: 2 / 3,
+    alt: 'Юлия Радионова у панорамного окна',
+  },
+  /** Студийный деловой портрет */
+  studio: {
+    name: 'portrait-studio',
+    widths: [520, 800, 1100],
+    ratio: 3 / 4,
+    alt: 'Юлия Радионова',
+  },
+  /** Горизонтальный кадр для широких врезок */
+  wide: {
+    name: 'portrait-wide',
+    widths: [900, 1440],
+    ratio: 16 / 9,
+    alt: 'Юлия Радионова',
+  },
+  /** Тёплый крупный портрет */
+  warm: {
+    name: 'portrait-warm',
+    widths: [480, 760],
+    ratio: 4 / 5,
+    alt: 'Юлия Радионова',
+  },
+} satisfies Record<string, ImageSet>;
+
+// Для превью ссылки: JPEG понимают все парсеры, AVIF — не все
+export const ogImage = '/portrait-square-896.jpg';
 
 export const ctaLabel = 'Обсудить задачу';
 
