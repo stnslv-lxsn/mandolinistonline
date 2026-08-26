@@ -5,6 +5,7 @@ export const variants = [
   { id: 'I', href: '/', title: 'Editorial' },
   { id: 'II', href: '/noir', title: 'Ночь' },
   { id: 'III', href: '/studio', title: 'Досье' },
+  { id: 'IV', href: '/cinema', title: 'Кадр' },
 ];
 
 interface VariantSwitcherProps {

@@ -56,12 +56,95 @@ body:has(.theme-studio) {
   background-color: var(--color-sheet);
 }
 
+/* Вариант IV открывается чёрной сценой и заканчивается чёрным футером */
+body:has(.theme-cinema) {
+  background-color: #000000;
+}
+
+/* ------------------------------------------------------------------
+   Вариант IV: киносцена в первом экране.
+   Порядок: пустой кабинет → наезд → в кадре появляется человек →
+   кадр уезжает влево → справа проявляется текст.
+   Всё на CSS: ни строчки JavaScript, поэтому сцена стартует сразу
+   после отрисовки и не ждёт гидратации.
+   ------------------------------------------------------------------ */
+
+/* Наезд камеры */
+@keyframes cinema-push {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+/* Кадр с человеком проступает поверх пустого кабинета.
+   Нижний кадр намеренно не гасим: если гасить оба одновременно, на середине
+   перехода обе картинки полупрозрачны и сквозь них проваливается чёрный фон */
+@keyframes cinema-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Кадр сдвигается из центра экрана в свою колонку слева */
+@keyframes cinema-shift {
+  from { transform: translateX(var(--cinema-shift)) scale(1.06); }
+  to { transform: translateX(0) scale(1); }
+}
+
+/* Текст выходит справа. pointer-events в первом кадре — чтобы по невидимой
+   кнопке нельзя было случайно попасть до её появления */
+@keyframes cinema-copy {
+  from { opacity: 0; transform: translateX(28px); pointer-events: none; }
+  to { opacity: 1; transform: none; pointer-events: auto; }
+}
+
+.cinema-stage {
+  /* На узком экране кадр никуда не едет: текст просто идёт под ним */
+  --cinema-shift: 0%;
+  animation: cinema-shift 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both;
+}
+
+@media (min-width: 768px) {
+  .cinema-stage {
+    /* Сдвиг подобран так, чтобы на старте кадр стоял ровно по центру экрана,
+       а в финале — в своей колонке слева */
+    --cinema-shift: 78%;
+  }
+}
+
+.cinema-frame {
+  animation: cinema-push 3s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.cinema-shot--her {
+  animation: cinema-appear 0.9s ease-in-out 0.7s both;
+}
+
+/* Задержки строк живут в CSS, а не в разметке: так их можно переопределить
+   под узкий экран, где кадр никуда не едет и ждать нечего */
+.cinema-copy > * {
+  animation: cinema-copy 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cinema-copy > *:nth-child(1) { animation-delay: 1.8s; }
+.cinema-copy > *:nth-child(2) { animation-delay: 1.92s; }
+.cinema-copy > *:nth-child(3) { animation-delay: 2.04s; }
+.cinema-copy > *:nth-child(4) { animation-delay: 2.16s; }
+
+@media (max-width: 767px) {
+  .cinema-copy > *:nth-child(1) { animation-delay: 1.2s; }
+  .cinema-copy > *:nth-child(2) { animation-delay: 1.32s; }
+  .cinema-copy > *:nth-child(3) { animation-delay: 1.44s; }
+  .cinema-copy > *:nth-child(4) { animation-delay: 1.56s; }
+}
+
 /* Уважаем системную настройку «уменьшить движение» */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Без сброса задержки контент со ступенчатым появлением остался бы
+       невидимым всё время delay — сокращения одной длительности мало */
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;

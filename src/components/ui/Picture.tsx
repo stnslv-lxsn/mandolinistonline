@@ -8,13 +8,16 @@ interface PictureProps {
   imgClassName?: string;
   /** true для изображения первого экрана: грузим сразу, с высоким приоритетом */
   priority?: boolean;
+  /** Грузить сразу, но без повышенного приоритета — чтобы не отбирать
+      канал у главного кадра */
+  eager?: boolean;
 }
 
 /**
  * Отдаёт AVIF/WebP с JPEG-запасом. next/image здесь не нужен: при
  * output: 'export' он отдаёт файл как есть, а <picture> умеет форматы.
  */
-export default function Picture({ image, sizes, className, imgClassName, priority = false }: PictureProps) {
+export default function Picture({ image, sizes, className, imgClassName, priority = false, eager = false }: PictureProps) {
   const srcSet = (ext: string) =>
     image.widths.map((width) => `/${image.name}-${width}.${ext} ${width}w`).join(', ');
 
@@ -31,7 +34,7 @@ export default function Picture({ image, sizes, className, imgClassName, priorit
         alt={image.alt}
         width={base}
         height={Math.round(base / image.ratio)}
-        loading={priority ? 'eager' : 'lazy'}
+        loading={priority || eager ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
         className={imgClassName}

@@ -50,6 +50,25 @@ const JOBS = [
     position: 'top',
     widths: [480, 760],
   },
+  // Кадры сцены для варианта IV: пустой кабинет и тот же кабинет с человеком.
+  // Кроп задан вручную, чтобы на первом кадре точно никого не было,
+  // а на втором фигура стояла по центру.
+  {
+    source: 'assets/scene-empty.jpg',
+    name: 'scene-empty',
+    crop: { left: 150, top: 0, width: 900, height: 1200 },
+    aspect: 3 / 4,
+    position: 'center',
+    widths: [640, 900],
+  },
+  {
+    source: 'assets/scene-her.jpg',
+    name: 'scene-her',
+    crop: { left: 420, top: 120, width: 900, height: 1200 },
+    aspect: 3 / 4,
+    position: 'center',
+    widths: [640, 900],
+  },
 ];
 
 const FORMATS = [
@@ -66,21 +85,25 @@ for (const job of JOBS) {
   }
 
   const meta = await sharp(job.source).metadata();
+  const sourceWidth = job.crop ? job.crop.width : meta.width;
+  const sourceHeight = job.crop ? job.crop.height : meta.height;
   console.log(`\n${job.name}  <- ${path.basename(job.source)} (${meta.width}x${meta.height})`);
 
   for (const width of job.widths) {
     const height = Math.round(width / job.aspect);
 
     // Апскейл бессмысленен: кадр не может быть больше исходника
-    if (width > meta.width || height > meta.height) {
+    if (width > sourceWidth || height > sourceHeight) {
       console.log(`  ${width}px пропущен — исходник меньше`);
       continue;
     }
 
     for (const [ext, apply] of FORMATS) {
       const file = path.join(OUT_DIR, `${job.name}-${width}.${ext}`);
+      const pipeline = sharp(job.source);
+      if (job.crop) pipeline.extract(job.crop);
       await apply(
-        sharp(job.source).resize(width, height, { fit: 'cover', position: job.position })
+        pipeline.resize(width, height, { fit: 'cover', position: job.position })
       ).toFile(file);
       const { size } = await stat(file);
       console.log(`  ${job.name}-${width}.${ext.padEnd(4)} ${width}x${height}  ${(size / 1024).toFixed(1)} KB`);
