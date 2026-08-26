@@ -32,7 +32,7 @@ export default function CinemaPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-12">
           {requestSection.moments.map((moment, index) => (
-            <div key={moment} className="border-t border-ink/15 pt-6">
+            <div key={moment} data-reveal className="border-t border-ink/15 pt-6">
               <span className="block text-[0.65rem] uppercase tracking-[0.28em] text-muted mb-6">
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -45,7 +45,7 @@ export default function CinemaPage() {
       </section>
 
       {/* Разворот: кадр во всю ширину */}
-      <section aria-hidden="true">
+      <section aria-hidden="true" data-reveal>
         <Picture
           image={images.wide}
           sizes="100vw"
@@ -57,7 +57,7 @@ export default function CinemaPage() {
       {/* Обо мне */}
       <section id="profile" className="px-6 md:px-12 py-24 md:py-36 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-          <div className="md:col-span-5">
+          <div data-reveal className="md:col-span-5">
             <p className="text-[0.65rem] uppercase tracking-[0.35em] text-muted mb-10">
               {aboutSection.number} — {aboutSection.title}
             </p>
@@ -66,7 +66,7 @@ export default function CinemaPage() {
             </h2>
           </div>
 
-          <div className="md:col-span-6 md:col-start-7 flex flex-col gap-7 text-base md:text-lg leading-relaxed text-muted text-pretty">
+          <div data-reveal className="md:col-span-6 md:col-start-7 flex flex-col gap-7 text-base md:text-lg leading-relaxed text-muted text-pretty">
             {aboutSection.columns.map((column) => (
               <p key={column}>{formatTypography(column)}</p>
             ))}
@@ -83,7 +83,7 @@ export default function CinemaPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
             {factsSection.numbers.map((fact) => (
-              <div key={fact.value} className="border-t border-bone/15 pt-7">
+              <div key={fact.value} data-reveal className="border-t border-bone/15 pt-7">
                 <p className="font-serif text-5xl md:text-7xl leading-none mb-5">
                   {fact.value}
                   <span className="ml-4 font-sans text-[0.6rem] uppercase tracking-[0.3em] text-bone/40 align-middle">
@@ -97,7 +97,7 @@ export default function CinemaPage() {
             ))}
 
             {factsSection.qualities.map((fact) => (
-              <div key={fact.value} className="border-t border-bone/15 pt-7">
+              <div key={fact.value} data-reveal className="border-t border-bone/15 pt-7">
                 <p className="font-serif italic text-2xl md:text-3xl leading-snug mb-5 text-balance">
                   {formatTypography(fact.value)}
                 </p>
@@ -113,7 +113,7 @@ export default function CinemaPage() {
       {/* Контакты */}
       <section id="contact" className="px-6 md:px-12 py-24 md:py-36 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
-          <div className="md:col-span-4">
+          <div data-reveal className="md:col-span-4">
             <Picture
               image={images.warm}
               sizes="(max-width: 768px) 100vw, 380px"
@@ -121,7 +121,7 @@ export default function CinemaPage() {
             />
           </div>
 
-          <div className="md:col-span-7 md:col-start-6">
+          <div data-reveal className="md:col-span-7 md:col-start-6">
             <p className="text-[0.65rem] uppercase tracking-[0.35em] text-muted mb-10">
               {contactSection.number} — {contactSection.title}
             </p>

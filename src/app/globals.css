@@ -62,31 +62,38 @@ body:has(.theme-cinema) {
 }
 
 /* ------------------------------------------------------------------
-   Вариант IV: киносцена в первом экране.
-   Порядок: пустой кабинет → наезд → в кадре появляется человек →
-   кадр уезжает влево → справа проявляется текст.
-   Всё на CSS: ни строчки JavaScript, поэтому сцена стартует сразу
-   после отрисовки и не ждёт гидратации.
+   Вариант IV: полноэкранная сцена.
+   Кабинет заполняет экран и уходит в расфокус, крупный план проявляется
+   ближе к зрителю, затем композиция сдвигается влево и открывает текст.
+   Сама сцена — чистый CSS и стартует на первой отрисовке; JavaScript
+   добавляет только отклик на курсор и прокрутку (CinemaMotion).
    ------------------------------------------------------------------ */
 
-/* Наезд камеры */
+body {
+  /* Значения по умолчанию: без JS сцена просто стоит на месте.
+     Смещения приходят уже в пикселях — CinemaMotion считает их сам */
+  --bg-x: 0px;
+  --bg-y: 0px;
+  --figure-x: 0px;
+  --figure-y: 0px;
+}
+
+/* Наезд камеры на кабинет */
 @keyframes cinema-push {
   from { transform: scale(1); }
-  to { transform: scale(1.12); }
+  to { transform: scale(1.1); }
 }
 
-/* Кадр с человеком проступает поверх пустого кабинета.
-   Нижний кадр намеренно не гасим: если гасить оба одновременно, на середине
-   перехода обе картинки полупрозрачны и сквозь них проваливается чёрный фон */
-@keyframes cinema-appear {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Крупный план проявляется и чуть приближается к зрителю */
+@keyframes cinema-figure-in {
+  from { opacity: 0; transform: translateY(24px) scale(1.05); }
+  to { opacity: 1; transform: none; }
 }
 
-/* Кадр сдвигается из центра экрана в свою колонку слева */
-@keyframes cinema-shift {
-  from { transform: translateX(var(--cinema-shift)) scale(1.06); }
-  to { transform: translateX(0) scale(1); }
+/* Композиция уходит из центра экрана влево, освобождая правую половину */
+@keyframes cinema-figure-shift {
+  from { transform: translateX(var(--cinema-center)); }
+  to { transform: translateX(0); }
 }
 
 /* Текст выходит справа. pointer-events в первом кадре — чтобы по невидимой
@@ -96,26 +103,68 @@ body:has(.theme-cinema) {
   to { opacity: 1; transform: none; pointer-events: auto; }
 }
 
-.cinema-stage {
-  /* На узком экране кадр никуда не едет: текст просто идёт под ним */
-  --cinema-shift: 0%;
-  animation: cinema-shift 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both;
+/* Слои сцены. Параллакс живёт на внешних обёртках, ключевые кадры — на
+   внутренних: одно и то же свойство transform нельзя одновременно
+   анимировать и подкручивать курсором */
+.cinema-bg {
+  transform: translate3d(var(--bg-x), var(--bg-y), 0) scale(1.06);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cinema-bg-push {
+  animation: cinema-push 6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cinema-figure {
+  /* Двигается навстречу фону — от этого и берётся ощущение глубины */
+  transform: translate3d(var(--figure-x), var(--figure-y), 0);
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cinema-figure-shift {
+  /* На узком экране крупный план и так по центру, ехать некуда */
+  --cinema-center: 0vw;
+  animation: cinema-figure-shift 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.1s both;
 }
 
 @media (min-width: 768px) {
-  .cinema-stage {
-    /* Сдвиг подобран так, чтобы на старте кадр стоял ровно по центру экрана,
-       а в финале — в своей колонке слева */
-    --cinema-shift: 78%;
+  .cinema-figure-shift {
+    --cinema-center: 21vw;
   }
 }
 
-.cinema-frame {
-  animation: cinema-push 3s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+.cinema-figure-in {
+  animation: cinema-figure-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
 }
 
-.cinema-shot--her {
-  animation: cinema-appear 0.9s ease-in-out 0.7s both;
+/* Края крупного плана растворяются в кабинете — иначе видно прямоугольник
+   вставленной фотографии */
+.cinema-figure-mask {
+  -webkit-mask-image: radial-gradient(
+    ellipse 66% 70% at 50% 40%,
+    #000 52%,
+    rgba(0, 0, 0, 0.72) 76%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 66% 70% at 50% 40%,
+    #000 52%,
+    rgba(0, 0, 0, 0.72) 76%,
+    transparent 100%
+  );
+}
+
+/* Блоки ниже первого экрана проявляются при прокрутке. Скрываем их только
+   когда JS действительно включил движение, иначе без него текста не будет */
+[data-reveal] {
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.motion-ready [data-reveal]:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(26px);
 }
 
 /* Задержки строк живут в CSS, а не в разметке: так их можно переопределить
@@ -124,16 +173,17 @@ body:has(.theme-cinema) {
   animation: cinema-copy 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.cinema-copy > *:nth-child(1) { animation-delay: 1.8s; }
-.cinema-copy > *:nth-child(2) { animation-delay: 1.92s; }
-.cinema-copy > *:nth-child(3) { animation-delay: 2.04s; }
-.cinema-copy > *:nth-child(4) { animation-delay: 2.16s; }
+.cinema-copy > *:nth-child(1) { animation-delay: 2.4s; }
+.cinema-copy > *:nth-child(2) { animation-delay: 2.52s; }
+.cinema-copy > *:nth-child(3) { animation-delay: 2.64s; }
+.cinema-copy > *:nth-child(4) { animation-delay: 2.76s; }
 
 @media (max-width: 767px) {
-  .cinema-copy > *:nth-child(1) { animation-delay: 1.2s; }
-  .cinema-copy > *:nth-child(2) { animation-delay: 1.32s; }
-  .cinema-copy > *:nth-child(3) { animation-delay: 1.44s; }
-  .cinema-copy > *:nth-child(4) { animation-delay: 1.56s; }
+  /* На телефоне композиция никуда не едет — ждать нечего */
+  .cinema-copy > *:nth-child(1) { animation-delay: 1.5s; }
+  .cinema-copy > *:nth-child(2) { animation-delay: 1.62s; }
+  .cinema-copy > *:nth-child(3) { animation-delay: 1.74s; }
+  .cinema-copy > *:nth-child(4) { animation-delay: 1.86s; }
 }
 
 /* Уважаем системную настройку «уменьшить движение» */

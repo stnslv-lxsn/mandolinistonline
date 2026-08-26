@@ -69,6 +69,26 @@ const JOBS = [
     position: 'center',
     widths: [640, 900],
   },
+  // Полноэкранная сцена варианта IV: кабинет уходит в расфокус и работает
+  // фоном, а крупный план ложится поверх — она в этом же кабинете, но ближе.
+  {
+    source: 'assets/scene-empty.jpg',
+    name: 'office-blur',
+    crop: { left: 0, top: 0, width: 1331, height: 1000 },
+    aspect: 16 / 10,
+    position: 'center',
+    widths: [900, 1300],
+    blur: 9,
+    brightness: 0.5,
+  },
+  {
+    source: 'assets/scene-close.jpg',
+    name: 'scene-close',
+    aspect: 4 / 5,
+    position: 'top',
+    widths: [560, 820],
+    grayscale: true,
+  },
 ];
 
 const FORMATS = [
@@ -102,9 +122,13 @@ for (const job of JOBS) {
       const file = path.join(OUT_DIR, `${job.name}-${width}.${ext}`);
       const pipeline = sharp(job.source);
       if (job.crop) pipeline.extract(job.crop);
-      await apply(
-        pipeline.resize(width, height, { fit: 'cover', position: job.position })
-      ).toFile(file);
+      pipeline.resize(width, height, { fit: 'cover', position: job.position });
+      // Расфокус и затемнение делаем на сборке: в рантайме фильтры дороги,
+      // а размытая картинка вдобавок жмётся в разы лучше резкой
+      if (job.blur) pipeline.blur(job.blur);
+      if (job.brightness) pipeline.modulate({ brightness: job.brightness });
+      if (job.grayscale) pipeline.grayscale();
+      await apply(pipeline).toFile(file);
       const { size } = await stat(file);
       console.log(`  ${job.name}-${width}.${ext.padEnd(4)} ${width}x${height}  ${(size / 1024).toFixed(1)} KB`);
     }

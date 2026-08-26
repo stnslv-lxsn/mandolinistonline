@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { author, contactEmail, ctaLabel, nav, siteMeta } from '@/content/site';
 import VariantSwitcher from '@/components/ui/VariantSwitcher';
+import CinemaMotion from './CinemaMotion';
 
 interface CinemaShellProps {
   children: ReactNode;
@@ -14,6 +15,9 @@ interface CinemaShellProps {
 export default function CinemaShell({ children }: CinemaShellProps) {
   return (
     <div className="theme-cinema min-h-screen bg-white text-ink font-sans selection:bg-ink selection:text-white">
+
+      {/* Отклик на курсор и прокрутку; ничего не рисует */}
+      <CinemaMotion />
 
       <header className="absolute top-0 left-0 right-0 z-40 px-6 md:px-12 py-6 flex items-center justify-between text-bone">
         <span className="font-serif text-base md:text-lg tracking-[0.32em] uppercase">
