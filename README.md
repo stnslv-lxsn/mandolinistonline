@@ -18,6 +18,7 @@ npm run dev
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Проверка типов без сборки |
 | `npm run images` | Пережимает портреты из `assets/` в AVIF/WebP/JPEG в `public/` |
+| `npm run cutout` | Вырезает фигуру из портрета в `assets/cutout.png` (нужен разовый `npm i -D @imgly/background-removal-node`) |
 
 Не запускайте `npm run build` одновременно с `npm run dev`: обе команды пишут в `.next` и мешают друг другу.
 
@@ -57,7 +58,9 @@ public/           статика: фотография
 
 Исходники портретов лежат в `assets/` — вне `public/`, чтобы оригиналы не уезжали на хостинг. Полный набор снимков от клиента хранится локально в папке «Фото (Исходники)» и в репозиторий не попадает (см. `.gitignore`).
 
-Кадры описаны в `images` внутри [site.ts](src/content/site.ts), файлы генерирует `npm run images`, отдаёт их компонент [Picture](src/components/ui/Picture.tsx) — AVIF, затем WebP, затем JPEG.
+Кадры описаны в `images` внутри [site.ts](src/content/site.ts), файлы генерирует `npm run images`, отдаёт их компонент [Picture](src/components/ui/Picture.tsx) — AVIF, затем WebP, затем JPEG (для картинок с прозрачностью — PNG).
+
+Для сцены варианта IV фигура нужна без фона: её готовит `npm run cutout` и кладёт в `assets/cutout.png`, дальше `npm run images` собирает из неё `figure-*`. Результат закоммичен, так что на хостинге модель сегментации не нужна.
 
 ## Что ещё не сделано
 

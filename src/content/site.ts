@@ -28,6 +28,8 @@ export interface ImageSet {
   /** Ширина / высота кадра */
   ratio: number;
   alt: string;
+  /** Запасной формат: для картинок с прозрачностью JPEG не подходит */
+  fallback?: 'jpg' | 'png';
 }
 
 /**
@@ -106,6 +108,17 @@ export const images = {
     widths: [560, 820],
     ratio: 4 / 5,
     alt: 'Юлия Радионова',
+  },
+  /**
+   * Фигура без фона — стоит поверх кабинета в полноэкранной сцене.
+   * Готовится отдельно: `npm run cutout`, затем `npm run images`.
+   */
+  figure: {
+    name: 'figure',
+    widths: [560, 820, 1100],
+    ratio: 1331 / 2000,
+    alt: 'Юлия Радионова',
+    fallback: 'png',
   },
 } satisfies Record<string, ImageSet>;
 

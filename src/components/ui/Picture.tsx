@@ -22,14 +22,15 @@ export default function Picture({ image, sizes, className, imgClassName, priorit
     image.widths.map((width) => `/${image.name}-${width}.${ext} ${width}w`).join(', ');
 
   const base = image.widths[0];
+  const fallback = image.fallback ?? 'jpg';
 
   return (
     <picture className={className}>
       <source type="image/avif" srcSet={srcSet('avif')} sizes={sizes} />
       <source type="image/webp" srcSet={srcSet('webp')} sizes={sizes} />
       <img
-        src={`/${image.name}-${base}.jpg`}
-        srcSet={srcSet('jpg')}
+        src={`/${image.name}-${base}.${fallback}`}
+        srcSet={srcSet(fallback)}
         sizes={sizes}
         alt={image.alt}
         width={base}

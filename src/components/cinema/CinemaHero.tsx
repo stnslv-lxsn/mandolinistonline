@@ -38,14 +38,14 @@ export default function CinemaHero() {
       {/* Передний план: она в этом же кабинете, только ближе.
           На телефоне кадр держится вверху, чтобы лицо не спорило с текстом */}
       <div className="cinema-figure absolute inset-0 flex items-start md:items-end justify-center md:justify-start pointer-events-none">
-        <div className="cinema-figure-shift relative h-[54svh] mt-[6svh] md:mt-0 md:h-[88svh] md:ml-[6vw] lg:ml-[10vw]">
+        <div className="cinema-figure-shift relative h-[56svh] mt-[6svh] md:mt-0 md:h-[94svh] md:ml-[4vw] lg:ml-[8vw]">
           <div className="cinema-figure-in h-full">
             <Picture
-              image={images.close}
-              sizes="(max-width: 768px) 78vw, 44vw"
+              image={images.figure}
+              sizes="(max-width: 768px) 80vw, 46vw"
               priority
               className="block h-full"
-              imgClassName="h-full w-auto object-cover object-top cinema-figure-mask"
+              imgClassName="h-full w-auto object-contain object-bottom cinema-figure-body"
             />
           </div>
         </div>

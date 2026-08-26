@@ -139,21 +139,13 @@ body {
   animation: cinema-figure-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
 }
 
-/* Края крупного плана растворяются в кабинете — иначе видно прямоугольник
-   вставленной фотографии */
-.cinema-figure-mask {
-  -webkit-mask-image: radial-gradient(
-    ellipse 66% 70% at 50% 40%,
-    #000 52%,
-    rgba(0, 0, 0, 0.72) 76%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 66% 70% at 50% 40%,
-    #000 52%,
-    rgba(0, 0, 0, 0.72) 76%,
-    transparent 100%
-  );
+/* Фигура вырезана из фона, поэтому маска по краям больше не нужна.
+   Тень сажает её в сцену, а нижний край растворяется — иначе видно, что
+   кадр обрезан по пояс */
+.cinema-figure-body {
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%);
+  mask-image: linear-gradient(to top, transparent 0%, #000 14%);
 }
 
 /* Блоки ниже первого экрана проявляются при прокрутке. Скрываем их только

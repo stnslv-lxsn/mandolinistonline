@@ -89,12 +89,30 @@ const JOBS = [
     widths: [560, 820],
     grayscale: true,
   },
+  // Фигура без фона (её готовит npm run cutout). Пропорции исходника
+  // не трогаем — обрезать вырезанного человека нечем и незачем.
+  {
+    source: 'assets/cutout.png',
+    name: 'figure',
+    aspect: 1331 / 2000,
+    position: 'center',
+    widths: [560, 820, 1100],
+    grayscale: true,
+    alpha: true,
+  },
 ];
 
 const FORMATS = [
   ['avif', (p) => p.avif({ quality: 52 })],
   ['webp', (p) => p.webp({ quality: 72 })],
   ['jpg', (p) => p.jpeg({ quality: 76, mozjpeg: true })],
+];
+
+// Для картинок с прозрачностью JPEG не годится — запасной формат PNG
+const ALPHA_FORMATS = [
+  ['avif', (p) => p.avif({ quality: 55 })],
+  ['webp', (p) => p.webp({ quality: 78, alphaQuality: 90 })],
+  ['png', (p) => p.png({ compressionLevel: 9, palette: true })],
 ];
 
 for (const job of JOBS) {
@@ -118,11 +136,14 @@ for (const job of JOBS) {
       continue;
     }
 
-    for (const [ext, apply] of FORMATS) {
+    for (const [ext, apply] of (job.alpha ? ALPHA_FORMATS : FORMATS)) {
       const file = path.join(OUT_DIR, `${job.name}-${width}.${ext}`);
       const pipeline = sharp(job.source);
       if (job.crop) pipeline.extract(job.crop);
-      pipeline.resize(width, height, { fit: 'cover', position: job.position });
+      pipeline.resize(width, height, {
+        fit: job.alpha ? 'inside' : 'cover',
+        position: job.position,
+      });
       // Расфокус и затемнение делаем на сборке: в рантайме фильтры дороги,
       // а размытая картинка вдобавок жмётся в разы лучше резкой
       if (job.blur) pipeline.blur(job.blur);
