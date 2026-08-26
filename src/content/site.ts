@@ -16,7 +16,7 @@ export const contactEmail = 'hello@example.com';
 
 /** Подпись разработчика в футере */
 export const author = {
-  name: 'Станислав',
+  name: 'example',
   role: 'Разработка и вёрстка',
   year: 2026,
 };
