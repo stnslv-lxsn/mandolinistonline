@@ -35,6 +35,9 @@ export default function CinemaMotion() {
       root.style.setProperty('--bg-y', `${(pointerY * 8 + scrolled * 42).toFixed(1)}px`);
       root.style.setProperty('--figure-x', `${(pointerX * -18).toFixed(1)}px`);
       root.style.setProperty('--figure-y', `${(pointerY * -11 - scrolled * 64).toFixed(1)}px`);
+      // Передний план ближе всех к камере, поэтому смещается заметнее
+      root.style.setProperty('--desk-x', `${(pointerX * -30).toFixed(1)}px`);
+      root.style.setProperty('--desk-y', `${(pointerY * -14 - scrolled * 96).toFixed(1)}px`);
     };
 
     const schedule = () => {
@@ -97,6 +100,8 @@ export default function CinemaMotion() {
       root.style.removeProperty('--bg-y');
       root.style.removeProperty('--figure-x');
       root.style.removeProperty('--figure-y');
+      root.style.removeProperty('--desk-x');
+      root.style.removeProperty('--desk-y');
     };
   }, []);
 

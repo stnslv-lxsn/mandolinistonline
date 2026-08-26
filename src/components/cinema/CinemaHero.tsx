@@ -37,8 +37,8 @@ export default function CinemaHero() {
 
       {/* Передний план: она в этом же кабинете, только ближе.
           На телефоне кадр держится вверху, чтобы лицо не спорило с текстом */}
-      <div className="cinema-figure absolute inset-0 flex items-start md:items-end justify-center md:justify-start pointer-events-none">
-        <div className="cinema-figure-shift relative h-[56svh] mt-[6svh] md:mt-0 md:h-[94svh] md:ml-[4vw] lg:ml-[8vw]">
+      <div className="cinema-figure absolute inset-0 z-10 flex items-start md:items-end justify-center md:justify-start pointer-events-none">
+        <div className="cinema-figure-shift relative h-[52svh] mt-[7svh] md:mt-0 md:h-[80svh] md:mb-[10svh] md:ml-[4vw] lg:ml-[7vw]">
           <div className="cinema-figure-in h-full">
             <Picture
               image={images.figure}
@@ -51,11 +51,24 @@ export default function CinemaHero() {
         </div>
       </div>
 
+      {/* Передний план: поверхность, за которой она сидит. Даёт глубину
+          и прячет край, где вырезанный кадр обрывается */}
+      <div className="cinema-desk absolute inset-x-0 bottom-0 h-[30svh] md:h-[34svh] z-20 pointer-events-none">
+        <Picture
+          image={images.foreground}
+          sizes="100vw"
+          eager
+          className="absolute inset-0"
+          imgClassName="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/75" />
+      </div>
+
       {/* Подложка под текстом на телефоне: там он лежит поверх кадра */}
-      <div className="md:hidden absolute inset-x-0 bottom-0 h-[58svh] bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
+      <div className="md:hidden absolute inset-x-0 bottom-0 h-[58svh] z-20 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
 
       {/* Текст */}
-      <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12">
+      <div className="relative z-30 w-full max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12">
         <div className="cinema-copy md:col-span-6 md:col-start-7 pt-[58svh] pb-28 md:py-0">
           <p className="text-[0.65rem] uppercase tracking-[0.4em] text-bone/60 mb-6 md:mb-8">
             {hero.role}
