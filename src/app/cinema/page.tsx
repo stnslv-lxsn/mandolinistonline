@@ -75,33 +75,33 @@ export default function CinemaPage() {
       </section>
 
       {/* Опыт в фактах — на чёрной плашке, перекликается с открытием */}
-      <section id="facts" className="bg-black text-bone">
+      <section id="facts" className="bg-espresso text-cream">
         <div className="px-6 md:px-12 py-24 md:py-32 max-w-[1400px] mx-auto">
-          <p className="text-[0.65rem] uppercase tracking-[0.35em] text-bone/40 mb-14">
+          <p className="text-[0.65rem] uppercase tracking-[0.35em] text-cream/40 mb-14">
             {factsSection.number} — {factsSection.title}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
             {factsSection.numbers.map((fact) => (
-              <div key={fact.value} data-reveal className="border-t border-bone/15 pt-7">
+              <div key={fact.value} data-reveal className="border-t border-cream/15 pt-7">
                 <p className="font-serif text-5xl md:text-7xl leading-none mb-5">
                   {fact.value}
-                  <span className="ml-4 font-sans text-[0.6rem] uppercase tracking-[0.3em] text-bone/40 align-middle">
+                  <span className="ml-4 font-sans text-[0.6rem] uppercase tracking-[0.3em] text-cream/40 align-middle">
                     {fact.unit}
                   </span>
                 </p>
-                <p className="text-sm text-bone/50 leading-relaxed max-w-sm text-pretty">
+                <p className="text-sm text-cream/50 leading-relaxed max-w-sm text-pretty">
                   {formatTypography(fact.caption)}
                 </p>
               </div>
             ))}
 
             {factsSection.qualities.map((fact) => (
-              <div key={fact.value} data-reveal className="border-t border-bone/15 pt-7">
+              <div key={fact.value} data-reveal className="border-t border-cream/15 pt-7">
                 <p className="font-serif italic text-2xl md:text-3xl leading-snug mb-5 text-balance">
                   {formatTypography(fact.value)}
                 </p>
-                <p className="text-sm text-bone/50 leading-relaxed max-w-sm text-pretty">
+                <p className="text-sm text-cream/50 leading-relaxed max-w-sm text-pretty">
                   {formatTypography(fact.caption)}
                 </p>
               </div>

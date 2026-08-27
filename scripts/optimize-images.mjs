@@ -70,16 +70,20 @@ const JOBS = [
     widths: [640, 900],
   },
   // Полноэкранная сцена варианта IV: кабинет уходит в расфокус и работает
-  // фоном, а крупный план ложится поверх — она в этом же кабинете, но ближе.
+  // фоном, а вырезанная фигура стоит перед ним.
+  // Цвет сохраняем — в чистом чёрно-белом сцена выглядит безжизненно,
+  // но насыщенность приглушаем, чтобы фон не спорил с человеком.
   {
     source: 'assets/scene-empty.jpg',
     name: 'office-blur',
-    crop: { left: 0, top: 0, width: 1331, height: 1000 },
+    crop: { left: 0, top: 0, width: 1331, height: 832 },
     aspect: 16 / 10,
     position: 'center',
     widths: [900, 1300],
-    blur: 9,
-    brightness: 0.5,
+    blur: 11,
+    brightness: 0.8,
+    // Кадр снят в чёрно-белом; без тонировки сцена выходит мертвенно-серой
+    tint: { r: 198, g: 170, b: 132 },
   },
   {
     source: 'assets/scene-close.jpg',
@@ -89,30 +93,16 @@ const JOBS = [
     widths: [560, 820],
     grayscale: true,
   },
-  // Передний план сцены: сильно размытая поверхность у нижнего края.
-  // За ней прячется место, где вырезанная фигура обрывается кадром,
-  // и появляется ощущение, что человек сидит за столом, а не висит в воздухе.
-  {
-    source: 'assets/scene-her.jpg',
-    name: 'foreground',
-    crop: { left: 0, top: 1620, width: 1331, height: 380 },
-    aspect: 1331 / 380,
-    position: 'center',
-    widths: [900, 1300],
-    blur: 14,
-    brightness: 0.62,
-    grayscale: true,
-  },
-  // Фигура без фона (её готовит npm run cutout). Пропорции исходника
-  // не трогаем — обрезать вырезанного человека нечем и незачем.
+  // Фигура во весь рост без фона (её готовит npm run cutout). Пропорции
+  // исходника не трогаем, цвет оставляем: костюм и кожа держат всю палитру сцены.
   {
     source: 'assets/cutout.png',
     name: 'figure',
-    aspect: 1331 / 2000,
+    aspect: 1706 / 2560,
     position: 'center',
     widths: [560, 820, 1100],
-    grayscale: true,
     alpha: true,
+    cleanEdge: true,
   },
 ];
 
@@ -126,7 +116,7 @@ const FORMATS = [
 const ALPHA_FORMATS = [
   ['avif', (p) => p.avif({ quality: 55 })],
   ['webp', (p) => p.webp({ quality: 78, alphaQuality: 90 })],
-  ['png', (p) => p.png({ compressionLevel: 9, palette: true })],
+  ['png', (p) => p.png({ compressionLevel: 9 })],
 ];
 
 for (const job of JOBS) {
@@ -141,6 +131,36 @@ for (const job of JOBS) {
   const sourceHeight = job.crop ? job.crop.height : meta.height;
   console.log(`\n${job.name}  <- ${path.basename(job.source)} (${meta.width}x${meta.height})`);
 
+  /**
+   * Кромка вырезанной фигуры. Модель оставляет по контуру волос полосу
+   * полупрозрачных пикселей, в которых сидит цвет старого фона: на новом
+   * фоне она читается как грязная кайма. Поджимаем альфу — почти прозрачное
+   * становится прозрачным, и контур садится на полпикселя внутрь.
+   */
+  let input = job.source;
+  if (job.cleanEdge) {
+    // Работаем по сырым пикселям: joinChannel не помечает добавленный канал
+    // как альфу, и PNG/WebP потом молча сохраняются без прозрачности
+    const { data, info } = await sharp(job.source)
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+
+    for (let i = 3; i < data.length; i += info.channels) {
+      const a = data[i];
+      if (a === 0 || a === 255) continue;
+      const tightened = (a - 46) * 1.5;
+      data[i] = tightened < 0 ? 0 : tightened > 255 ? 255 : tightened;
+    }
+
+    input = await sharp(data, {
+      raw: { width: info.width, height: info.height, channels: info.channels },
+    })
+      .png()
+      .toBuffer();
+    console.log('  кромка подчищена');
+  }
+
   for (const width of job.widths) {
     const height = Math.round(width / job.aspect);
 
@@ -152,7 +172,7 @@ for (const job of JOBS) {
 
     for (const [ext, apply] of (job.alpha ? ALPHA_FORMATS : FORMATS)) {
       const file = path.join(OUT_DIR, `${job.name}-${width}.${ext}`);
-      const pipeline = sharp(job.source);
+      const pipeline = sharp(input);
       if (job.crop) pipeline.extract(job.crop);
       pipeline.resize(width, height, {
         fit: job.alpha ? 'inside' : 'cover',
@@ -161,8 +181,14 @@ for (const job of JOBS) {
       // Расфокус и затемнение делаем на сборке: в рантайме фильтры дороги,
       // а размытая картинка вдобавок жмётся в разы лучше резкой
       if (job.blur) pipeline.blur(job.blur);
-      if (job.brightness) pipeline.modulate({ brightness: job.brightness });
+      if (job.brightness || job.saturation) {
+        pipeline.modulate({
+          ...(job.brightness ? { brightness: job.brightness } : {}),
+          ...(job.saturation ? { saturation: job.saturation } : {}),
+        });
+      }
       if (job.grayscale) pipeline.grayscale();
+      if (job.tint) pipeline.tint(job.tint);
       await apply(pipeline).toFile(file);
       const { size } = await stat(file);
       console.log(`  ${job.name}-${width}.${ext.padEnd(4)} ${width}x${height}  ${(size / 1024).toFixed(1)} KB`);

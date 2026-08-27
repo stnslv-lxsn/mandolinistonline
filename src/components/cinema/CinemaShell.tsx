@@ -19,26 +19,26 @@ export default function CinemaShell({ children }: CinemaShellProps) {
       {/* Отклик на курсор и прокрутку; ничего не рисует */}
       <CinemaMotion />
 
-      <header className="absolute top-0 left-0 right-0 z-40 px-6 md:px-12 py-6 flex items-center justify-between text-bone">
+      <header className="absolute top-0 left-0 right-0 z-40 px-6 md:px-12 py-6 flex items-center justify-between text-cream">
         <span className="font-serif text-base md:text-lg tracking-[0.32em] uppercase">
           {siteMeta.name}
         </span>
 
-        <nav className="hidden md:flex gap-8 text-[0.65rem] uppercase tracking-[0.28em] text-bone/60">
+        <nav className="hidden md:flex gap-8 text-[0.65rem] uppercase tracking-[0.28em] text-cream/60">
           {nav.map((item) => (
-            <a key={item.name} href={item.href} className="hover:text-bone transition-colors">
+            <a key={item.name} href={item.href} className="hover:text-cream transition-colors">
               {item.name}
             </a>
           ))}
         </nav>
 
         <details className="md:hidden relative">
-          <summary className="list-none cursor-pointer text-[0.65rem] uppercase tracking-[0.28em] text-bone/70">
+          <summary className="list-none cursor-pointer text-[0.65rem] uppercase tracking-[0.28em] text-cream/70">
             Меню
           </summary>
-          <nav className="absolute right-0 mt-4 flex flex-col gap-4 bg-black/90 backdrop-blur-sm px-6 py-5 text-[0.7rem] uppercase tracking-[0.24em] whitespace-nowrap">
+          <nav className="absolute right-0 mt-4 flex flex-col gap-4 bg-espresso/90 backdrop-blur-sm px-6 py-5 text-[0.7rem] uppercase tracking-[0.24em] whitespace-nowrap">
             {nav.map((item) => (
-              <a key={item.name} href={item.href} className="text-bone/80 hover:text-bone transition-colors">
+              <a key={item.name} href={item.href} className="text-cream/80 hover:text-cream transition-colors">
                 {item.name}
               </a>
             ))}
@@ -48,15 +48,15 @@ export default function CinemaShell({ children }: CinemaShellProps) {
 
       <main>{children}</main>
 
-      <footer className="bg-black text-bone px-6 md:px-12 py-16">
+      <footer className="bg-espresso text-cream px-6 md:px-12 py-16">
         <div className="max-w-[1400px] mx-auto flex flex-col gap-10">
           <a
             href={`mailto:${contactEmail}`}
-            className="font-serif text-3xl md:text-5xl hover:text-bone/60 transition-colors break-all"
+            className="font-serif text-3xl md:text-5xl hover:text-cream/60 transition-colors break-all"
           >
             {contactEmail}
           </a>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-[0.65rem] uppercase tracking-[0.28em] text-bone/40">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-[0.65rem] uppercase tracking-[0.28em] text-cream/40">
             <span>{siteMeta.name} — {siteMeta.role}</span>
             <span>© {author.year}. Все права защищены</span>
             <span>{author.role} — {author.name}</span>

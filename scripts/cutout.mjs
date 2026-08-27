@@ -3,13 +3,16 @@
  * человек без фона, иначе поверх кабинета лежит вторая фотография.
  *
  * Запуск: npm run cutout
- * Считается один раз на машине разработчика, результат (assets/cutout.png)
- * коммитится, поэтому на сборке хостинга модель не нужна.
+ * Считается один раз на машине разработчика, результат коммитится,
+ * поэтому на сборке хостинга модель не нужна.
  */
-import { writeFile, stat } from 'node:fs/promises';
+// sharp здесь намеренно не импортируется: пакет сегментации тянет свою
+// версию, и две копии libvips в одном процессе роняют его по segfault.
+// Кромку подчищает npm run images — там отдельный процесс.
+import { stat, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 
-const SOURCE = 'assets/scene-close.jpg';
+const SOURCE = 'assets/scene-standing.jpg';
 const OUT = 'assets/cutout.png';
 
 // Пакет с моделью весит под 200 МБ и нужен раз в сто лет, поэтому в
@@ -43,3 +46,4 @@ await writeFile(OUT, Buffer.from(await blob.arrayBuffer()));
 
 const { size } = await stat(OUT);
 console.log(`Готово: ${OUT}, ${(size / 1024 / 1024).toFixed(1)} MB`);
+console.log('Дальше: npm run images — он подчистит кромку и соберёт форматы');
