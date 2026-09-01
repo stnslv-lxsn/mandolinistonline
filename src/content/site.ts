@@ -4,7 +4,7 @@
  */
 
 export const siteMeta = {
-  url: 'https://mandolinistonline.pages.dev',
+  url: 'https://radionova.pro',
   name: 'Юлия Радионова',
   role: 'Консультант по развитию бизнес-вертикали',
   description:
