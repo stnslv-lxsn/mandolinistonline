@@ -7,6 +7,11 @@
   --color-muted: #666666;
   --color-forest: #1d332d;
   --color-forest-dark: #11201c;
+
+  /* Служебные цвета, зависящие от палитры: линии, лёгкие подложки, затемнение фото */
+  --color-rule: rgba(34, 34, 34, 0.12);
+  --color-veil: rgba(34, 34, 34, 0.05);
+  --color-shade: #000000;
 }
 
 @theme inline {
@@ -18,4 +23,26 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Демонстрационные палитры. Зелёная — значения из @theme выше (по умолчанию, без атрибута).
+   Остальные включаются атрибутом data-palette на <html>. */
+:root[data-palette='blue'] {
+  /* бумага и вторичный серый — из исходной тёплой гаммы, синь только в тексте и акценте */
+  --color-paper: #F7F5F0;
+  --color-ink: #17263A;
+  --color-muted: #666666;
+  --color-forest: #1B3A5C;
+  --color-forest-dark: #12293F;
+}
+
+:root[data-palette='navy'] {
+  /* прусский синий как фон; все светлые тона — тёплые, из кремового семейства */
+  --color-paper: #14304C;
+  --color-ink: #F2EFE9;
+  --color-muted: #B6B3AC;
+  --color-forest: #E8DFCC;
+  --color-forest-dark: #D9CDB2;
+  --color-rule: rgba(242, 239, 233, 0.16);
+  --color-veil: rgba(242, 239, 233, 0.07);
 }

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import PaletteSwitcher from '@/components/PaletteSwitcher';
 import { cn } from '@/lib/utils';
 
 interface LayoutProps {
@@ -10,37 +11,37 @@ interface LayoutProps {
 
 const menuItems = [
   { name: 'Обо мне', href: '#profile' },
-  { name: 'Авторские продукты', href: '#expertise' },
+  { name: 'Запросы', href: '#expertise' },
   { name: 'Работа', href: '#work' },
   { name: 'Исследования', href: '#research' },
   { name: 'Контакты', href: '#contact' },
 ];
 
 export default function Layout({ children }: LayoutProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Оптимизация обработчика скролла: throttle/debounce не обязателен для простого boolean,
-  // но лучше вызывать state update только если значение реально изменилось (уменьшает ререндеры)
+  // Пишем прогресс прокрутки (0…1 на отрезке 0…180px) прямо в CSS-переменную,
+  // без setState на каждый кадр — иначе лишний ререндер на каждое движение
   useEffect(() => {
-    let lastScrollY = window.scrollY;
+    let frame = 0;
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      // Проверяем пересечение границы в 50px, обновляем стейт только при переходе
-      if (currentScrollY > 50 && lastScrollY <= 50) {
-        setIsScrolled(true);
-      } else if (currentScrollY <= 50 && lastScrollY > 50) {
-        setIsScrolled(false);
-      }
-      lastScrollY = currentScrollY;
+    const apply = () => {
+      frame = 0;
+      const progress = Math.min(1, Math.max(0, window.scrollY / 180));
+      headerRef.current?.style.setProperty('--hdr', progress.toFixed(3));
     };
 
-    // Инициализация при монтировании
-    handleScroll();
+    const handleScroll = () => {
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true }); // passive: true улучшает производительность скролла
-    return () => window.removeEventListener('scroll', handleScroll);
+    apply();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Открытое мобильное меню перекрывает страницу целиком: блокируем скролл под ним
@@ -63,36 +64,33 @@ export default function Layout({ children }: LayoutProps) {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-paper text-ink font-sans relative selection:bg-forest selection:text-white">
+    <div className="min-h-screen bg-paper text-ink font-sans relative selection:bg-forest selection:text-paper">
 
       {/* 1. ВЕРХНЕЕ МЕНЮ (Sticky + Glassmorphism) */}
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          isScrolled && !mobileMenuOpen ? "bg-paper/90 backdrop-blur-md border-b border-black/5 shadow-sm" : "bg-transparent"
-        )}
-      >
-        <div className={cn(
-          "px-6 py-5 md:px-12 flex justify-between items-center transition-all duration-300",
-          isScrolled && !mobileMenuOpen ? "py-4" : ""
-        )}>
-          <div className={cn(
-            "font-serif text-2xl font-bold tracking-wide relative z-50",
-            isScrolled || mobileMenuOpen ? "text-ink" : "text-white md:text-ink"
-          )}>
+      <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50">
+        <div
+          aria-hidden="true"
+          className={cn(
+            'absolute inset-0 bg-paper/90 backdrop-blur-md border-b border-rule shadow-sm pointer-events-none',
+            mobileMenuOpen && 'opacity-0'
+          )}
+          style={mobileMenuOpen ? undefined : { opacity: 'var(--hdr, 0)' }}
+        />
+        <div
+          className="relative px-6 md:px-12 flex justify-between items-center"
+          style={{
+            paddingTop: 'calc(1.25rem - 0.25rem * var(--hdr, 0))',
+            paddingBottom: 'calc(1.25rem - 0.25rem * var(--hdr, 0))',
+          }}
+        >
+          <div className="font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-ink">
             ЮЛИЯ РАДИОНОВА
           </div>
 
           {/* Desktop Menu */}
-          <nav className={cn(
-            "hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em]",
-            isScrolled || mobileMenuOpen ? "text-muted" : "text-white md:text-muted"
-          )}>
+          <nav className="hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
             {menuItems.map((item) => (
-              <a key={item.name} href={item.href} className={cn(
-                "transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap",
-                isScrolled || mobileMenuOpen ? "hover:text-ink after:bg-ink" : "hover:text-white md:hover:text-ink after:bg-white md:after:bg-ink"
-              )}>
+              <a key={item.name} href={item.href} className="transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink">
                 {item.name}
               </a>
             ))}
@@ -100,10 +98,7 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobile Menu Button */}
           <button
-            className={cn(
-              "lg:hidden relative z-50 p-2 -mr-2",
-              isScrolled || mobileMenuOpen ? "text-ink" : "text-white md:text-ink"
-            )}
+            className="lg:hidden relative z-50 p-2 -mr-2 text-ink"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
             aria-expanded={mobileMenuOpen}
@@ -137,29 +132,11 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Основной контент */}
-      <main className="pb-32 md:pb-0">
+      <main>
         {children}
       </main>
 
-      {/* 2. ФИКСИРОВАННАЯ КНОПКА (Десктоп - Справа посередине) */}
-      <div className="hidden md:flex fixed top-1/2 right-0 -translate-y-1/2 z-40">
-        <a
-          href="#contact"
-          className="bg-forest text-white py-8 px-4 rounded-l-md hover:bg-forest-dark transition-colors flex items-center justify-center shadow-lg group duration-300 min-h-[200px]"
-          style={{ writingMode: 'vertical-rl' }}
-        >
-          <span className="inline-block text-[11px] uppercase tracking-[0.3em] font-medium whitespace-nowrap rotate-180">
-            Обсудить задачу
-          </span>
-        </a>
-      </div>
-
-      {/* 3. ФИКСИРОВАННАЯ КНОПКА (Мобайл - Прилипает к низу) */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40">
-        <a href="#contact" className="flex items-center justify-center w-full bg-forest text-white py-4 rounded-md font-medium text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-forest-dark transition-colors">
-          Обсудить задачу
-        </a>
-      </div>
+      <PaletteSwitcher />
     </div>
   );
 }

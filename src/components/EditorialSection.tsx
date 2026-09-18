@@ -10,7 +10,7 @@ interface EditorialSectionProps {
 
 export default function EditorialSection({ id, number, title, children, className = '' }: EditorialSectionProps) {
   return (
-    <section id={id} className={`px-6 md:px-12 py-24 md:py-32 max-w-[1400px] mx-auto border-t border-black/10 ${className}`}>
+    <section id={id} className={`px-6 md:px-12 py-24 md:py-32 max-w-[1400px] mx-auto border-t border-rule ${className}`}>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
 
         {/* Левая колонка (Навигация/Заголовок) */}

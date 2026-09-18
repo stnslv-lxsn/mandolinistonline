@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Юлия Радионова | Бизнес-консультант",
-  description: "Помогаю компаниям проходить через кризисы управления и масштабирования.",
+  description: "Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.",
 };
 
 export default function RootLayout({
@@ -27,6 +27,11 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
       <body className="min-h-full flex flex-col font-sans">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=localStorage.getItem('palette');if(p&&p!=='warm')document.documentElement.setAttribute('data-palette',p)}catch(e){}`,
+          }}
+        />
         {children}
       </body>
     </html>
