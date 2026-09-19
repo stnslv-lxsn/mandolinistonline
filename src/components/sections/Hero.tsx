@@ -4,8 +4,10 @@ export default function Hero() {
   return (
     <section className="relative min-h-svh w-full flex md:items-center md:justify-center md:bg-paper md:px-12 md:py-28">
 
-      {/* Телефон: фото сверху, текст под ним. Десктоп: фото — центрированный блок, текст поверх справа */}
-      <div className="bg-paper pt-20 md:bg-transparent md:pt-0 relative w-full min-h-svh md:min-h-0 flex flex-col md:flex-none md:flex-row md:w-auto md:h-[calc(100svh-14rem)] md:max-h-[793px] md:max-w-[1100px] md:aspect-[1539/1109] md:items-center md:overflow-hidden md:shadow-2xl">
+      {/* Телефон: фото сверху, текст под ним. Десктоп: фото — центрированный блок, текст поверх справа.
+          Ширина блока выводится из высоты через aspect-ratio, поэтому высоту ограничивает и ширина
+          окна за вычетом md:px-12: иначе на высоком узком экране (планшет стоя) блок шире окна */}
+      <div className="bg-paper pt-20 md:bg-transparent md:pt-0 relative w-full min-h-svh md:min-h-0 flex flex-col md:flex-none md:flex-row md:w-auto md:h-[calc(100svh-14rem)] md:max-h-[min(793px,calc((100vw-6rem)*1109/1539))] md:max-w-[1100px] md:aspect-[1539/1109] md:items-center md:overflow-hidden md:shadow-2xl">
 
         {/* Фото */}
         <div className="absolute inset-x-0 top-20 bottom-0 md:inset-0 md:top-0">
