@@ -1,12 +1,28 @@
 'use client';
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import PaletteSwitcher from '@/components/PaletteSwitcher';
 import { cn } from '@/lib/utils';
 
 interface LayoutProps {
   children: ReactNode;
+}
+
+// Иконки нарисованы вручную: ради двух штук lucide-react тянул в бандл
+// собственный рантайм создания иконок
+function BurgerIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
 }
 
 const menuItems = [
@@ -103,7 +119,7 @@ export default function Layout({ children }: LayoutProps) {
             aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}
           </button>
         </div>
 
@@ -122,7 +138,7 @@ export default function Layout({ children }: LayoutProps) {
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-forest transition-colors"
+                className="hover:text-forest transition-colors whitespace-nowrap"
               >
                 {item.name}
               </a>
@@ -135,8 +151,6 @@ export default function Layout({ children }: LayoutProps) {
       <main>
         {children}
       </main>
-
-      <PaletteSwitcher />
     </div>
   );
 }

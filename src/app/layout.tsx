@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant, Montserrat } from "next/font/google";
+import { siteUrl } from "@/lib/site";
+import { formatTypography } from "@/lib/typography";
 import "./globals.css";
 
 const cormorant = Cormorant({
@@ -14,9 +16,30 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const title = "Юлия Радионова | Бизнес-консультант";
+
+// Описание уходит и в превью ссылок в мессенджерах и соцсетях, поэтому тоже через типограф.
+// Картинку превью Next берёт из opengraph-image.jpg рядом с этим файлом
+const description = formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.");
+
 export const metadata: Metadata = {
-  title: "Юлия Радионова | Бизнес-консультант",
-  description: "Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: "/",
+    siteName: "Юлия Радионова",
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({
@@ -27,11 +50,6 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
       <body className="min-h-full flex flex-col font-sans">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var p=localStorage.getItem('palette');if(p&&p!=='warm')document.documentElement.setAttribute('data-palette',p)}catch(e){}`,
-          }}
-        />
         {children}
       </body>
     </html>

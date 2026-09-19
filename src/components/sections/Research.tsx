@@ -1,4 +1,3 @@
-import Balancer from 'react-wrap-balancer';
 import EditorialSection from '@/components/EditorialSection';
 import { formatTypography } from '@/lib/typography';
 
@@ -18,10 +17,8 @@ const topics = [
 export default function Research() {
   return (
     <EditorialSection id="research" number="04" title="Исследования">
-      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink">
-        <Balancer>
-          {formatTypography("Что происходит с руководителем в момент сложного решения")}
-        </Balancer>
+      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
+        {formatTypography("Что происходит с руководителем в момент сложного решения")}
       </h2>
 
       <div className="flex flex-col max-w-4xl">
@@ -31,8 +28,8 @@ export default function Research() {
               {topic.year}
             </span>
             <div className="min-w-0">
-              <h3 className="font-serif text-2xl md:text-3xl mb-4 text-ink break-words hyphens-auto max-w-2xl">
-                <Balancer>{formatTypography(topic.title)}</Balancer>
+              <h3 className="font-serif text-2xl md:text-3xl mb-4 text-ink break-words hyphens-auto max-w-2xl text-balance">
+                {formatTypography(topic.title)}
               </h3>
               <p className="text-sm md:text-base text-muted font-light leading-relaxed max-w-2xl">
                 {formatTypography(topic.description)}

@@ -1,4 +1,3 @@
-import Balancer from 'react-wrap-balancer';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
@@ -10,8 +9,13 @@ export default function Hero() {
 
         {/* Фото */}
         <div className="absolute inset-x-0 top-20 bottom-0 md:inset-0 md:top-0">
+          {/* LCP-изображение: AVIF вдвое легче WebP, WebP остаётся для старых браузеров.
+              Файлы готовит npm run images. Первый подходящий <source> выигрывает.
+              sizes: на телефоне фото во всю ширину, на десктопе кадр не шире 1100px */}
           <picture>
-            <source media="(max-width: 767px)" srcSet="/hero-mobile.webp" />
+            <source media="(max-width: 767px)" type="image/avif" srcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w" sizes="100vw" />
+            <source media="(max-width: 767px)" type="image/webp" srcSet="/hero-mobile.webp" />
+            <source type="image/avif" srcSet="/hero-desktop-1100.avif 1100w, /hero-desktop.avif 1539w" sizes="1100px" />
             <img
               src="/hero-desktop.webp"
               alt="Юлия Радионова"
@@ -34,10 +38,8 @@ export default function Hero() {
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight">
               Юлия Радионова
             </h1>
-            <p className="font-sans text-sm md:text-base text-white/75 max-w-xl leading-relaxed">
-              <Balancer>
-                {formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.")}
-              </Balancer>
+            <p className="font-sans text-sm md:text-base text-white/75 max-w-xl leading-relaxed text-balance">
+              {formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.")}
             </p>
             <a
               href="#contact"

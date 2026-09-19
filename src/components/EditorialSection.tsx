@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { formatTypography } from '@/lib/typography';
 
 interface EditorialSectionProps {
   id: string;
@@ -17,7 +18,8 @@ export default function EditorialSection({ id, number, title, children, classNam
         <div className="md:col-span-2 lg:col-span-2 xl:col-span-2 shrink-0">
           <div className="md:sticky md:top-32 flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-muted mb-8 md:mb-0">
             <span className="w-6 h-[1px] bg-muted/50"></span>
-            {number} / {title}
+            {/* Номер не отрывается от косой черты: «01 /» не распадается на две строки */}
+            {number}&nbsp;/ {formatTypography(title)}
           </div>
         </div>
 

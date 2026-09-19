@@ -1,4 +1,3 @@
-import Balancer from 'react-wrap-balancer';
 import EditorialSection from '@/components/EditorialSection';
 import { formatTypography } from '@/lib/typography';
 
@@ -6,10 +5,8 @@ export default function About() {
   return (
     <EditorialSection id="profile" number="01" title="Обо мне">
       {/* Журнальная цитата */}
-      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink">
-        <Balancer>
-          {formatTypography('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.')}
-        </Balancer>
+      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
+        {formatTypography('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.')}
       </h2>
 
       {/* Две колонки текста */}
