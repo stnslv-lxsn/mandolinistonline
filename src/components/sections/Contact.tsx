@@ -33,7 +33,8 @@ export default function Contact() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="border-b border-transparent pb-1 transition-colors hover:text-ink hover:border-ink whitespace-nowrap"
+              // Подчёркивание как у пунктов меню в шапке: растёт из нуля за 300 мс
+              className="transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink"
             >
               {social.label}
             </a>
