@@ -27,7 +27,11 @@ export default function VideoEmbed({ title, poster, vkOid, vkId }: VideoEmbedPro
           title={title}
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
           allowFullScreen
-          className="absolute inset-0 h-full w-full"
+          /* Видео ровно 16:9, как и бокс, но при масштабировании страницы размеры
+             получаются дробными, плеер округляет их по-своему и дорисовывает чёрные
+             полосы по краям. Делаем кадр на 8px больше бокса и обрезаем: полосы
+             уходят за край, видео теряет по 4px с каждой стороны — незаметно */
+          className="absolute left-1/2 top-1/2 h-[calc(100%+8px)] w-[calc(100%+8px)] -translate-x-1/2 -translate-y-1/2"
         />
       ) : (
         <button
