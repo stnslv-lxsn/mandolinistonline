@@ -29,7 +29,7 @@ const menuItems = [
   { name: 'Обо мне', href: '#profile' },
   { name: 'Запросы', href: '#expertise' },
   { name: 'Работа', href: '#work' },
-  { name: 'Исследования', href: '#research' },
+  { name: 'Проекты', href: '#research' },
   { name: 'Контакты', href: '#contact' },
 ];
 

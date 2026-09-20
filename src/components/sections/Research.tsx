@@ -41,9 +41,10 @@ const podcast = [
   },
 ];
 
+// Якорь #research оставлен прежним: ссылку на раздел могли уже кому-то отправить
 export default function Research() {
   return (
-    <EditorialSection id="research" number="04" title="Исследования">
+    <EditorialSection id="research" number="04" title="Проекты">
       <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
         {formatTypography("Что происходит с руководителем в момент сложного решения")}
       </h2>
