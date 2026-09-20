@@ -50,6 +50,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
+      <head>
+        {/* Фото первого экрана — самый крупный элемент страницы. Без этих строк браузер
+            узнаёт о нём только добравшись до разметки Hero; так загрузка стартует сразу.
+            type даёт браузерам без AVIF пропустить предзагрузку и не тратить трафик */}
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/hero-mobile-828.avif"
+          imageSrcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w"
+          imageSizes="100vw"
+          media="(max-width: 767px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/hero-desktop-1100.avif"
+          imageSrcSet="/hero-desktop-1100.avif 1100w, /hero-desktop.avif 1539w"
+          imageSizes="1100px"
+          media="(min-width: 768px)"
+          fetchPriority="high"
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         {children}
       </body>
