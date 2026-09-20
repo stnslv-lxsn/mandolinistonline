@@ -2,6 +2,7 @@ import EditorialSection from '@/components/EditorialSection';
 import { formatTypography } from '@/lib/typography';
 
 const email = 'YuliaRadionova2026@yandex.ru';
+const [emailName, emailDomain] = email.split('@');
 
 const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/yulsun_vk' },
@@ -18,8 +19,11 @@ export default function Contact() {
         <p className="text-muted mb-12 font-light text-lg">
           {formatTypography("Напишите, чтобы договориться о первой встрече. На ней разберём вашу ситуацию и определим формат работы.")}
         </p>
-        <a href={`mailto:${email}`} className="text-2xl md:text-3xl font-serif text-ink hover:text-muted transition-colors border-b border-ink pb-2 break-all">
-          {email}
+        {/* На узком экране адрес не помещается в одну строку кеглем 24px, а break-all рвал его
+            посреди домена. Кегль меньше до sm, а единственное разрешённое место переноса —
+            перед «@»: домен остаётся целым */}
+        <a href={`mailto:${email}`} className="text-xl sm:text-2xl md:text-3xl font-serif text-ink hover:text-muted transition-colors border-b border-ink pb-2 break-words">
+          {emailName}<wbr />@{emailDomain}
         </a>
 
         <div className="mt-12 flex flex-wrap gap-x-8 gap-y-3 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted">

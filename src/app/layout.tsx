@@ -16,7 +16,8 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-const title = "Юлия Радионова | Бизнес-консультант";
+const title = formatTypography("Юлия Радионова | Бизнес-консультант");
+const siteName = formatTypography("Юлия Радионова");
 
 // Описание уходит и в превью ссылок в мессенджерах и соцсетях, поэтому тоже через типограф.
 // Картинку превью Next берёт из opengraph-image.jpg рядом с этим файлом
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ru_RU",
     url: "/",
-    siteName: "Юлия Радионова",
+    siteName,
     title,
     description,
   },

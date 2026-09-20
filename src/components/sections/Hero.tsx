@@ -35,10 +35,10 @@ export default function Hero() {
         <div className="relative z-10 w-full mt-auto bg-gradient-to-t from-shade/70 via-shade/60 to-transparent px-6 pt-24 pb-14 md:mt-0 md:bg-none md:px-8 md:py-0 md:flex md:justify-end">
           <div className="w-full md:w-[44%] flex flex-col gap-6 md:gap-6 text-white">
             <p className="font-serif italic text-sm md:text-xl text-white/70">
-              Бизнес-консультант, исследователь
+              {formatTypography("Бизнес-консультант, исследователь")}
             </p>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight">
-              Юлия Радионова
+              {formatTypography("Юлия Радионова")}
             </h1>
             <p className="font-sans text-sm md:text-base text-white/75 max-w-xl leading-relaxed text-balance">
               {formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.")}
@@ -47,7 +47,7 @@ export default function Hero() {
               href="#contact"
               className="w-fit uppercase tracking-[0.18em] text-xs text-white border-b border-white/40 pb-1 hover:border-white transition-colors md:border-b-0 md:pb-3.5 md:pt-3.5 md:px-7 md:bg-white md:text-shade md:font-medium md:tracking-[0.2em] md:hover:bg-white/90 md:inline-flex"
             >
-              Обсудить задачу
+              {formatTypography("Обсудить задачу")}
             </a>
           </div>
         </div>
