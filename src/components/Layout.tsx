@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 
 interface LayoutProps {
   children: ReactNode;
+  /** Префикс для пунктов меню: на главной якоря локальные, на других страницах нужен «/» */
+  anchorPrefix?: string;
 }
 
 // Иконки нарисованы вручную: ради двух штук lucide-react тянул в бандл
@@ -33,7 +35,7 @@ const menuItems = [
   { name: 'Контакты', href: '#contact' },
 ];
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
   const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -106,7 +108,7 @@ export default function Layout({ children }: LayoutProps) {
           {/* Desktop Menu */}
           <nav className="hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
             {menuItems.map((item) => (
-              <a key={item.name} href={item.href} className="transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink">
+              <a key={item.name} href={anchorPrefix + item.href} className="transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink">
                 {item.name}
               </a>
             ))}
@@ -136,7 +138,7 @@ export default function Layout({ children }: LayoutProps) {
             {menuItems.map((item) => (
               <a
                 key={item.name}
-                href={item.href}
+                href={anchorPrefix + item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-forest transition-colors whitespace-nowrap"
               >

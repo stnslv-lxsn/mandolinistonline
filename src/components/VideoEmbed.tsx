@@ -20,7 +20,7 @@ export default function VideoEmbed({ title, poster, vkOid, vkId }: VideoEmbedPro
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="relative aspect-video overflow-hidden bg-veil border border-rule">
+    <div className="relative aspect-video overflow-hidden bg-shade">
       {playing ? (
         <iframe
           src={`https://vkvideo.ru/video_ext.php?oid=${vkOid}&id=${vkId}&hd=2&autoplay=1`}
@@ -45,7 +45,7 @@ export default function VideoEmbed({ title, poster, vkOid, vkId }: VideoEmbedPro
               decoding="async"
               width={960}
               height={540}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </picture>
 

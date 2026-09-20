@@ -5,13 +5,11 @@ import { siteUrl } from '@/lib/site';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Статический сайт: дата фиксируется на сборке
+  const lastModified = new Date();
+
   return [
-    {
-      url: siteUrl,
-      // Статический сайт: дата фиксируется на сборке
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1,
-    },
+    { url: siteUrl, lastModified, changeFrequency: 'monthly', priority: 1 },
+    { url: `${siteUrl}/podcast`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
   ];
 }

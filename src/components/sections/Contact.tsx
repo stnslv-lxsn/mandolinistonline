@@ -6,7 +6,6 @@ const [emailName, emailDomain] = email.split('@');
 
 const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/yulsun_vk' },
-  { label: 'Instagram', href: 'https://www.instagram.com/yulsun__' },
 ];
 
 export default function Contact() {
@@ -22,7 +21,7 @@ export default function Contact() {
         {/* На узком экране адрес не помещается в одну строку кеглем 24px, а break-all рвал его
             посреди домена. Кегль меньше до sm, а единственное разрешённое место переноса —
             перед «@»: домен остаётся целым */}
-        <a href={`mailto:${email}`} className="text-xl sm:text-2xl md:text-3xl font-serif text-ink hover:text-muted transition-colors border-b border-ink pb-2 break-words">
+        <a href={`mailto:${email}`} className="text-lg md:text-xl font-serif text-ink hover:text-muted transition-colors border-b border-rule hover:border-ink pb-1 break-words">
           {emailName}<wbr />@{emailDomain}
         </a>
 
