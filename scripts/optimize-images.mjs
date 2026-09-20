@@ -10,9 +10,13 @@
  * - src/app/opengraph-image.jpg: 1200x630 для превью в мессенджерах и соцсетях.
  *   Кадр сдвинут так, чтобы лицо было ближе к центру: WhatsApp и часть клиентов
  *   режут превью в квадрат по центру.
+ * - podcast-1…3: обложки выпусков подкаста для плееров. Пока посетитель не нажал
+ *   «play», грузится только обложка, а не чужой плеер.
  *
- * Оригиналов нет, исходник — сами WebP из public/. Заменили фото — положите
- * новые WebP с теми же именами и перезапустите скрипт.
+ * Исходники обложек лежат в assets/ — намеренно вне public/, иначе оригиналы
+ * уехали бы на хостинг лишним весом. У фото первого экрана оригиналов нет,
+ * исходник — сами WebP из public/: заменили фото — положите новые WebP
+ * с теми же именами и перезапустите скрипт.
  */
 import { stat } from 'node:fs/promises';
 import sharp from 'sharp';
@@ -25,6 +29,11 @@ const OG = {
   out: 'src/app/opengraph-image.jpg',
 };
 
+// Обложки подкаста: карточка занимает треть колонки на десктопе и всю ширину
+// на телефоне, 960 px хватает даже при плотности 2
+const POSTERS = ['podcast-1', 'podcast-2', 'podcast-3'];
+const POSTER_WIDTH = 960;
+
 const kb = async (file) => `${((await stat(file)).size / 1024).toFixed(1)} KB`;
 
 for (const [name, smallWidth] of Object.entries(HERO)) {
@@ -35,6 +44,15 @@ for (const [name, smallWidth] of Object.entries(HERO)) {
   await sharp(source).resize({ width: smallWidth }).avif({ quality: 55, effort: 6 }).toFile(small);
   console.log(`${full.padEnd(32)} ${await kb(full)}  (WebP ${await kb(source)})`);
   console.log(`${small.padEnd(32)} ${await kb(small)}`);
+}
+
+for (const name of POSTERS) {
+  const source = `assets/${name}.jpg`;
+  for (const [ext, encode] of [['avif', (p) => p.avif({ quality: 55, effort: 6 })], ['webp', (p) => p.webp({ quality: 72 })]]) {
+    const out = `public/${name}.${ext}`;
+    await encode(sharp(source).resize({ width: POSTER_WIDTH })).toFile(out);
+    console.log(`${out.padEnd(32)} ${await kb(out)}  (исходник ${await kb(source)})`);
+  }
 }
 
 await sharp(OG.source)
