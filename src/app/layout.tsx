@@ -50,10 +50,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
-      <head>
+      <body className="min-h-full flex flex-col font-sans">
         {/* Фото первого экрана — самый крупный элемент страницы. Без этих строк браузер
             узнаёт о нём только добравшись до разметки Hero; так загрузка стартует сразу.
-            type даёт браузерам без AVIF пропустить предзагрузку и не тратить трафик */}
+            React сам поднимает эти теги в <head>. type даёт браузерам без AVIF
+            пропустить предзагрузку и не тратить трафик */}
         <link
           rel="preload"
           as="image"
@@ -74,8 +75,6 @@ export default function RootLayout({
           media="(min-width: 768px)"
           fetchPriority="high"
         />
-      </head>
-      <body className="min-h-full flex flex-col font-sans">
         {children}
       </body>
     </html>
