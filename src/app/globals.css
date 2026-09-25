@@ -6,6 +6,8 @@
 @theme {
   --color-paper: #F9F8F4;
   --color-ink: #17263A;
+  /* Тот же синий, что у текста, но почти чёрный: фон подвала */
+  --color-ink-deep: #0A111A;
   --color-muted: #666666;
   --color-forest: #1B3A5C;
   --color-forest-dark: #12293F;

@@ -156,17 +156,20 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
 
       {/* Подвал: ссылки на документы о персональных данных. Подписи короткие,
           держатся вместе через whitespace-nowrap — типограф в клиентском компоненте не нужен */}
-      <footer className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-3 text-xs text-muted">
-        {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
-        <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
-        <a href="/privacy" className="whitespace-nowrap underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink">
-          Политика персональных данных
-        </a>
-        <a href="/cookies" className="whitespace-nowrap underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink">
-          Политика cookie
-        </a>
-        {/* Подпись создателей сайта — справа, на телефоне уходит на свою строку */}
-        <span className="whitespace-nowrap sm:ml-auto">Сайт — Stoik</span>
+      {/* Тёмный на всю ширину окна — оттенок текста сайта, сильно темнее; содержимое в той же колонке 1400px */}
+      <footer className="bg-ink-deep text-white/60">
+        <div className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-3 text-xs">
+          {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
+          <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
+          <a href="/privacy" className="whitespace-nowrap underline decoration-white/25 underline-offset-4 transition-colors hover:text-white hover:decoration-white">
+            Политика персональных данных
+          </a>
+          <a href="/cookies" className="whitespace-nowrap underline decoration-white/25 underline-offset-4 transition-colors hover:text-white hover:decoration-white">
+            Политика cookie
+          </a>
+          {/* Подпись создателей сайта — справа, на телефоне уходит на свою строку */}
+          <span className="whitespace-nowrap sm:ml-auto">Сайт — Stoik</span>
+        </div>
       </footer>
     </div>
   );
