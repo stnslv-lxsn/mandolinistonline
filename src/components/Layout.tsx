@@ -10,7 +10,7 @@ interface LayoutProps {
   /** Страница начинается с тёмного экрана во всё окно: пока фон шапки прозрачен,
       её текст белый и темнеет вместе с появлением фона при прокрутке */
   darkHero?: boolean;
-  /** На странице есть имя на первом экране (.hero-name): логотип в шапке скрыт, пока оно видно */
+  /** Логотип в шапке скрыт, пока не пролистан уровень [data-logo-trigger] на первом экране */
   logoAfterHero?: boolean;
 }
 
@@ -43,6 +43,7 @@ const menuItems = [
 export default function Layout({ children, anchorPrefix = '', darkHero = false, logoAfterHero = false }: LayoutProps) {
   const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoShown, setLogoShown] = useState(!logoAfterHero);
 
   // Пишем прогресс прокрутки (0…1 на отрезке 0…180px) прямо в CSS-переменную,
   // без setState на каждый кадр — иначе лишний ререндер на каждое движение
@@ -66,6 +67,20 @@ export default function Layout({ children, anchorPrefix = '', darkHero = false, 
       if (frame) cancelAnimationFrame(frame);
     };
   }, []);
+
+  // Имя в шапке появляется, когда уровень «Листать» уходит под шапку (верхний отступ
+  // корня — высота шапки), и прячется, когда он снова ниже неё
+  useEffect(() => {
+    if (!logoAfterHero) return;
+    const trigger = document.querySelector('[data-logo-trigger]');
+    if (!trigger) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setLogoShown(!entry.isIntersecting && entry.boundingClientRect.top < window.innerHeight / 2),
+      { rootMargin: '-80px 0px 0px 0px' }
+    );
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, [logoAfterHero]);
 
   // Открытое мобильное меню перекрывает страницу целиком: блокируем скролл под ним
   // и даём закрыть его с клавиатуры
@@ -124,7 +139,8 @@ export default function Layout({ children, anchorPrefix = '', darkHero = false, 
           <div
             className={cn(
               'font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-[var(--hdr-fg)]',
-              logoAfterHero && !mobileMenuOpen && 'logo-after-hero'
+              logoAfterHero && 'logo-after-hero',
+              (logoShown || mobileMenuOpen) && 'is-shown'
             )}
           >
             ЮЛИЯ РАДИОНОВА

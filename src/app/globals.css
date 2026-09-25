@@ -49,29 +49,23 @@ body {
   );
 }
 
-/* Логотип в шапке главной скрыт, пока видно имя на первом экране, и проявляется,
-   пока имя уходит под шапку. Привязка к положению имени — именованный view-timeline,
-   видимый шапке через timeline-scope на body. Без поддержки (Firefox) логотип просто
-   виден всегда. inset сверху = высота шапки: под ней имя уже не читается */
-@keyframes logo-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Логотип в шапке главной скрыт, пока человек не пролистал первый экран до уровня
+   «Листать»; тогда он въезжает короткой анимацией, а при возврате наверх уходит.
+   Момент отслеживает Layout (IntersectionObserver на [data-logo-trigger]) */
+.logo-after-hero {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-@supports (animation-timeline: view()) {
-  body {
-    timeline-scope: --hero-name;
-  }
+.logo-after-hero.is-shown {
+  opacity: 1;
+  transform: none;
+}
 
-  .hero-name {
-    view-timeline: --hero-name block;
-    view-timeline-inset: 4.5rem 0;
-  }
-
+@media (prefers-reduced-motion: reduce) {
   .logo-after-hero {
-    animation: logo-in linear both;
-    animation-timeline: --hero-name;
-    animation-range: exit 0% exit 100%;
+    transform: none;
   }
 }
 

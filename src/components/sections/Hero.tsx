@@ -5,9 +5,7 @@ export default function Hero() {
   return (
     <>
       {/* Первый экран во всё окно. Фон — цвет края студийного фона фотографии,
-          поэтому фото стыкуется с ним без шва при любых пропорциях окна.
-          overflow-clip, а не hidden: hidden делает секцию контейнером прокрутки,
-          и привязка логотипа к имени (.hero-name) следила бы за ней, а не за страницей */}
+          поэтому фото стыкуется с ним без шва при любых пропорциях окна */}
       <section className="relative h-svh min-h-[560px] w-full overflow-clip bg-backdrop">
 
         {/* Телефон и планшет стоя: фото закрывает экран целиком, текст внизу поверх.
@@ -39,7 +37,7 @@ export default function Hero() {
             <p className="hero-rise font-serif italic text-sm md:text-xl text-muted" style={{ '--i': 0 } as React.CSSProperties}>
               {formatTypography("Бизнес-консультант, исследователь")}
             </p>
-            <h1 className="hero-name hero-rise font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
+            <h1 className="hero-rise font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
               {formatTypography("Юлия Радионова")}
             </h1>
             <p className="hero-rise font-sans text-sm md:text-base text-muted max-w-xl leading-relaxed text-balance" style={{ '--i': 2 } as React.CSSProperties}>
@@ -55,14 +53,18 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Уровень «Листать» (на телефоне подсказки нет, уровень тот же): когда он уходит
+            под шапку, в шапке появляется имя — см. logoAfterHero в Layout */}
+        <div data-logo-trigger aria-hidden="true" className="absolute inset-x-0 bottom-8 h-px pointer-events-none" />
+
         {/* Подсказка прокрутить вниз — только на десктопе: на телефоне низ экрана занят текстом.
-            Стоит под колонкой текста, а не по центру: по центру на 1024px она ложилась на фото.
+            По центру экрана; на 1024–1279px центр попадает на фото, там она под колонкой текста.
             Плавность перехода даёт scroll-smooth на <html> */}
         <a
           href="#profile"
           aria-label="Листать вниз"
           style={{ '--i': 5 } as React.CSSProperties}
-          className="hero-rise hidden lg:flex absolute bottom-8 left-3/4 -translate-x-1/2 z-10 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted hover:text-ink transition-colors"
+          className="hero-rise hidden lg:flex absolute bottom-8 left-3/4 xl:left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted hover:text-ink transition-colors"
         >
           Листать
           <span aria-hidden="true" className="relative block h-12 w-px overflow-hidden bg-ink/15">
