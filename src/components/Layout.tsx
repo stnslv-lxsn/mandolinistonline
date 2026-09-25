@@ -158,16 +158,19 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
           держатся вместе через whitespace-nowrap — типограф в клиентском компоненте не нужен */}
       {/* Тёмный на всю ширину окна — оттенок текста сайта, сильно темнее; содержимое в той же колонке 1400px */}
       <footer className="bg-ink-deep text-white/60">
-        <div className="px-6 md:px-12 py-5 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-2 text-xs">
+        <div className="px-6 md:px-12 py-2.5 max-w-[1400px] mx-auto flex flex-wrap items-center gap-x-5 md:gap-x-8 gap-y-0.5 text-[11px] leading-5">
           {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
           <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
           <a href="/privacy" className="link whitespace-nowrap hover:text-white">
-            Политика персональных данных
+            <span className="hidden sm:inline">Политика персональных данных</span>
+            <span className="sm:hidden">Персональные данные</span>
           </a>
           <a href="/cookies" className="link whitespace-nowrap hover:text-white">
-            Политика cookie
+            <span className="hidden sm:inline">Политика cookie</span>
+            <span className="sm:hidden">Cookie</span>
           </a>
-          {/* Подпись создателей сайта — справа, на телефоне уходит на свою строку */}
+          {/* Подпись создателей сайта — справа. На телефоне подписи ссылок короче, чтобы подвал
+              уместился в две строки */}
           <span className="whitespace-nowrap sm:ml-auto">Сайт — Stoik</span>
         </div>
       </footer>
