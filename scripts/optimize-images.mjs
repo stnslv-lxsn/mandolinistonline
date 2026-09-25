@@ -3,29 +3,32 @@
  *
  * Запуск: npm run images
  *
- * - hero-desktop / hero-mobile: рядом с WebP кладётся AVIF, который вдвое легче,
- *   в полном размере и в уменьшенном: 1100 px — ширина кадра на десктопе,
- *   828 px — телефон с плотностью 2. <picture> в Hero выбирает размер через
- *   srcSet/sizes и отдаёт AVIF первым, WebP остаётся для старых браузеров.
+ * - hero-desktop / hero-mobile: из одного исходника assets/hero.jpg — студийное фото
+ *   в костюме на тёмном фоне, его край ≈ #070708 (см. --color-backdrop). На десктопе
+ *   фото стоит у левого края во всю высоту окна, поэтому кадр обрезан до колен;
+ *   на телефоне фото закрывает экран целиком, кадр полный. AVIF и WebP, полный
+ *   размер и уменьшенный для srcSet.
  * - src/app/opengraph-image.jpg: 1200x630 для превью в мессенджерах и соцсетях.
- *   Кадр сдвинут так, чтобы лицо было ближе к центру: WhatsApp и часть клиентов
- *   режут превью в квадрат по центру.
+ *   Лицо по центру кадра: WhatsApp и часть клиентов режут превью в квадрат по центру.
  * - podcast-1…3: обложки выпусков подкаста для плееров. Пока посетитель не нажал
  *   «play», грузится только обложка, а не чужой плеер.
  *
- * Исходники обложек лежат в assets/ — намеренно вне public/, иначе оригиналы
- * уехали бы на хостинг лишним весом. У фото первого экрана оригиналов нет,
- * исходник — сами WebP из public/: заменили фото — положите новые WebP
- * с теми же именами и перезапустите скрипт.
+ * Исходники лежат в assets/ — намеренно вне public/, иначе оригиналы уехали бы
+ * на хостинг лишним весом. Заменили фото — положите новый assets/hero.jpg
+ * и поправьте кадры ниже, если композиция другая.
  */
 import { stat } from 'node:fs/promises';
 import sharp from 'sharp';
 
-// Уменьшенная ширина для srcSet; полный размер собирается всегда
-const HERO = { 'hero-desktop': 1100, 'hero-mobile': 828 };
+// Исходник 1706x2560. extract — кадр, width/small — ширина полного и уменьшенного файла
+const HERO_SOURCE = 'assets/hero.jpg';
+const HERO = {
+  'hero-desktop': { extract: { left: 0, top: 0, width: 1706, height: 1920 }, width: 1706, small: 977 },
+  'hero-mobile': { extract: null, width: 1080, small: 828 },
+};
 const OG = {
-  source: 'public/hero-desktop.webp',
-  crop: { left: 0, top: 50, width: 1100, height: 578 },
+  source: HERO_SOURCE,
+  crop: { left: 0, top: 120, width: 1706, height: 896 },
   out: 'src/app/opengraph-image.jpg',
 };
 
@@ -36,14 +39,17 @@ const POSTER_WIDTH = 960;
 
 const kb = async (file) => `${((await stat(file)).size / 1024).toFixed(1)} KB`;
 
-for (const [name, smallWidth] of Object.entries(HERO)) {
-  const source = `public/${name}.webp`;
-  const full = `public/${name}.avif`;
-  const small = `public/${name}-${smallWidth}.avif`;
-  await sharp(source).avif({ quality: 55, effort: 6 }).toFile(full);
-  await sharp(source).resize({ width: smallWidth }).avif({ quality: 55, effort: 6 }).toFile(small);
-  console.log(`${full.padEnd(32)} ${await kb(full)}  (WebP ${await kb(source)})`);
-  console.log(`${small.padEnd(32)} ${await kb(small)}`);
+for (const [name, { extract, width, small }] of Object.entries(HERO)) {
+  const frame = () => (extract ? sharp(HERO_SOURCE).extract(extract) : sharp(HERO_SOURCE));
+  const outputs = [
+    [`public/${name}.avif`, (p) => p.resize({ width }).avif({ quality: 55, effort: 6 })],
+    [`public/${name}.webp`, (p) => p.resize({ width }).webp({ quality: 75 })],
+    [`public/${name}-${small}.avif`, (p) => p.resize({ width: small }).avif({ quality: 55, effort: 6 })],
+  ];
+  for (const [out, encode] of outputs) {
+    await encode(frame()).toFile(out);
+    console.log(`${out.padEnd(32)} ${await kb(out)}`);
+  }
 }
 
 for (const name of POSTERS) {
