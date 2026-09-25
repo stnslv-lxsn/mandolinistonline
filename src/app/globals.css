@@ -86,3 +86,8 @@ body {
     }
   }
 }
+
+/* Нарисованная стрелка у ссылки: линия толщиной с букву Montserrat Light,
+   при наведении на ссылку утолщается на ту же величину, что и текст */
+.arrow-link { stroke-width: 0.068em; transition: transform .3s, stroke-width .2s; }
+.group:hover .arrow-link { stroke-width: 0.076em; }

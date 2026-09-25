@@ -32,7 +32,7 @@ export default function PodcastPage() {
             return (
               <article key={episode.slug} id={episode.slug} className="reveal min-w-0 scroll-mt-32 flex flex-col">
                 <VideoEmbed title={title} poster={episode.poster} vkOid={episode.vkOid} vkId={episode.vkId} />
-                <h2 className="font-serif text-lg md:text-xl mt-4 mb-2 text-ink text-balance flex-1">
+                <h2 className="font-serif text-xl md:text-2xl mt-4 mb-2 text-ink text-balance flex-1">
                   {title}
                 </h2>
                 <a
