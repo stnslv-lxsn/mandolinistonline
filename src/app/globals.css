@@ -30,6 +30,26 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Переход под первым экраном: от фона фото к цвету страницы по кривой smoothstep
+   (3t² − 2t³), в oklab. У обычного двухточечного градиента середина светлеет рывком
+   и при быстрой прокрутке читается как вспышка; здесь разгон и торможение плавные */
+.hero-fade {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-paper) 0%, var(--color-backdrop)) 0%,
+    color-mix(in oklab, var(--color-paper) 2.8%, var(--color-backdrop)) 10%,
+    color-mix(in oklab, var(--color-paper) 10.4%, var(--color-backdrop)) 20%,
+    color-mix(in oklab, var(--color-paper) 21.6%, var(--color-backdrop)) 30%,
+    color-mix(in oklab, var(--color-paper) 35.2%, var(--color-backdrop)) 40%,
+    color-mix(in oklab, var(--color-paper) 50%, var(--color-backdrop)) 50%,
+    color-mix(in oklab, var(--color-paper) 64.8%, var(--color-backdrop)) 60%,
+    color-mix(in oklab, var(--color-paper) 78.4%, var(--color-backdrop)) 70%,
+    color-mix(in oklab, var(--color-paper) 89.6%, var(--color-backdrop)) 80%,
+    color-mix(in oklab, var(--color-paper) 97.2%, var(--color-backdrop)) 90%,
+    color-mix(in oklab, var(--color-paper) 100%, var(--color-backdrop)) 100%
+  );
+}
+
 /* Анимации. Только если человек не просил уменьшить движение в настройках системы.
    Без поддержки анимаций по прокрутке (Firefox пока за флагом) блоки просто стоят
    на месте: состояние по умолчанию видимое, скрытых элементов без JS не бывает */

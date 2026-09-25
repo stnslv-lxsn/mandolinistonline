@@ -26,6 +26,9 @@ export default function Hero() {
           />
         </picture>
 
+        {/* Низ кадра уходит в тёмный фон, чтобы фото не обрывалось о переход ниже */}
+        <div className="absolute inset-x-0 bottom-0 h-1/4 pointer-events-none bg-gradient-to-b from-transparent to-backdrop" />
+
         {/* Затемнение снизу под текстом — только на телефоне, где текст лежит на фото */}
         <div className="lg:hidden absolute inset-x-0 bottom-0 h-3/5 pointer-events-none bg-gradient-to-t from-backdrop via-backdrop/70 to-transparent" />
 
@@ -67,9 +70,9 @@ export default function Hero() {
 
       </section>
 
-      {/* Переход под первым экраном: из тёмного фона сверху в цвет страницы вниз.
-          Стоит после фото, а не поверх него, поэтому кадр не теряет низ */}
-      <div aria-hidden="true" className="h-16 lg:h-24 bg-gradient-to-b from-backdrop to-paper" />
+      {/* Переход под первым экраном из тёмного фона в цвет страницы. Высокий и с плавным
+          разгоном (см. .hero-fade), чтобы при прокрутке не было вспышки от чёрного к белому */}
+      <div aria-hidden="true" className="hero-fade h-[45svh] min-h-64" />
     </>
   );
 }
