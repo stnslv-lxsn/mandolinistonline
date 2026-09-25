@@ -22,13 +22,13 @@ const stages = [
 export default function Work() {
   return (
     <EditorialSection id="work" number="03" title="Работа">
-      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
+      <h2 className="reveal font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
         {formatTypography("Формат зависит от задачи, работа строится вокруг реальных решений руководителя")}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8">
         {stages.map((stage) => (
-          <div key={stage.number} className="border-t border-rule pt-6 min-w-0">
+          <div key={stage.number} className="reveal border-t border-rule pt-6 min-w-0">
             <span className="block font-serif text-2xl italic text-muted mb-4">
               {stage.number}
             </span>

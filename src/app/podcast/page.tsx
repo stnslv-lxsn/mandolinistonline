@@ -28,7 +28,7 @@ export default function PodcastPage() {
           {podcast.map((episode) => {
             const title = formatTypography(episode.title);
             return (
-              <article key={episode.slug} id={episode.slug} className="min-w-0 scroll-mt-32">
+              <article key={episode.slug} id={episode.slug} className="reveal min-w-0 scroll-mt-32">
                 <VideoEmbed title={title} poster={episode.poster} vkOid={episode.vkOid} vkId={episode.vkId} />
                 <h2 className="font-serif text-lg md:text-xl mt-4 mb-2 text-ink text-balance">
                   {title}
