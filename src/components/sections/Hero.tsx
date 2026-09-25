@@ -3,51 +3,42 @@ import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-svh w-full flex md:items-center md:justify-center md:bg-paper md:px-12 md:py-28">
+    <section className="relative min-h-svh w-full flex pt-20 pb-12 px-4 md:px-12 md:py-28 md:items-center md:justify-center md:bg-paper">
 
-      {/* Телефон: фото сверху, текст под ним. Десктоп: фото — центрированный блок, текст поверх справа */}
-      <div className="bg-paper pt-20 md:bg-transparent md:pt-0 relative w-full min-h-svh md:min-h-0 flex flex-col md:flex-none md:flex-row md:w-auto md:h-[calc(100svh-14rem)] md:max-h-[793px] md:max-w-[1100px] md:aspect-[1539/1109] md:items-center md:overflow-hidden md:shadow-2xl">
+      {/* Рамка: слева фотография, справа текст на светлом */}
+      <div className="relative w-full md:w-auto md:h-[calc(100svh-14rem)] md:max-h-[793px] md:max-w-[1100px] md:aspect-[1539/1109] bg-paper overflow-hidden grid grid-cols-1 md:grid-cols-[45%_55%]">
 
-        {/* Фото */}
-        <div className="absolute inset-x-0 top-20 bottom-0 md:inset-0 md:top-0">
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/hero-mobile.webp" />
-            <img
-              src="/hero-desktop.webp"
-              alt="Юлия Радионова"
-              fetchPriority="high"
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover object-[50%_0%] md:object-center"
-            />
-          </picture>
+        {/* Фотография */}
+        <div className="relative h-[46svh] md:h-full">
+          <img
+            src="/portrait.webp"
+            alt="Юлия Радионова"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+          />
         </div>
 
-        {/* Затемнение справа налево — только десктоп */}
-        <div className="hidden md:block absolute inset-0 pointer-events-none bg-gradient-to-l from-shade/85 via-shade/40 to-shade/0" />
-
-        {/* Контент */}
-        <div className="relative z-10 w-full mt-auto bg-gradient-to-t from-shade/70 via-shade/60 to-transparent px-6 pt-24 pb-14 md:mt-0 md:bg-none md:px-8 md:py-0 md:flex md:justify-end">
-          <div className="w-full md:w-[44%] flex flex-col gap-6 md:gap-6 text-white">
-            <p className="font-serif italic text-sm md:text-xl text-white/70">
-              Бизнес-консультант, исследователь
-            </p>
-            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight">
-              Юлия Радионова
-            </h1>
-            <p className="font-sans text-sm md:text-base text-white/75 max-w-xl leading-relaxed">
-              <Balancer>
-                {formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.")}
-              </Balancer>
-            </p>
-            <a
-              href="#contact"
-              className="w-fit uppercase tracking-[0.18em] text-xs text-white border-b border-white/40 pb-1 hover:border-white transition-colors md:border-b-0 md:pb-3.5 md:pt-3.5 md:px-7 md:bg-white md:text-shade md:font-medium md:tracking-[0.2em] md:hover:bg-white/90 md:inline-flex"
-            >
-              Обсудить задачу
-            </a>
-          </div>
+        {/* Текст */}
+        <div className="border border-forest md:border-l-0 flex flex-col justify-center gap-6 px-6 py-10 md:pl-20 md:pr-12 md:py-0">
+          <p className="font-serif italic text-sm md:text-xl text-muted">
+            Бизнес-консультант, исследователь
+          </p>
+          <h1 className="font-serif text-[2rem] md:text-[2.75rem] lg:text-[3.25rem] leading-[1.05] md:leading-[0.95] tracking-tight text-ink">
+            Юлия Радионова
+          </h1>
+          <p className="font-sans text-[15px] md:text-[17px] text-muted leading-relaxed">
+            <Balancer>
+              {formatTypography("Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.")}
+            </Balancer>
+          </p>
+          <a
+            href="#contact"
+            className="w-fit font-sans text-xs uppercase tracking-[0.18em] text-ink border-b border-ink/40 hover:border-ink pb-1 transition-colors"
+          >
+            Обсудить задачу
+          </a>
         </div>
-
       </div>
     </section>
   );
