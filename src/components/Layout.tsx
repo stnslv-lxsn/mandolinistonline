@@ -153,6 +153,19 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
       <main>
         {children}
       </main>
+
+      {/* Подвал: ссылки на документы о персональных данных. Подписи короткие,
+          держатся вместе через whitespace-nowrap — типограф в клиентском компоненте не нужен */}
+      <footer className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-3 text-xs text-muted">
+        {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
+        <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
+        <a href="/privacy" className="whitespace-nowrap underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink">
+          Политика персональных данных
+        </a>
+        <a href="/cookies" className="whitespace-nowrap underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink">
+          Политика cookie
+        </a>
+      </footer>
     </div>
   );
 }
