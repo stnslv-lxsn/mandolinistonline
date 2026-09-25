@@ -3,11 +3,10 @@
  *
  * Запуск: npm run images
  *
- * - hero-desktop / hero-mobile: из одного исходника assets/hero.jpg — студийное фото
- *   в костюме на тёмном фоне, его край ≈ #070708 (см. --color-backdrop). На десктопе
- *   фото стоит у левого края во всю высоту окна, поэтому кадр обрезан до колен;
- *   на телефоне фото закрывает экран целиком, кадр полный. AVIF и WebP, полный
- *   размер и уменьшенный для srcSet.
+ * - hero-desktop / hero-mobile: из одного исходника assets/hero.jpg — студийный портрет
+ *   по пояс в костюме на белом фоне, его край ровно #FDFDFD (см. --color-backdrop).
+ *   На десктопе фото стоит у левого края во всю высоту окна, на телефоне закрывает
+ *   экран целиком. AVIF и WebP, полный размер и уменьшенный для srcSet.
  * - src/app/opengraph-image.jpg: 1200x630 для превью в мессенджерах и соцсетях.
  *   Лицо по центру кадра: WhatsApp и часть клиентов режут превью в квадрат по центру.
  * - podcast-1…3: обложки выпусков подкаста для плееров. Пока посетитель не нажал
@@ -23,12 +22,12 @@ import sharp from 'sharp';
 // Исходник 1706x2560. extract — кадр, width/small — ширина полного и уменьшенного файла
 const HERO_SOURCE = 'assets/hero.jpg';
 const HERO = {
-  'hero-desktop': { extract: { left: 0, top: 0, width: 1706, height: 1920 }, width: 1706, small: 977 },
+  'hero-desktop': { extract: null, width: 1280, small: 800 },
   'hero-mobile': { extract: null, width: 1080, small: 828 },
 };
 const OG = {
   source: HERO_SOURCE,
-  crop: { left: 0, top: 120, width: 1706, height: 896 },
+  crop: { left: 0, top: 40, width: 1706, height: 896 },
   out: 'src/app/opengraph-image.jpg',
 };
 

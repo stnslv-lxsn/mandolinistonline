@@ -69,9 +69,9 @@ export default function RootLayout({
           rel="preload"
           as="image"
           type="image/avif"
-          href="/hero-desktop-977.avif"
-          imageSrcSet="/hero-desktop-977.avif 977w, /hero-desktop.avif 1706w"
-          imageSizes="89vh"
+          href="/hero-desktop-800.avif"
+          imageSrcSet="/hero-desktop-800.avif 800w, /hero-desktop.avif 1280w"
+          imageSizes="67vh"
           media="(min-width: 1024px)"
           fetchPriority="high"
         />
