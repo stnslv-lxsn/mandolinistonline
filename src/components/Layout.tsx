@@ -158,7 +158,7 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
           держатся вместе через whitespace-nowrap — типограф в клиентском компоненте не нужен */}
       {/* Тёмный на всю ширину окна — оттенок текста сайта, сильно темнее; содержимое в той же колонке 1400px */}
       <footer className="bg-ink-deep text-white/60">
-        <div className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-3 text-xs">
+        <div className="px-6 md:px-12 py-5 max-w-[1400px] mx-auto flex flex-wrap gap-x-8 gap-y-2 text-xs">
           {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
           <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
           <a href="/privacy" className="whitespace-nowrap underline decoration-white/25 underline-offset-4 transition-colors hover:text-white hover:decoration-white">

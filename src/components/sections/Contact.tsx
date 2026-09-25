@@ -4,6 +4,9 @@ import { formatTypography } from '@/lib/typography';
 
 const [emailName, emailDomain] = email.split('@');
 
+// Ссылки контактов: акцентный синий, подчёркивание проявляется при наведении
+const contactLink = 'text-forest underline decoration-transparent decoration-1 underline-offset-[6px] transition-colors hover:decoration-current';
+
 const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/yulsun_vk' },
 ];
@@ -18,23 +21,16 @@ export default function Contact() {
         <p className="reveal text-muted mb-6 font-light text-lg">
           {formatTypography("Напишите, чтобы договориться о первой встрече. На ней разберём вашу ситуацию и определим формат работы.")}
         </p>
-        {/* На узком экране адрес не помещается в одну строку кеглем 24px, а break-all рвал его
-            посреди домена. Кегль меньше до sm, а единственное разрешённое место переноса —
+        {/* Почта и соцсети в один ряд, одним стилем: синие, подчёркивание при наведении.
+            На узком экране адрес не помещается в строку кеглем 24px, а break-all рвал его
+            посреди домена. Кегль меньше до md, а единственное разрешённое место переноса —
             перед «@»: домен остаётся целым */}
-        <a href={`mailto:${email}`} className="text-xl md:text-2xl font-serif text-ink hover:text-muted transition-colors border-b border-rule hover:border-ink pb-1 break-words">
-          {emailName}<wbr />@{emailDomain}
-        </a>
-
-        <div className="reveal mt-6 flex flex-wrap gap-x-8 gap-y-3 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted">
+        <div className="reveal flex flex-wrap items-baseline gap-x-8 gap-y-2 font-serif text-xl md:text-2xl">
+          <a href={`mailto:${email}`} className={`${contactLink} break-words`}>
+            {emailName}<wbr />@{emailDomain}
+          </a>
           {socials.map((social) => (
-            <a
-              key={social.href}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              // Подчёркивание как у пунктов меню в шапке: растёт из нуля за 300 мс
-              className="transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink"
-            >
+            <a key={social.href} href={social.href} target="_blank" rel="noopener noreferrer" className={`${contactLink} whitespace-nowrap`}>
               {social.label}
             </a>
           ))}
