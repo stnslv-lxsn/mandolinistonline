@@ -2,14 +2,14 @@ import type React from 'react';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
-  // Первый экран во всё окно. Фон — цвет края студийного фона фотографии,
-  // поэтому фото стыкуется с ним без шва при любых пропорциях окна
+  // Первый экран во всё окно на фоне страницы. Белый фон фото при подготовке
+  // подкрашен ровно в цвет страницы (scripts/optimize-images.mjs), поэтому
+  // ни вокруг фото, ни на стыке с разделом ниже шва нет
   return (
-    <section className="relative flex flex-col h-svh min-h-[560px] w-full overflow-clip bg-backdrop">
+    <section className="relative flex flex-col h-svh min-h-[560px] w-full overflow-clip bg-paper">
 
       {/* Телефон и планшет стоя: фото сверху на всю оставшуюся высоту, текст под ним.
           С lg: фото у левого края во всю высоту, текст справа на белом фоне.
-          Край фото того же цвета, что и фон секции, поэтому стыка не видно.
           Градиентов нет намеренно: ни поверх фото, ни на переходах */}
       <div className="relative flex-1 min-h-0 lg:absolute lg:inset-0">
         <picture>
@@ -28,21 +28,24 @@ export default function Hero() {
       </div>
 
       {/* Контент */}
-      <div className="relative z-10 px-6 pt-8 pb-12 lg:absolute lg:inset-0 lg:flex lg:items-center lg:justify-end lg:pl-12 lg:pr-8 lg:py-0 xl:pr-12">
-        <div className="w-full lg:w-[44%] max-w-xl flex flex-col gap-6 text-ink">
-          <p className="hero-rise font-serif italic text-sm md:text-xl text-muted" style={{ '--i': 0 } as React.CSSProperties}>
+      <div className="relative z-10 px-6 pt-8 pb-12 lg:absolute lg:inset-0 lg:flex lg:items-center lg:pl-[calc(11vw+66.7svh)] lg:pr-8 lg:py-0 xl:pr-12">
+        {/* Колонка текста начинается сразу за фото: 6vw отступ фото + его ширина
+            (0,667 высоты окна) + 5vw воздуха. Текст растёт вместе с экраном: при прежних
+            размерах на широком мониторе подписи терялись рядом с фото во всю высоту */}
+        <div className="w-full max-w-xl lg:max-w-2xl flex flex-col gap-6 lg:gap-7 2xl:gap-9 text-ink">
+          <p className="hero-rise font-serif italic text-sm md:text-xl lg:text-2xl 2xl:text-3xl text-muted" style={{ '--i': 0 } as React.CSSProperties}>
             {formatTypography("Бизнес-консультант, исследователь")}
           </p>
-          <h1 className="hero-rise font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
+          <h1 className="hero-rise font-serif text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
             {formatTypography("Юлия Радионова")}
           </h1>
-          <p className="hero-rise font-sans text-sm md:text-base text-muted max-w-xl leading-relaxed text-balance" style={{ '--i': 2 } as React.CSSProperties}>
+          <p className="hero-rise font-sans text-sm md:text-base lg:text-lg 2xl:text-xl text-muted max-w-xl lg:max-w-2xl leading-relaxed text-balance" style={{ '--i': 2 } as React.CSSProperties}>
             {formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.")}
           </p>
           <a
             href="#contact"
             style={{ '--i': 3 } as React.CSSProperties}
-            className="hero-rise w-fit uppercase tracking-[0.18em] text-xs text-ink border-b border-ink/40 pb-1 hover:border-ink transition-colors lg:border-b-0 lg:pb-3.5 lg:pt-3.5 lg:px-7 lg:bg-ink lg:text-white lg:font-medium lg:tracking-[0.2em] lg:hover:bg-forest lg:inline-flex"
+            className="hero-rise w-fit uppercase tracking-[0.18em] text-xs text-ink border-b border-ink/40 pb-1 hover:border-ink transition-colors lg:border-b-0 lg:py-4 lg:px-9 lg:text-sm 2xl:py-5 2xl:px-11 lg:bg-ink lg:text-white lg:font-medium lg:tracking-[0.2em] lg:hover:bg-forest lg:inline-flex"
           >
             {formatTypography("Обсудить задачу")}
           </a>
