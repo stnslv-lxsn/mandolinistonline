@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import VideoEmbed from '@/components/VideoEmbed';
-import { podcast, podcastHeading, podcastTitle } from '@/content/podcast';
+import { podcast, podcastHeading } from '@/content/podcast';
 import { formatTypography } from '@/lib/typography';
 
 export const metadata: Metadata = {
-  title: formatTypography(`Подкаст «${podcastTitle}» | Юлия Радионова`),
-  description: formatTypography('Выпуски подкаста «Экспертная карта Дона» с участием Юлии Радионовой: о решениях, команде и рынке.'),
+  title: formatTypography('Подкаст | Юлия Радионова'),
+  description: formatTypography('Выпуски подкаста с участием Юлии Радионовой: разговор о решениях, команде и рынке.'),
   alternates: { canonical: '/podcast' },
 };
 
