@@ -21,7 +21,7 @@ export default function Contact() {
         {/* На узком экране адрес не помещается в одну строку кеглем 24px, а break-all рвал его
             посреди домена. Кегль меньше до sm, а единственное разрешённое место переноса —
             перед «@»: домен остаётся целым */}
-        <a href={`mailto:${email}`} className="text-lg md:text-xl font-serif text-ink hover:text-muted transition-colors border-b border-rule hover:border-ink pb-1 break-words">
+        <a href={`mailto:${email}`} className="text-xl md:text-2xl font-serif text-ink hover:text-muted transition-colors border-b border-rule hover:border-ink pb-1 break-words">
           {emailName}<wbr />@{emailDomain}
         </a>
 
