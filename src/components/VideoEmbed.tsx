@@ -53,14 +53,17 @@ export default function VideoEmbed({ title, poster, vkOid, vkId }: VideoEmbedPro
             />
           </picture>
 
-          {/* Затемнение, чтобы белый треугольник читался на любой обложке */}
-          <span aria-hidden="true" className="absolute inset-0 bg-shade/25 transition-colors duration-300 group-hover:bg-shade/10" />
+          {/* Лёгкое затемнение при наведении — обложка откликается на курсор */}
+          <span aria-hidden="true" className="absolute inset-0 bg-shade/0 transition-colors duration-300 group-hover:bg-shade/10" />
 
+          {/* Кнопка в левом нижнем углу на своей тёмной подложке: по центру она закрывала
+              заголовки, напечатанные на обложках, и без затемнения всей картинки читается
+              на любом фоне */}
           <span
             aria-hidden="true"
-            className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 transition-colors duration-300 group-hover:bg-white/15"
+            className="absolute left-3 bottom-3 flex h-11 w-11 items-center justify-center rounded-full bg-shade/60 backdrop-blur-sm transition-colors duration-300 group-hover:bg-shade/80"
           >
-            <span className="ml-1 block h-0 w-0 border-y-[9px] border-l-[15px] border-y-transparent border-l-white" />
+            <span className="ml-0.5 block h-0 w-0 border-y-[7px] border-l-[12px] border-y-transparent border-l-white" />
           </span>
         </button>
       )}

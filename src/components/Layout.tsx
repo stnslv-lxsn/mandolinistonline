@@ -1,6 +1,7 @@
 'use client';
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 interface LayoutProps {
@@ -26,6 +27,8 @@ function CloseIcon() {
     </svg>
   );
 }
+
+const logoClass = 'font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-ink';
 
 const menuItems = [
   { name: 'Обо мне', href: '#profile' },
@@ -82,7 +85,7 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-paper text-ink font-sans relative selection:bg-forest selection:text-paper">
+    <div className="min-h-screen flex flex-col bg-paper text-ink font-sans relative selection:bg-forest selection:text-paper">
 
       {/* 1. ВЕРХНЕЕ МЕНЮ (Sticky + Glassmorphism) */}
       <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50">
@@ -101,9 +104,12 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
             paddingBottom: 'calc(1.25rem - 0.25rem * var(--hdr, 0))',
           }}
         >
-          <div className="font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-ink">
-            ЮЛИЯ РАДИОНОВА
-          </div>
+          {/* Имя — ссылка на главную на всех страницах, кроме самой главной */}
+          {anchorPrefix ? (
+            <Link href="/" className={logoClass}>ЮЛИЯ РАДИОНОВА</Link>
+          ) : (
+            <div className={logoClass}>ЮЛИЯ РАДИОНОВА</div>
+          )}
 
           {/* Desktop Menu */}
           <nav className="hidden lg:flex space-x-6 xl:space-x-10 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
@@ -150,15 +156,17 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
       </header>
 
       {/* Основной контент */}
-      <main>
+      {/* flex-1: на короткой странице подвал прижат к низу окна, без светлой полосы под ним */}
+      <main className="flex-1">
         {children}
       </main>
 
       {/* Подвал: ссылки на документы о персональных данных. Подписи короткие,
           держатся вместе через whitespace-nowrap — типограф в клиентском компоненте не нужен */}
-      {/* Тёмный на всю ширину окна — оттенок текста сайта, сильно темнее; содержимое в той же колонке 1400px */}
+      {/* Тёмный на всю ширину окна — оттенок текста сайта, сильно темнее. Поля как у шапки,
+          чтобы края подвала совпадали с логотипом и меню на любой ширине */}
       <footer className="bg-ink-deep text-white/60">
-        <div className="px-6 md:px-12 py-2.5 max-w-[1400px] mx-auto flex flex-wrap items-center gap-x-5 md:gap-x-8 gap-y-0.5 text-[11px] leading-5">
+        <div className="px-6 md:px-12 py-2.5 flex flex-wrap items-center gap-x-5 md:gap-x-8 gap-y-0.5 text-[11px] leading-5">
           {/* Год считается и при сборке, и в браузере: на стыке лет они разойдутся, это ожидаемо */}
           <span className="whitespace-nowrap" suppressHydrationWarning>© {new Date().getFullYear()} Юлия Радионова</span>
           <a href="/privacy" className="link whitespace-nowrap hover:text-white">

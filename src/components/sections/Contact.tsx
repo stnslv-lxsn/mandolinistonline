@@ -22,10 +22,10 @@ export default function Contact() {
           {formatTypography("Напишите, чтобы договориться о первой встрече. На ней разберём вашу ситуацию и определим формат работы.")}
         </p>
         {/* Почта и соцсети в один ряд, одним стилем: синие, подчёркивание при наведении.
-            На узком экране адрес не помещается в строку кеглем 24px, а break-all рвал его
+            Шрифт — гротеск, как во всём тексте сайта. На узком экране адрес не помещается в строку, а break-all рвал его
             посреди домена. Кегль меньше до md, а единственное разрешённое место переноса —
             перед «@»: домен остаётся целым */}
-        <div className="reveal flex flex-wrap items-baseline gap-x-8 gap-y-2 font-serif text-xl md:text-2xl">
+        <div className="reveal flex flex-wrap items-baseline gap-x-8 gap-y-2 font-sans text-lg md:text-xl">
           <a href={`mailto:${email}`} className={`${contactLink} break-words`}>
             {emailName}<wbr />@{emailDomain}
           </a>
