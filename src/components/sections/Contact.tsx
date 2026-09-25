@@ -10,12 +10,12 @@ const socials = [
 
 export default function Contact() {
   return (
-    <EditorialSection id="contact" number="05" title="Контакты" className="pb-32">
+    <EditorialSection id="contact" number="05" title="Контакты" className="pb-24">
       <div className="max-w-2xl">
-        <h2 className="font-serif text-4xl md:text-5xl mb-8 text-balance">
+        <h2 className="font-serif text-4xl md:text-5xl mb-6 text-balance">
           {formatTypography("Обсудить вашу ситуацию")}
         </h2>
-        <p className="text-muted mb-12 font-light text-lg">
+        <p className="text-muted mb-8 font-light text-lg">
           {formatTypography("Напишите, чтобы договориться о первой встрече. На ней разберём вашу ситуацию и определим формат работы.")}
         </p>
         {/* На узком экране адрес не помещается в одну строку кеглем 24px, а break-all рвал его
@@ -25,7 +25,7 @@ export default function Contact() {
           {emailName}<wbr />@{emailDomain}
         </a>
 
-        <div className="mt-12 flex flex-wrap gap-x-8 gap-y-3 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted">
+        <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted">
           {socials.map((social) => (
             <a
               key={social.href}

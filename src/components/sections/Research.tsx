@@ -22,7 +22,7 @@ export default function Research() {
     <EditorialSection id="research" number="04" title="Проекты">
       <div className="flex flex-col max-w-4xl">
         {topics.map((topic) => (
-          <article key={topic.title} className="border-t border-rule py-8 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
+          <article key={topic.title} className="border-t border-rule py-6 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
             <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.45rem]">
               {topic.year}
             </span>
@@ -38,7 +38,7 @@ export default function Research() {
         ))}
 
         {/* Подкаст: на главной только тема и кнопка, выпуски и плееры — на /podcast */}
-        <article className="border-t border-rule py-8 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
+        <article className="border-t border-rule py-6 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
           <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.45rem]">
             Подкасты
           </span>

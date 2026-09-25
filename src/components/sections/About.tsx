@@ -5,12 +5,12 @@ export default function About() {
   return (
     <EditorialSection id="profile" number="01" title="Обо мне">
       {/* Журнальная цитата */}
-      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
+      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-10 max-w-4xl text-ink text-balance">
         {formatTypography('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.')}
       </h2>
 
       {/* Две колонки текста */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 text-base leading-relaxed text-muted max-w-4xl font-light">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-base leading-relaxed text-muted max-w-4xl font-light">
         <p>
           {formatTypography("Двадцать лет в управлении и бизнесе. Последние шесть — в e-commerce: развитие направления продаж на маркетплейсах с оборотом более 900 млн рублей в год. Управление командами и коммерческими процессами — от ассортимента и контента до логистики и аналитики площадок.")}
         </p>
