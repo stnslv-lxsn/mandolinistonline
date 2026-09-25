@@ -24,13 +24,13 @@ export default function PodcastPage() {
           {formatTypography(podcastHeading)}
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-12 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 max-w-6xl">
           {podcast.map((episode) => {
             const title = formatTypography(episode.title);
             return (
               <article key={episode.slug} id={episode.slug} className="min-w-0 scroll-mt-32">
                 <VideoEmbed title={title} poster={episode.poster} vkOid={episode.vkOid} vkId={episode.vkId} />
-                <h2 className="font-serif text-xl md:text-2xl mt-5 mb-3 text-ink text-balance">
+                <h2 className="font-serif text-lg md:text-xl mt-4 mb-2 text-ink text-balance">
                   {title}
                 </h2>
                 <a
