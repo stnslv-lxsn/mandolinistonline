@@ -37,7 +37,7 @@ export default function PodcastPage() {
                   href={episode.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-forest relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap after:bg-forest"
+                  className="link font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-forest whitespace-nowrap"
                 >
                   Смотреть на YouTube
                 </a>

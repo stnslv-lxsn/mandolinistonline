@@ -4,8 +4,8 @@ import { formatTypography } from '@/lib/typography';
 
 const [emailName, emailDomain] = email.split('@');
 
-// Ссылки контактов: акцентный синий, подчёркивание проявляется при наведении
-const contactLink = 'text-forest underline decoration-transparent decoration-1 underline-offset-[6px] transition-colors hover:decoration-current';
+// Ссылки контактов: акцентный синий; поведение при наведении — .link в globals.css
+const contactLink = 'link text-forest';
 
 const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/yulsun_vk' },

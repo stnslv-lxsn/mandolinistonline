@@ -53,7 +53,7 @@ export default function Research() {
               href="/podcast"
               className="group inline-flex items-center gap-2 text-base md:text-lg text-forest font-light leading-relaxed"
             >
-              <span className="underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-current">Смотреть выпуски</span>
+              <span className="link-part">Смотреть выпуски</span>
               <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>

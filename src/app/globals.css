@@ -29,6 +29,27 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Ссылки в тексте — одно поведение по всему сайту: при наведении появляется
+   подчёркивание и буквы чуть утолщаются. Утолщение — обводкой глифа, а не сменой
+   начертания, поэтому ширина текста не меняется и соседи не сдвигаются.
+   .link — на самой ссылке; если подчёркивать нужно только часть (текст без стрелки),
+   .link-part на этой части, а на ссылке — group */
+.link,
+.link-part {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  -webkit-text-stroke: 0 transparent;
+  transition: color 0.2s, text-decoration-color 0.2s, -webkit-text-stroke 0.2s;
+}
+
+.link:hover,
+.group:hover .link-part {
+  text-decoration-color: currentColor;
+  -webkit-text-stroke: 0.025em currentColor;
+}
+
 /* Анимации. Только если человек не просил уменьшить движение в настройках системы.
    Без поддержки анимаций по прокрутке (Firefox пока за флагом) блоки просто стоят
    на месте: состояние по умолчанию видимое, скрытых элементов без JS не бывает */
