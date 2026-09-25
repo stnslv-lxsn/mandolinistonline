@@ -10,6 +10,8 @@ interface LayoutProps {
   /** Страница начинается с тёмного экрана во всё окно: пока фон шапки прозрачен,
       её текст белый и темнеет вместе с появлением фона при прокрутке */
   darkHero?: boolean;
+  /** На странице есть имя на первом экране (.hero-name): логотип в шапке скрыт, пока оно видно */
+  logoAfterHero?: boolean;
 }
 
 // Иконки нарисованы вручную: ради двух штук lucide-react тянул в бандл
@@ -38,7 +40,7 @@ const menuItems = [
   { name: 'Контакты', href: '#contact' },
 ];
 
-export default function Layout({ children, anchorPrefix = '', darkHero = false }: LayoutProps) {
+export default function Layout({ children, anchorPrefix = '', darkHero = false, logoAfterHero = false }: LayoutProps) {
   const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -118,7 +120,13 @@ export default function Layout({ children, anchorPrefix = '', darkHero = false }
             paddingBottom: 'calc(1.25rem - 0.25rem * var(--hdr, 0))',
           }}
         >
-          <div className="font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-[var(--hdr-fg)]">
+          {/* Открытое меню показывает логотип всегда: там имени первого экрана не видно */}
+          <div
+            className={cn(
+              'font-serif text-[13px] md:text-2xl font-semibold md:font-bold tracking-[0.14em] md:tracking-wide relative z-50 text-[var(--hdr-fg)]',
+              logoAfterHero && !mobileMenuOpen && 'logo-after-hero'
+            )}
+          >
             ЮЛИЯ РАДИОНОВА
           </div>
 

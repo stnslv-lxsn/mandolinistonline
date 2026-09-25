@@ -49,6 +49,32 @@ body {
   );
 }
 
+/* Логотип в шапке главной скрыт, пока видно имя на первом экране, и проявляется,
+   пока имя уходит под шапку. Привязка к положению имени — именованный view-timeline,
+   видимый шапке через timeline-scope на body. Без поддержки (Firefox) логотип просто
+   виден всегда. inset сверху = высота шапки: под ней имя уже не читается */
+@keyframes logo-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@supports (animation-timeline: view()) {
+  body {
+    timeline-scope: --hero-name;
+  }
+
+  .hero-name {
+    view-timeline: --hero-name block;
+    view-timeline-inset: 4.5rem 0;
+  }
+
+  .logo-after-hero {
+    animation: logo-in linear both;
+    animation-timeline: --hero-name;
+    animation-range: exit 0% exit 100%;
+  }
+}
+
 /* Анимации. Только если человек не просил уменьшить движение в настройках системы.
    Без поддержки анимаций по прокрутке (Firefox пока за флагом) блоки просто стоят
    на месте: состояние по умолчанию видимое, скрытых элементов без JS не бывает */

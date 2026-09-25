@@ -5,8 +5,10 @@ export default function Hero() {
   return (
     <>
       {/* Первый экран во всё окно. Фон — цвет края студийного фона фотографии,
-          поэтому фото стыкуется с ним без шва при любых пропорциях окна */}
-      <section className="relative h-svh min-h-[560px] w-full overflow-hidden bg-backdrop">
+          поэтому фото стыкуется с ним без шва при любых пропорциях окна.
+          overflow-clip, а не hidden: hidden делает секцию контейнером прокрутки,
+          и привязка логотипа к имени (.hero-name) следила бы за ней, а не за страницей */}
+      <section className="relative h-svh min-h-[560px] w-full overflow-clip bg-backdrop">
 
         {/* Телефон и планшет стоя: фото закрывает экран целиком, текст внизу поверх.
             С lg: фото у левого края во всю высоту, текст справа на белом фоне.
@@ -37,7 +39,7 @@ export default function Hero() {
             <p className="hero-rise font-serif italic text-sm md:text-xl text-muted" style={{ '--i': 0 } as React.CSSProperties}>
               {formatTypography("Бизнес-консультант, исследователь")}
             </p>
-            <h1 className="hero-rise font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
+            <h1 className="hero-name hero-rise font-serif text-3xl md:text-4xl lg:text-5xl leading-[1.05] md:leading-[0.95] tracking-tight" style={{ '--i': 1 } as React.CSSProperties}>
               {formatTypography("Юлия Радионова")}
             </h1>
             <p className="hero-rise font-sans text-sm md:text-base text-muted max-w-xl leading-relaxed text-balance" style={{ '--i': 2 } as React.CSSProperties}>
