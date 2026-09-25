@@ -27,8 +27,12 @@ export default function Hero() {
       {/* Затемнение снизу под текстом — только на телефоне, где текст лежит на фото */}
       <div className="lg:hidden absolute inset-x-0 bottom-0 h-3/5 pointer-events-none bg-gradient-to-t from-backdrop via-backdrop/70 to-transparent" />
 
+      {/* Короткий переход в цвет страницы у нижнего края, чтобы тёмный экран
+          не обрывался о светлый раздел под ним */}
+      <div className="absolute inset-x-0 bottom-0 h-16 lg:h-24 pointer-events-none bg-gradient-to-b from-transparent to-paper" />
+
       {/* Контент */}
-      <div className="relative z-10 h-full flex items-end lg:items-center lg:justify-end px-6 pb-14 lg:px-12 lg:pb-0 xl:px-24">
+      <div className="relative z-10 h-full flex items-end lg:items-center lg:justify-end px-6 pb-24 lg:px-12 lg:pb-0 xl:px-24">
         <div className="w-full lg:w-[44%] max-w-xl flex flex-col gap-6 text-white">
           <p className="font-serif italic text-sm md:text-xl text-white/70">
             {formatTypography("Бизнес-консультант, исследователь")}
