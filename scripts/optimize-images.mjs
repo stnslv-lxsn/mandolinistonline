@@ -14,8 +14,10 @@
  *   «play», грузится только обложка, а не чужой плеер.
  *
  * Исходники лежат в assets/ — намеренно вне public/, иначе оригиналы уехали бы
- * на хостинг лишним весом. Заменили фото — положите новый assets/hero.jpg
- * и поправьте кадры ниже, если композиция другая.
+ * на хостинг лишним весом. assets/hero.jpg — уже с ретушью кожи, её делает
+ * scripts/retouch-hero.py из assets/hero-original.jpg. Заменили фото — положите
+ * его в hero-original.jpg, поправьте координаты лица в retouch-hero.py, запустите
+ * его, затем этот скрипт.
  */
 import { stat } from 'node:fs/promises';
 import sharp from 'sharp';
