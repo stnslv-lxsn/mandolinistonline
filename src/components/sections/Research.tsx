@@ -46,11 +46,14 @@ export default function Research() {
             <h3 className="font-serif text-3xl md:text-4xl mb-5 text-ink break-words hyphens-auto max-w-3xl text-balance">
               {formatTypography(podcastHeading)}
             </h3>
+            {/* Кнопка, а не подпись: мелким капсом она читалась как ещё одно название
+                раздела рядом с «Подкасты» */}
             <Link
               href="/podcast"
-              className="font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink"
+              className="group inline-flex items-center gap-3 bg-ink px-7 py-3.5 font-sans text-xs uppercase tracking-[0.18em] font-medium text-white transition-colors hover:bg-forest whitespace-nowrap"
             >
-              Смотреть
+              Смотреть выпуски
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
         </article>

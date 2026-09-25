@@ -2,9 +2,9 @@ import type React from 'react';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
-  // Первый экран во всё окно на фоне страницы. Белый фон фото при подготовке
-  // подкрашен ровно в цвет страницы (scripts/optimize-images.mjs), поэтому
-  // ни вокруг фото, ни на стыке с разделом ниже шва нет
+  // Первый экран во всё окно на фоне страницы. Фон фото вырезан в прозрачность
+  // (scripts/optimize-images.mjs), вокруг фигуры виден сам фон страницы, поэтому
+  // ни вокруг фото, ни на стыке с разделом ниже шва нет ни в одном браузере
   return (
     <section className="relative flex flex-col h-svh min-h-[560px] w-full overflow-clip bg-paper">
 
