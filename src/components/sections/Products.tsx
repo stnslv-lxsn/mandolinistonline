@@ -16,7 +16,7 @@ export default function Products() {
     <EditorialSection id="expertise" number="02" title="Запросы">
       <div className="max-w-4xl">
         {situations.map((situation, index) => (
-          <div key={situation} className="border-t border-rule py-5 md:py-6 flex gap-5 md:gap-8 items-baseline min-w-0">
+          <div key={situation} className="border-t border-rule py-4 md:py-5 flex gap-5 md:gap-8 items-baseline min-w-0">
             <span className="font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted shrink-0">
               {String(index + 1).padStart(2, '0')}
             </span>
@@ -26,7 +26,7 @@ export default function Products() {
           </div>
         ))}
         <div className="border-t border-rule" aria-hidden="true" />
-        <p className="mt-8 text-sm md:text-base text-muted leading-relaxed max-w-2xl">
+        <p className="mt-6 text-sm md:text-base text-muted leading-relaxed max-w-2xl">
           {formatTypography('Вместе посмотрим на ситуацию целиком: что вас сдерживает, какие есть варианты и какое решение подойдёт именно вашим условиям.')}
         </p>
       </div>

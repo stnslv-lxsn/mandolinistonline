@@ -20,17 +20,17 @@ const topics = [
 export default function Research() {
   return (
     <EditorialSection id="research" number="04" title="Проекты">
-      <div className="flex flex-col max-w-4xl">
+      <div className="flex flex-col max-w-5xl">
         {topics.map((topic) => (
-          <article key={topic.title} className="border-t border-rule py-6 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
-            <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.45rem]">
+          <article key={topic.title} className="border-t border-rule py-5 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
+            <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.7rem]">
               {topic.year}
             </span>
             <div className="min-w-0">
-              <h3 className="font-serif text-2xl md:text-3xl mb-4 text-ink break-words hyphens-auto max-w-2xl text-balance">
+              <h3 className="font-serif text-3xl md:text-4xl mb-3 text-ink break-words hyphens-auto max-w-3xl text-balance">
                 {formatTypography(topic.title)}
               </h3>
-              <p className="text-sm md:text-base text-muted font-light leading-relaxed max-w-2xl">
+              <p className="text-base md:text-lg text-muted font-light leading-relaxed max-w-2xl">
                 {formatTypography(topic.description)}
               </p>
             </div>
@@ -38,12 +38,12 @@ export default function Research() {
         ))}
 
         {/* Подкаст: на главной только тема и кнопка, выпуски и плееры — на /podcast */}
-        <article className="border-t border-rule py-6 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
-          <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.45rem]">
+        <article className="border-t border-rule py-5 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
+          <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.7rem]">
             Подкасты
           </span>
           <div className="min-w-0">
-            <h3 className="font-serif text-2xl md:text-3xl mb-6 text-ink break-words hyphens-auto max-w-2xl text-balance">
+            <h3 className="font-serif text-3xl md:text-4xl mb-5 text-ink break-words hyphens-auto max-w-3xl text-balance">
               {formatTypography(podcastHeading)}
             </h3>
             <Link
