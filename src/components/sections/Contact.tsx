@@ -1,7 +1,7 @@
 import EditorialSection from '@/components/EditorialSection';
+import { contactEmail as email } from '@/lib/site';
 import { formatTypography } from '@/lib/typography';
 
-const email = 'YuliaRadionova2026@yandex.ru';
 const [emailName, emailDomain] = email.split('@');
 
 const socials = [
