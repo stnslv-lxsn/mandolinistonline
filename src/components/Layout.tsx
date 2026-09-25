@@ -165,6 +165,8 @@ export default function Layout({ children, anchorPrefix = '' }: LayoutProps) {
         <a href="/cookies" className="whitespace-nowrap underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink">
           Политика cookie
         </a>
+        {/* Подпись создателей сайта — справа, на телефоне уходит на свою строку */}
+        <span className="whitespace-nowrap sm:ml-auto">Сайт — Stoik</span>
       </footer>
     </div>
   );
