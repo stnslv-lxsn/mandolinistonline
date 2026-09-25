@@ -40,7 +40,7 @@ export default function Research() {
         {/* Подкаст: на главной только тема и кнопка, выпуски и плееры — на /podcast */}
         <article className="border-t border-rule py-8 flex flex-col md:flex-row gap-4 md:gap-12 min-w-0">
           <span className="font-sans text-[11px] uppercase tracking-[0.16em] font-semibold text-muted md:w-40 shrink-0 whitespace-nowrap md:pt-[0.45rem]">
-            Подкаст
+            Подкасты
           </span>
           <div className="min-w-0">
             <h3 className="font-serif text-2xl md:text-3xl mb-6 text-ink break-words hyphens-auto max-w-2xl text-balance">
