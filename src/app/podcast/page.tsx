@@ -6,8 +6,8 @@ import { podcast, podcastHeading } from '@/content/podcast';
 import { formatTypography } from '@/lib/typography';
 
 export const metadata: Metadata = {
-  title: formatTypography('Подкаст | Юлия Радионова'),
-  description: formatTypography('Выпуски подкаста с участием Юлии Радионовой: разговор о решениях, команде и рынке.'),
+  title: formatTypography('Подкасты | Юлия Радионова'),
+  description: formatTypography('Подкасты с участием Юлии Радионовой: разговоры о решениях, команде и рынке.'),
   alternates: { canonical: '/podcast' },
 };
 
@@ -17,7 +17,7 @@ export default function PodcastPage() {
       <section className="px-6 md:px-12 pt-32 pb-24 md:pt-44 md:pb-32 max-w-[1400px] mx-auto">
         <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-muted mb-8">
           <span className="w-6 h-[1px] bg-muted/50" />
-          Подкаст
+          Подкасты
         </div>
 
         <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
