@@ -39,6 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Исходники фотографий храним локально, в репозиторий не кладём
-/Фото (Исходники)/

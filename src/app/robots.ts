@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { siteMeta } from '@/content/site';
+import { siteUrl } from '@/lib/site';
 
 // Обязательно при output: 'export' — иначе маршрут считается динамическим
 export const dynamic = 'force-static';
@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: `${siteMeta.url}/sitemap.xml`,
+    sitemap: `${siteUrl}/sitemap.xml`,
   };
 }

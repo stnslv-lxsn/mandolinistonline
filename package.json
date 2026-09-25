@@ -1,5 +1,5 @@
 {
-  "name": "mandolinistonline",
+  "name": "1",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "images": "node scripts/optimize-images.mjs",
-    "cutout": "node scripts/cutout.mjs"
+    "images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "next": "16.3.2",

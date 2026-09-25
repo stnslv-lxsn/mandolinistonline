@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant, Montserrat } from "next/font/google";
+import { siteUrl } from "@/lib/site";
+import { formatTypography } from "@/lib/typography";
 import "./globals.css";
-import { images, ogImage, siteMeta } from "@/content/site";
 
 const cormorant = Cormorant({
   subsets: ["cyrillic", "latin"],
@@ -15,29 +16,30 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-const title = `${siteMeta.name} | ${siteMeta.role}`;
+const title = formatTypography("Юлия Радионова | Бизнес-консультант");
+const siteName = formatTypography("Юлия Радионова");
+
+// Описание уходит и в превью ссылок в мессенджерах и соцсетях, поэтому тоже через типограф.
+// Картинку превью Next берёт из opengraph-image.jpg рядом с этим файлом
+const description = formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.");
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteMeta.url),
+  metadataBase: new URL(siteUrl),
   title,
-  description: siteMeta.description,
-  alternates: {
-    canonical: "/",
-  },
+  description,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    url: siteMeta.url,
-    siteName: siteMeta.name,
+    url: "/",
+    siteName,
     title,
-    description: siteMeta.description,
-    images: [{ url: ogImage, alt: images.square.alt }],
+    description,
   },
   twitter: {
     card: "summary_large_image",
     title,
-    description: siteMeta.description,
-    images: [ogImage],
+    description,
   },
 };
 
@@ -49,6 +51,30 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
       <body className="min-h-full flex flex-col font-sans">
+        {/* Фото первого экрана — самый крупный элемент страницы. Без этих строк браузер
+            узнаёт о нём только добравшись до разметки Hero; так загрузка стартует сразу.
+            React сам поднимает эти теги в <head>. type даёт браузерам без AVIF
+            пропустить предзагрузку и не тратить трафик */}
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/hero-mobile-828.avif"
+          imageSrcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w"
+          imageSizes="100vw"
+          media="(max-width: 1023px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          href="/hero-desktop-800.avif"
+          imageSrcSet="/hero-desktop-800.avif 800w, /hero-desktop.avif 1280w"
+          imageSizes="67vh"
+          media="(min-width: 1024px)"
+          fetchPriority="high"
+        />
         {children}
       </body>
     </html>
