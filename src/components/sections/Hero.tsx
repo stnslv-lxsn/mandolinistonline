@@ -23,7 +23,7 @@ export default function Hero() {
             alt="Юлия Радионова"
             fetchPriority="high"
             decoding="async"
-            className="hero-settle absolute inset-0 h-full w-full object-cover object-[50%_0%] lg:right-auto lg:w-auto lg:max-w-none"
+            className="hero-settle absolute inset-0 h-full w-full object-cover object-[50%_0%] lg:left-[6vw] lg:right-auto lg:w-auto lg:max-w-none"
           />
         </picture>
 
@@ -34,7 +34,7 @@ export default function Hero() {
         <div className="lg:hidden absolute inset-x-0 bottom-0 h-3/5 pointer-events-none bg-gradient-to-t from-backdrop via-backdrop/90 to-transparent" />
 
         {/* Контент */}
-        <div className="relative z-10 h-full flex items-end lg:items-center lg:justify-end px-6 pb-14 lg:px-12 lg:pb-0 xl:px-24">
+        <div className="relative z-10 h-full flex items-end lg:items-center lg:justify-end px-6 pb-14 lg:pl-12 lg:pr-8 lg:pb-0 xl:pr-12">
           <div className="w-full lg:w-[44%] max-w-xl flex flex-col gap-6 text-ink">
             <p className="hero-rise font-serif italic text-sm md:text-xl text-muted" style={{ '--i': 0 } as React.CSSProperties}>
               {formatTypography("Бизнес-консультант, исследователь")}
@@ -56,12 +56,13 @@ export default function Hero() {
         </div>
 
         {/* Подсказка прокрутить вниз — только на десктопе: на телефоне низ экрана занят текстом.
+            Стоит под колонкой текста, а не по центру: по центру на 1024px она ложилась на фото.
             Плавность перехода даёт scroll-smooth на <html> */}
         <a
           href="#profile"
           aria-label="Листать вниз"
           style={{ '--i': 5 } as React.CSSProperties}
-          className="hero-rise hidden lg:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted hover:text-ink transition-colors"
+          className="hero-rise hidden lg:flex absolute bottom-8 left-3/4 -translate-x-1/2 z-10 flex-col items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-muted hover:text-ink transition-colors"
         >
           Листать
           <span aria-hidden="true" className="relative block h-12 w-px overflow-hidden bg-ink/15">
