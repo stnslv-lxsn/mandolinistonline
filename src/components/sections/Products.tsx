@@ -15,8 +15,9 @@ export default function Products() {
   return (
     <EditorialSection id="expertise" number="02" title="Запросы">
       <div className="max-w-4xl">
-        {/* Маркеры — кружки, а не номера: порядок здесь ничего не значит. Над первым
-            пунктом линии нет, список начинается вровень с подписью раздела */}
+        {/* Маркеры — кружки, а не номера: порядок здесь ничего не значит. Линии только
+            между пунктами: над первым и под последним их нет, список начинается вровень
+            с подписью раздела */}
         <ul>
           {situations.map((situation) => (
             <li key={situation} className="reveal border-t border-rule first:border-t-0 first:pt-0 py-4 md:py-5 flex gap-5 md:gap-8 items-start min-w-0">
@@ -28,7 +29,6 @@ export default function Products() {
             </li>
           ))}
         </ul>
-        <div className="border-t border-rule" aria-hidden="true" />
         <p className="reveal mt-6 text-sm md:text-base text-muted leading-relaxed max-w-2xl">
           {formatTypography('Вместе посмотрим на ситуацию целиком: что вас сдерживает, какие есть варианты и какое решение подойдёт именно вашим условиям.')}
         </p>
