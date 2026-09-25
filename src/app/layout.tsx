@@ -62,17 +62,17 @@ export default function RootLayout({
           href="/hero-mobile-828.avif"
           imageSrcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w"
           imageSizes="100vw"
-          media="(max-width: 1023px)"
+          media="(max-width: 767px)"
           fetchPriority="high"
         />
         <link
           rel="preload"
           as="image"
           type="image/avif"
-          href="/hero-desktop-800.avif"
-          imageSrcSet="/hero-desktop-800.avif 800w, /hero-desktop.avif 1280w"
-          imageSizes="67vh"
-          media="(min-width: 1024px)"
+          href="/hero-desktop-600.avif"
+          imageSrcSet="/hero-desktop-600.avif 600w, /hero-desktop.avif 940w"
+          imageSizes="(min-width: 1200px) 468px, 40vw"
+          media="(min-width: 768px)"
           fetchPriority="high"
         />
         {children}
