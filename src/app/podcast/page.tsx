@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import VideoEmbed from '@/components/VideoEmbed';
-import { podcast, podcastTitle } from '@/content/podcast';
+import { podcast, podcastHeading, podcastTitle } from '@/content/podcast';
 import { formatTypography } from '@/lib/typography';
 
 export const metadata: Metadata = {
@@ -20,12 +20,9 @@ export default function PodcastPage() {
           Подкаст
         </div>
 
-        <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-6 max-w-4xl text-ink text-balance">
-          {formatTypography(`«${podcastTitle}»`)}
+        <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
+          {formatTypography(podcastHeading)}
         </h1>
-        <p className="text-sm md:text-base text-muted font-light leading-relaxed max-w-2xl mb-16">
-          {formatTypography('Разговор о решениях, команде и рынке. Выпуски можно смотреть прямо здесь.')}
-        </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-12 max-w-6xl">
           {podcast.map((episode) => {

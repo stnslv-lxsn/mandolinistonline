@@ -4,7 +4,7 @@
    Синяя гамма: бумага и вторичный серый тёплые, синь только в тексте и акценте.
    Имена forest/forest-dark остались от зелёной гаммы — это акцентный цвет. */
 @theme {
-  --color-paper: #F7F5F0;
+  --color-paper: #FAF8F5;
   --color-ink: #17263A;
   --color-muted: #666666;
   --color-forest: #1B3A5C;
