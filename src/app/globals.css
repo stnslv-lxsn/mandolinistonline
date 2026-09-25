@@ -10,6 +10,14 @@
   --color-forest: #1B3A5C;
   --color-forest-dark: #12293F;
 
+  /* Фон разделов 01–05: от прежней бумаги #F7F5F0 к белому, оттенок тот же.
+     Каждый шаг — ещё 15 % белого: c + k·(255 − c), k = 0; 0,15; 0,3; 0,45; 0,6 */
+  --color-paper-1: #F7F5F0;
+  --color-paper-2: #F8F7F2;
+  --color-paper-3: #F9F8F5;
+  --color-paper-4: #FBFAF7;
+  --color-paper-5: #FCFBF9;
+
   /* Служебные цвета: линии, лёгкие подложки, затемнение фото */
   --color-rule: rgba(34, 34, 34, 0.12);
   --color-veil: rgba(34, 34, 34, 0.05);
