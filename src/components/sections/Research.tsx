@@ -43,16 +43,17 @@ export default function Research() {
             Подкасты
           </span>
           <div className="min-w-0">
-            <h3 className="font-serif text-3xl md:text-4xl mb-5 text-ink break-words hyphens-auto max-w-3xl text-balance">
+            <h3 className="font-serif text-3xl md:text-4xl mb-3 text-ink break-words hyphens-auto max-w-3xl text-balance">
               {formatTypography(podcastHeading)}
             </h3>
-            {/* Кнопка, а не подпись: мелким капсом она читалась как ещё одно название
-                раздела рядом с «Подкасты» */}
+            {/* Как описание у пунктов выше («Тема научной работы»): тем же шрифтом и цветом,
+                ссылку выдаёт стрелка и подчёркивание при наведении. Мелким капсом она
+                читалась как ещё одно название раздела, кнопкой — выбивалась из ряда */}
             <Link
               href="/podcast"
-              className="group inline-flex items-center gap-3 bg-ink px-7 py-3.5 font-sans text-xs uppercase tracking-[0.18em] font-medium text-white transition-colors hover:bg-forest whitespace-nowrap"
+              className="group inline-flex items-center gap-2 text-base md:text-lg text-muted font-light leading-relaxed transition-colors hover:text-ink"
             >
-              Смотреть выпуски
+              <span className="underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-current">Смотреть выпуски</span>
               <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
