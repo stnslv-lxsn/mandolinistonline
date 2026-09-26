@@ -51,30 +51,10 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
       <body className="min-h-full flex flex-col font-sans">
-        {/* Фото первого экрана — самый крупный элемент страницы. Без этих строк браузер
-            узнаёт о нём только добравшись до разметки Hero; так загрузка стартует сразу.
-            React сам поднимает эти теги в <head>. type даёт браузерам без AVIF
-            пропустить предзагрузку и не тратить трафик */}
-        <link
-          rel="preload"
-          as="image"
-          type="image/avif"
-          href="/hero-mobile-828.avif"
-          imageSrcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w"
-          imageSizes="100vw"
-          media="(max-width: 767px)"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          type="image/avif"
-          href="/hero-desktop-600.avif"
-          imageSrcSet="/hero-desktop-600.avif 600w, /hero-desktop.avif 940w"
-          imageSizes="(min-width: 1200px) 468px, 40vw"
-          media="(min-width: 768px)"
-          fetchPriority="high"
-        />
+        {/* Фото первого экрана — самый крупный элемент страницы. Без предзагрузки браузер
+            узнаёт о нём, только добравшись до разметки Hero; так загрузка стартует сразу.
+            Файл тот же, что в версии Егора: public/portrait.webp. React сам поднимает тег в <head> */}
+        <link rel="preload" as="image" type="image/webp" href="/portrait.webp" fetchPriority="high" />
         {children}
       </body>
     </html>
