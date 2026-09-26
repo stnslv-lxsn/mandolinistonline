@@ -27,17 +27,19 @@ export default function PodcastPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 max-w-6xl">
           {podcast.map((episode) => {
             const title = formatTypography(episode.title);
+            // Колонкой: ссылка на YouTube прижата к низу карточки, у выпусков с короткими
+            // названиями она стоит на одной линии с остальными
             return (
-              <article key={episode.slug} id={episode.slug} className="reveal min-w-0 scroll-mt-32">
+              <article key={episode.slug} id={episode.slug} className="reveal min-w-0 scroll-mt-32 flex flex-col">
                 <VideoEmbed title={title} poster={episode.poster} vkOid={episode.vkOid} vkId={episode.vkId} />
-                <h2 className="font-serif text-lg md:text-xl mt-4 mb-2 text-ink text-balance">
+                <h2 className="font-serif text-xl md:text-2xl mt-4 mb-2 text-ink text-balance flex-1">
                   {title}
                 </h2>
                 <a
                   href={episode.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink"
+                  className="link self-start font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-forest whitespace-nowrap"
                 >
                   Смотреть на YouTube
                 </a>
@@ -48,7 +50,7 @@ export default function PodcastPage() {
 
         <Link
           href="/"
-          className="inline-block mt-20 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] hover:after:w-full after:transition-all after:duration-300 whitespace-nowrap hover:text-ink after:bg-ink"
+          className="link inline-block mt-20 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-forest whitespace-nowrap"
         >
           На главную
         </Link>

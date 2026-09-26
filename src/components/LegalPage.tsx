@@ -45,7 +45,7 @@ export default function LegalPage({ title, sections }: LegalPageProps) {
 
         <Link
           href="/"
-          className="inline-block mt-6 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-muted transition-colors hover:text-ink border-b border-rule hover:border-ink pb-1"
+          className="link inline-block mt-6 font-sans text-[11px] uppercase tracking-[0.18em] font-semibold text-forest whitespace-nowrap"
         >
           На главную
         </Link>

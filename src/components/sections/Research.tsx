@@ -51,10 +51,23 @@ export default function Research() {
                 читалась как ещё одно название раздела, кнопкой — выбивалась из ряда */}
             <Link
               href="/podcast"
-              className="group inline-flex items-center gap-2 text-base md:text-lg text-muted font-light leading-relaxed transition-colors hover:text-ink"
+              className="group inline-flex items-center gap-2 text-base md:text-lg text-forest font-light leading-relaxed"
             >
-              <span className="underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-current">Смотреть выпуски</span>
-              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <span className="link-part">Смотреть выпуски</span>
+              {/* Стрелка нарисована, а не набрана символом «→»: у глифа тонкая линия и длинный
+                  хвост. Толщина линии как у букв Montserrat Light, при наведении утолщается
+                  вместе с текстом (.link-part) */}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 10"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="arrow-link h-[0.6em] w-[0.95em] transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path d="M1 5h14M11 1l4 4-4 4" vectorEffect="non-scaling-stroke" />
+              </svg>
             </Link>
           </div>
         </article>

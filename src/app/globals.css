@@ -6,6 +6,8 @@
 @theme {
   --color-paper: #F9F8F4;
   --color-ink: #17263A;
+  /* Тот же синий, что у текста, но почти чёрный: фон подвала */
+  --color-ink-deep: #0A111A;
   --color-muted: #666666;
   --color-forest: #1B3A5C;
   --color-forest-dark: #12293F;
@@ -32,6 +34,28 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Ссылки в тексте — одно поведение по всему сайту: при наведении появляется
+   подчёркивание и буквы едва заметно утолщаются (0,008em: сильнее — буквы
+   расплываются и выглядят как с тенью). Утолщение — обводкой глифа, а не сменой
+   начертания, поэтому ширина текста не меняется и соседи не сдвигаются.
+   .link — на самой ссылке; если подчёркивать нужно только часть (текст без стрелки),
+   .link-part на этой части, а на ссылке — group */
+.link,
+.link-part {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  -webkit-text-stroke: 0 transparent;
+  transition: color 0.2s, text-decoration-color 0.2s, -webkit-text-stroke 0.2s;
+}
+
+.link:hover,
+.group:hover .link-part {
+  text-decoration-color: currentColor;
+  -webkit-text-stroke: 0.008em currentColor;
 }
 
 /* Анимации. Только если человек не просил уменьшить движение в настройках системы.
@@ -211,3 +235,8 @@ html[data-daytime="evening"] .window-light { --sun: #FFEFDB; --shade: #F1EEF1; -
     animation: choice-in 0.35s both;
   }
 }
+
+/* Нарисованная стрелка у ссылки: линия толщиной с букву Montserrat Light,
+   при наведении на ссылку утолщается на ту же величину, что и текст */
+.arrow-link { stroke-width: 0.068em; transition: transform .3s, stroke-width .2s; }
+.group:hover .arrow-link { stroke-width: 0.076em; }
