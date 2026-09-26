@@ -1,4 +1,7 @@
 import EditorialSection from '@/components/EditorialSection';
+import FormatMap from '@/components/FormatMap';
+import MarkLayer from '@/components/MarkLayer';
+import { marked } from '@/lib/marked';
 import { formatTypography } from '@/lib/typography';
 
 const stages = [
@@ -19,28 +22,42 @@ const stages = [
   },
 ];
 
+// Оси карты взяты из описаний форматов: одно решение или серия, ясно или нет, что мешает
+const axes = {
+  top: 'неясно, что мешает',
+  bottom: 'ясно, что мешает',
+  left: 'одно решение',
+  right: 'серия решений',
+};
+
 export default function Work() {
   return (
     <EditorialSection id="work" number="03" title="Работа">
-      <h2 className="reveal font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
-        {formatTypography("Формат зависит от задачи, работа строится вокруг реальных решений руководителя")}
+      <h2 className="reveal relative font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-10 max-w-4xl text-ink text-balance">
+        {marked('Формат зависит от задачи, работа строится вокруг реальных решений руководителя', [
+          { phrase: 'реальных решений', kind: 'underline' },
+        ])}
+        <MarkLayer />
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8">
-        {stages.map((stage) => (
-          <div key={stage.number} className="reveal border-t border-rule pt-6 min-w-0">
-            <span className="block font-serif text-2xl italic text-muted mb-4">
-              {stage.number}
-            </span>
-            <h3 className="font-serif text-2xl md:text-3xl mb-4 text-ink break-words hyphens-auto">
-              {formatTypography(stage.title)}
-            </h3>
-            <p className="text-sm md:text-base text-muted font-light leading-relaxed">
-              {formatTypography(stage.description)}
-            </p>
-          </div>
-        ))}
-      </div>
+      {/* Типограф здесь, на сервере: FormatMap клиентский и получает готовые строки */}
+      <FormatMap
+        stages={stages.map((stage) => ({
+          number: stage.number,
+          title: formatTypography(stage.title),
+          description: formatTypography(stage.description),
+        }))}
+        prompt={formatTypography('Где вы сейчас? Поставьте точку на карте, и подходящий формат подсветится.')}
+        axes={{
+          top: formatTypography(axes.top),
+          bottom: formatTypography(axes.bottom),
+          left: formatTypography(axes.left),
+          right: formatTypography(axes.right),
+        }}
+        cta={formatTypography('Обсудить этот формат')}
+        fits={formatTypography('Подходит:')}
+        markerLabel={formatTypography('Точка на карте. Двигайте стрелками')}
+      />
     </EditorialSection>
   );
 }

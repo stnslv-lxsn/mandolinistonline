@@ -1,12 +1,19 @@
 import EditorialSection from '@/components/EditorialSection';
+import MarkLayer from '@/components/MarkLayer';
+import { marked } from '@/lib/marked';
 import { formatTypography } from '@/lib/typography';
 
 export default function About() {
   return (
     <EditorialSection id="profile" number="01" title="Обо мне">
-      {/* Журнальная цитата */}
-      <h2 className="reveal font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
-        {formatTypography('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.')}
+      {/* Журнальная цитата с пометками от руки: слой пометок внутри заголовка,
+          чтобы ехать вместе с ним в анимации .reveal */}
+      <h2 className="reveal relative font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
+        {marked('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.', [
+          { phrase: 'изнутри', kind: 'underline' },
+          { phrase: 'высокой цене ошибки', kind: 'circle' },
+        ])}
+        <MarkLayer />
       </h2>
 
       {/* Две колонки текста */}

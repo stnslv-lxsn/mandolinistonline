@@ -10,6 +10,13 @@
   --color-forest: #1B3A5C;
   --color-forest-dark: #12293F;
 
+  /* Акценты: синяя ручка, красный карандаш, жёлтый маркер — инструменты пометок
+     консультанта. Ими рисуются пометки от руки, точка на карте форматов, подстановки
+     в письме, подчёркивания меню. Фон остаётся светлым, цвет — только в деталях */
+  --color-accent: #2E4BE0;
+  --color-pencil: #EF5436;
+  --color-marker: #FFE15A;
+
   /* Служебные цвета: линии, лёгкие подложки, затемнение фото */
   --color-rule: rgba(34, 34, 34, 0.12);
   --color-veil: rgba(34, 34, 34, 0.05);
@@ -60,5 +67,147 @@ body {
       animation-timeline: view();
       animation-range: entry 0% entry 90%;
     }
+  }
+}
+
+/* Свет из окна на карточке первого экрана: тёплые пятна и тени от рамы, которые медленно
+   смещаются. Слой накладывается умножением, поэтому только чуть затемняет — фон остаётся
+   светлым. Тон и угол по времени у посетителя: data-daytime ставит скрипт в layout.tsx
+   до первой отрисовки, без него свет дневной */
+.window-light {
+  --sun: #FFFCF5;
+  --shade: #F4F2F3;
+  --skew: -8deg;
+  --wx: 46%;
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: var(--shade);
+}
+
+/* Окно падает на текстовую колонку: на тёмном фото умножение почти не видно.
+   Тени — на 3–5% темнее бумаги, блики — чуть теплее неё */
+html[data-daytime="morning"] .window-light { --sun: #FFF5EA; --shade: #F2F0F3; --skew: -22deg; --wx: 38%; }
+html[data-daytime="evening"] .window-light { --sun: #FFEFDB; --shade: #F1EEF1; --skew: 24deg; --wx: 52%; }
+
+/* Размытие на самом движущемся слое: браузер растеризует его один раз и дальше только сдвигает */
+.window-light > i {
+  position: absolute;
+  top: -6%;
+  bottom: -6%;
+  left: var(--wx);
+  width: 50%;
+  transform: skewX(var(--skew));
+  filter: blur(11px);
+  background:
+    linear-gradient(0deg, transparent 47%, var(--shade) 47%, var(--shade) 50%, transparent 50%),
+    repeating-linear-gradient(90deg, var(--sun) 0 21%, var(--shade) 21% 25%);
+}
+
+@keyframes sun-drift {
+  from { translate: -4% 0; }
+  to { translate: 4% 0; }
+}
+
+/* Пометки от руки (MarkLayer). Умножение оставляет текст под маркером тёмным */
+.mark-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.mark-layer path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Точка на карте форматов (FormatMap). Пока её не ставили — пустое кольцо в центре */
+.format-marker {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 9999px;
+  border: 2px solid var(--color-accent);
+  background: var(--color-paper);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    left 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.format-marker.is-picked {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.format-plane.is-dragging .format-marker {
+  cursor: grabbing;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+@keyframes marker-pulse {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 35%, transparent); }
+  to { box-shadow: 0 0 0 14px color-mix(in srgb, var(--color-accent) 0%, transparent); }
+}
+
+/* Подстановки в письме (LetterComposer): пунктир — «можно выбрать своё» */
+.letter-slot {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  color: var(--color-accent);
+  cursor: pointer;
+  border-radius: 2px;
+  border-bottom: 1.5px dashed color-mix(in srgb, var(--color-accent) 50%, transparent);
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.letter-slot:hover,
+.letter-slot.is-open {
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-accent);
+}
+
+.letter-slot.is-open {
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.letter-slot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@keyframes ink-in {
+  from { opacity: 0; filter: blur(3px); }
+}
+
+@keyframes choice-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .window-light > i {
+    animation: sun-drift 38s ease-in-out infinite alternate;
+  }
+
+  .format-marker:not(.is-picked) {
+    animation: marker-pulse 2.2s ease-out infinite;
+  }
+
+  .letter-fresh {
+    animation: ink-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .letter-choice {
+    animation: choice-in 0.35s both;
   }
 }

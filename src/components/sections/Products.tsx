@@ -1,14 +1,18 @@
 import EditorialSection from '@/components/EditorialSection';
+import MarkLayer from '@/components/MarkLayer';
+import { marked, type Mark } from '@/lib/marked';
 import { formatTypography } from '@/lib/typography';
 
-const situations = [
-  'Нужно выбрать, а цена ошибки кажется слишком высокой',
-  'В команде каждый стоит на своём, и договориться не получается',
-  'Приходится решать там, где у вас пока нет опыта',
-  'Решение давно назрело, но вы снова его откладываете',
-  'То, что раньше работало, вдруг перестало работать',
-  'Условия изменились, и бизнес нужно перестраивать',
-  'Знаний хватает, но трудно сделать шаг, когда впереди неизвестность',
+// Пометки от руки — на двух пунктах из семи, больше будет похоже на тетрадь.
+// Зачёркнутое «откладываете» — жест консультанта: хватит откладывать
+const situations: { text: string; marks?: Mark[] }[] = [
+  { text: 'Нужно выбрать, а цена ошибки кажется слишком высокой' },
+  { text: 'В команде каждый стоит на своём, и договориться не получается' },
+  { text: 'Приходится решать там, где у вас пока нет опыта' },
+  { text: 'Решение давно назрело, но вы снова его откладываете', marks: [{ phrase: 'откладываете', kind: 'strike' }] },
+  { text: 'То, что раньше работало, вдруг перестало работать' },
+  { text: 'Условия изменились, и бизнес нужно перестраивать' },
+  { text: 'Знаний хватает, но трудно сделать шаг, когда впереди неизвестность', marks: [{ phrase: 'неизвестность', kind: 'highlight' }] },
 ];
 
 export default function Products() {
@@ -20,12 +24,13 @@ export default function Products() {
             с подписью раздела */}
         <ul>
           {situations.map((situation) => (
-            <li key={situation} className="reveal border-t border-rule first:border-t-0 first:pt-0 py-4 md:py-5 flex gap-5 md:gap-8 items-start min-w-0">
+            <li key={situation.text} className="reveal relative border-t border-rule first:border-t-0 first:pt-0 py-4 md:py-5 flex gap-5 md:gap-8 items-start min-w-0">
               {/* Кружок по центру первой строки: (высота строки − 8px) / 2 при 24/30px и leading-snug */}
               <span aria-hidden="true" className="mt-[12.5px] md:mt-[16.6px] size-2 shrink-0 rounded-full border border-ink/60" />
               <p className="font-serif text-2xl md:text-3xl leading-snug text-ink text-pretty">
-                {formatTypography(situation)}
+                {situation.marks ? marked(situation.text, situation.marks) : formatTypography(situation.text)}
               </p>
+              {situation.marks && <MarkLayer />}
             </li>
           ))}
         </ul>

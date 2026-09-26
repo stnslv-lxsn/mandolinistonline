@@ -43,13 +43,24 @@ export const metadata: Metadata = {
   },
 };
 
+// Время суток у посетителя для света из окна на первом экране (.window-light в globals.css).
+// Инлайн-скрипт в <head> выполняется до первой отрисовки, иначе свет успел бы смениться
+// у человека на глазах. next/script тут не подходит: даже beforeInteractive он ставит
+// в очередь и выполняет после загрузки JS Next. Паттерн из гайда Next
+// «Preventing flash before hydration». Без скрипта — дневной свет. ES5: выполняется везде
+const daytimeScript = `(function(){var h=new Date().getHours();document.documentElement.setAttribute('data-daytime',h>=5&&h<11?'morning':h>=11&&h<17?'day':'evening')})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
+    // suppressHydrationWarning: data-daytime ставит скрипт из <head>, React о нём не знает
+    <html lang="ru" suppressHydrationWarning className={`scroll-smooth h-full antialiased ${cormorant.variable} ${montserrat.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: daytimeScript }} />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         {/* Фото первого экрана — самый крупный элемент страницы. Без этих строк браузер
             узнаёт о нём только добравшись до разметки Hero; так загрузка стартует сразу.

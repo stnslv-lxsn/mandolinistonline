@@ -3,10 +3,12 @@ import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
   // Первый экран — карточка по центру: портрет слева, текст справа, тонкая рамка
-  // по контуру. На телефоне портрет сверху во всю ширину, текст под ним
+  // по контуру. На телефоне портрет сверху во всю ширину, текст под ним.
+  // isolate и свой фон у карточки нужны свету из окна: он накладывается умножением
+  // на то, что лежит внутри карточки, а не на страницу под ней
   return (
     <section className="flex min-h-svh items-center justify-center px-6 pt-24 pb-12 md:px-12 md:pt-28 md:pb-16">
-      <div className="grid w-full max-w-[1040px] grid-cols-1 border border-rule md:h-[min(750px,calc(100svh-11rem))] md:min-h-[520px] md:grid-cols-[45%_1fr]">
+      <div className="relative isolate overflow-hidden bg-paper grid w-full max-w-[1040px] grid-cols-1 border border-rule md:h-[min(750px,calc(100svh-11rem))] md:min-h-[520px] md:grid-cols-[45%_1fr]">
 
         {/* Портрет. Кадр 1331x2000; в карточке его ширина — 45% от 1040px */}
         <div className="relative aspect-[4/5] overflow-hidden md:aspect-auto md:h-full">
@@ -38,11 +40,15 @@ export default function Hero() {
           <a
             href="#contact"
             style={{ '--i': 3 } as React.CSSProperties}
-            className="hero-rise mt-1 w-fit border-b border-ink/40 pb-1 text-xs uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink"
+            className="hero-rise mt-1 w-fit border-b border-accent/50 pb-1 text-xs uppercase tracking-[0.18em] text-ink transition-colors hover:border-accent"
           >
             {formatTypography('Обсудить задачу')}
           </a>
         </div>
+
+        {/* Свет из окна: тёплые пятна и тени от рамы. Тон и угол — по времени у посетителя,
+            см. .window-light в globals.css и скрипт daytime в layout.tsx */}
+        <div aria-hidden="true" className="window-light"><i /></div>
 
       </div>
     </section>
