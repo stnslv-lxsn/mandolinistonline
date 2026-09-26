@@ -1,55 +1,49 @@
-import Picture from '@/components/ui/Picture';
-import { ctaLabel, hero, images } from '@/content/site';
+import type React from 'react';
 import { formatTypography } from '@/lib/typography';
 
-// Ступенчатое появление при загрузке; animate-rise отключается
-// при prefers-reduced-motion — правило в globals.css
-const rise = 'animate-rise';
-
 export default function Hero() {
-  // overflow-x-clip: размытый ореол шире своей колонки и иначе растягивает страницу
+  // Первый экран — карточка по центру: портрет слева, текст справа, тонкая рамка
+  // по контуру. На телефоне портрет сверху во всю ширину, текст под ним
   return (
-    <section className="px-6 md:px-12 pt-32 pb-24 md:pt-48 md:pb-32 max-w-[1400px] mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-16 md:gap-12 min-h-[90vh] overflow-x-clip">
+    <section className="flex min-h-svh items-center justify-center px-6 pt-24 pb-12 md:px-12 md:pt-28 md:pb-16">
+      <div className="grid w-full max-w-[1040px] grid-cols-1 border border-rule md:h-[min(750px,calc(100svh-11rem))] md:min-h-[520px] md:grid-cols-[45%_1fr]">
 
-      <div className="md:w-3/5 flex flex-col gap-8 md:gap-10">
-        <div>
-          <p className={`font-serif italic text-xl md:text-2xl text-muted mb-4 text-balance ${rise}`}>
-            {formatTypography(hero.role)}
-          </p>
-          <h1
-            className={`font-serif text-5xl md:text-7xl lg:text-8xl leading-none text-ink tracking-tight mb-8 ${rise}`}
-            style={{ animationDelay: '80ms' }}
-          >
-            {hero.firstName}<br />{hero.lastName}
-          </h1>
-          <p
-            className={`font-sans text-lg md:text-xl text-muted max-w-2xl leading-relaxed text-pretty ${rise}`}
-            style={{ animationDelay: '160ms' }}
-          >
-            {formatTypography(hero.lead)}
-          </p>
+        {/* Портрет. Кадр 1331x2000; в карточке его ширина — 45% от 1040px */}
+        <div className="relative aspect-[4/5] overflow-hidden md:aspect-auto md:h-full">
+          <picture>
+            <source media="(max-width: 767px)" type="image/avif" srcSet="/hero-mobile-828.avif 828w, /hero-mobile.avif 1080w" sizes="100vw" />
+            <source media="(max-width: 767px)" type="image/webp" srcSet="/hero-mobile.webp" />
+            <source type="image/avif" srcSet="/hero-desktop-600.avif 600w, /hero-desktop.avif 940w" sizes="(min-width: 1200px) 468px, 40vw" />
+            <img
+              src="/hero-desktop.webp"
+              alt="Юлия Радионова"
+              fetchPriority="high"
+              decoding="async"
+              className="hero-settle absolute inset-0 h-full w-full object-cover object-[50%_20%]"
+            />
+          </picture>
         </div>
 
-        <div className={`hidden md:block pt-8 ${rise}`} style={{ animationDelay: '240ms' }}>
-          <a href="#contact" className="inline-flex bg-forest text-white px-8 py-4 font-medium text-sm hover:bg-forest-dark transition-colors uppercase tracking-[0.2em]">
-            {ctaLabel}
+        {/* Текст */}
+        <div className="flex flex-col justify-center gap-5 px-6 py-10 md:px-12 md:py-12">
+          <p className="hero-rise font-serif italic text-base md:text-lg text-muted" style={{ '--i': 0 } as React.CSSProperties}>
+            {formatTypography('Бизнес-консультант, исследователь')}
+          </p>
+          <h1 className="hero-rise font-serif text-4xl md:text-5xl leading-[1.05] tracking-tight text-ink" style={{ '--i': 1 } as React.CSSProperties}>
+            {formatTypography('Юлия Радионова')}
+          </h1>
+          <p className="hero-rise font-sans text-sm md:text-base text-muted leading-relaxed max-w-md text-balance" style={{ '--i': 2 } as React.CSSProperties}>
+            {formatTypography('Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.')}
+          </p>
+          <a
+            href="#contact"
+            style={{ '--i': 3 } as React.CSSProperties}
+            className="hero-rise mt-1 w-fit border-b border-ink/40 pb-1 text-xs uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink"
+          >
+            {formatTypography('Обсудить задачу')}
           </a>
         </div>
-      </div>
 
-      {/* Фотография в круге */}
-      <div className={`md:w-2/5 flex justify-center md:justify-end shrink-0 relative ${rise}`} style={{ animationDelay: '120ms' }}>
-        {/* Приятный ореол (Glow effect) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] bg-forest/5 rounded-full blur-3xl -z-10"></div>
-
-        <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden bg-black/5 shadow-2xl shrink-0">
-          <Picture
-            image={images.square}
-            sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
-            priority
-            imgClassName="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
-          />
-        </div>
       </div>
     </section>
   );
