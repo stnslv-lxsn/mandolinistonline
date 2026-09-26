@@ -21,7 +21,7 @@ const siteName = formatTypography("Юлия Радионова");
 
 // Описание уходит и в превью ссылок в мессенджерах и соцсетях, поэтому тоже через типограф.
 // Картинку превью Next берёт из opengraph-image.jpg рядом с этим файлом
-const description = formatTypography("Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.");
+const description = formatTypography("Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

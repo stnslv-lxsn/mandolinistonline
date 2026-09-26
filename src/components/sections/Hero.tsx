@@ -33,7 +33,7 @@ export default function Hero() {
             {formatTypography('Юлия Радионова')}
           </h1>
           <p className="hero-rise font-sans text-sm md:text-base text-muted leading-relaxed max-w-md text-balance" style={{ '--i': 2 } as React.CSSProperties}>
-            {formatTypography('Работаю с собственниками и руководителями, которым важно разобраться в сложной ситуации и принять обоснованное решение.')}
+            {formatTypography('Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.')}
           </p>
           <a
             href="#contact"
