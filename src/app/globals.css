@@ -1,44 +1,28 @@
 @import "tailwindcss";
 
-/* Палитра проекта: доступна как bg-paper, text-ink, bg-forest и т.д. */
+/* Палитра проекта: доступна как bg-paper, text-ink, bg-forest и т.д.
+   Синяя гамма: бумага и вторичный серый тёплые, синь только в тексте и акценте.
+   Имена forest/forest-dark остались от зелёной гаммы — это акцентный цвет. */
 @theme {
-  --color-paper: #f7f5f0;
-  --color-ink: #222222;
+  --color-paper: #F9F8F4;
+  --color-ink: #17263A;
+  /* Тот же синий, что у текста, но почти чёрный: фон подвала */
+  --color-ink-deep: #0A111A;
   --color-muted: #666666;
-  --color-forest: #1d332d;
-  --color-forest-dark: #11201c;
+  --color-forest: #1B3A5C;
+  --color-forest-dark: #12293F;
 
-  /* Вариант II «Ночь»: кинематографичный тёмный */
-  --color-noir: #0c0d0b;
-  --color-noir-soft: #161714;
-  --color-bone: #e8e4db;
-  --color-brass: #b08d57;
+  /* Акценты: синяя ручка, красный карандаш, жёлтый маркер — инструменты пометок
+     консультанта. Ими рисуются пометки от руки, точка на карте форматов, подстановки
+     в письме, подчёркивания меню. Фон остаётся светлым, цвет — только в деталях */
+  --color-accent: #2E4BE0;
+  --color-pencil: #EF5436;
+  --color-marker: #FFE15A;
 
-  /* Вариант IV «Кадр»: тёплый уголь вместо чистого чёрного —
-     иначе сцена читается как траурная */
-  --color-espresso: #17120c;
-  --color-espresso-soft: #241b12;
-  --color-cream: #f2ebdf;
-
-  /* Вариант III «Досье»: строгий типографический документ */
-  --color-sheet: #fbfbf9;
-  --color-graphite: #131313;
-  --color-slate: #6b6b6b;
-  --color-marker: #8c2f21;
-
-  /* Появление контента при загрузке страницы */
-  --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(1rem);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
+  /* Служебные цвета: линии, лёгкие подложки, затемнение фото */
+  --color-rule: rgba(34, 34, 34, 0.12);
+  --color-veil: rgba(34, 34, 34, 0.05);
+  --color-shade: #000000;
 }
 
 @theme inline {
@@ -52,152 +36,207 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Варианты дизайна перекрашивают и подложку body, иначе при оттягивании
-   страницы из-под неё выглядывает фон основного макета */
-body:has(.theme-noir) {
-  background-color: var(--color-noir);
+/* Ссылки в тексте — одно поведение по всему сайту: при наведении появляется
+   подчёркивание и буквы едва заметно утолщаются (0,008em: сильнее — буквы
+   расплываются и выглядят как с тенью). Утолщение — обводкой глифа, а не сменой
+   начертания, поэтому ширина текста не меняется и соседи не сдвигаются.
+   .link — на самой ссылке; если подчёркивать нужно только часть (текст без стрелки),
+   .link-part на этой части, а на ссылке — group */
+.link,
+.link-part {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  -webkit-text-stroke: 0 transparent;
+  transition: color 0.2s, text-decoration-color 0.2s, -webkit-text-stroke 0.2s;
 }
 
-body:has(.theme-studio) {
-  background-color: var(--color-sheet);
+.link:hover,
+.group:hover .link-part {
+  text-decoration-color: currentColor;
+  -webkit-text-stroke: 0.008em currentColor;
 }
 
-/* Вариант IV открывается тёплой тёмной сценой и таким же футером */
-body:has(.theme-cinema) {
-  background-color: var(--color-espresso);
-}
-
-/* ------------------------------------------------------------------
-   Вариант IV: полноэкранная сцена.
-   Кабинет заполняет экран и уходит в расфокус, крупный план проявляется
-   ближе к зрителю, затем композиция сдвигается влево и открывает текст.
-   Сама сцена — чистый CSS и стартует на первой отрисовке; JavaScript
-   добавляет только отклик на курсор и прокрутку (CinemaMotion).
-   ------------------------------------------------------------------ */
-
-body {
-  /* Значения по умолчанию: без JS сцена просто стоит на месте.
-     Смещения приходят уже в пикселях — CinemaMotion считает их сам */
-  --bg-x: 0px;
-  --bg-y: 0px;
-  --figure-x: 0px;
-  --figure-y: 0px;
-}
-
-/* Наезд камеры на кабинет */
-@keyframes cinema-push {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
-}
-
-/* Крупный план проявляется и чуть приближается к зрителю */
-@keyframes cinema-figure-in {
-  from { opacity: 0; transform: translateY(24px) scale(1.05); }
+/* Анимации. Только если человек не просил уменьшить движение в настройках системы.
+   Без поддержки анимаций по прокрутке (Firefox пока за флагом) блоки просто стоят
+   на месте: состояние по умолчанию видимое, скрытых элементов без JS не бывает */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(1.5rem); }
   to { opacity: 1; transform: none; }
 }
 
-/* Композиция уходит из центра экрана влево, освобождая правую половину */
-@keyframes cinema-figure-shift {
-  from { transform: translateX(var(--cinema-center)); }
-  to { transform: translateX(0); }
+@keyframes settle {
+  from { transform: scale(1.04); }
+  to { transform: none; }
 }
 
-/* Текст выходит справа. pointer-events в первом кадре — чтобы по невидимой
-   кнопке нельзя было случайно попасть до её появления */
-@keyframes cinema-copy {
-  from { opacity: 0; transform: translateX(28px); pointer-events: none; }
-  to { opacity: 1; transform: none; pointer-events: auto; }
-}
+@media (prefers-reduced-motion: no-preference) {
+  /* Первый экран при загрузке: текст выплывает по очереди, задержка — --i × 120 мс.
+     Фото только «оседает» масштабом: прозрачность у LCP-картинки не трогаем,
+     иначе браузер засчитает её отрисовку позже */
+  .hero-rise {
+    animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 150ms);
+  }
 
-/* Слои сцены. Параллакс живёт на внешних обёртках, ключевые кадры — на
-   внутренних: одно и то же свойство transform нельзя одновременно
-   анимировать и подкручивать курсором */
-.cinema-bg {
-  transform: translate3d(var(--bg-x), var(--bg-y), 0) scale(1.06);
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-}
+  .hero-settle {
+    animation: settle 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
 
-.cinema-bg-push {
-  animation: cinema-push 6s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.cinema-figure {
-  /* Двигается навстречу фону — от этого и берётся ощущение глубины */
-  transform: translate3d(var(--figure-x), var(--figure-y), 0);
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
-}
-
-.cinema-figure-shift {
-  /* На узком экране крупный план и так по центру, ехать некуда */
-  --cinema-center: 0vw;
-  animation: cinema-figure-shift 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.1s both;
-}
-
-@media (min-width: 768px) {
-  .cinema-figure-shift {
-    --cinema-center: 21vw;
+  /* Разделы: блок проявляется, пока въезжает в окно снизу */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
   }
 }
 
-.cinema-figure-in {
-  animation: cinema-figure-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+/* Свет из окна на карточке первого экрана: тёплые пятна и тени от рамы, которые медленно
+   смещаются. Слой накладывается умножением, поэтому только чуть затемняет — фон остаётся
+   светлым. Тон и угол по времени у посетителя: data-daytime ставит скрипт в layout.tsx
+   до первой отрисовки, без него свет дневной */
+.window-light {
+  --sun: #FFFCF5;
+  --shade: #F4F2F3;
+  --skew: -8deg;
+  --wx: 46%;
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: var(--shade);
 }
 
-/* Фигура снята при другом свете, чем фон, поэтому её слегка утепляем и
-   приглушаем — иначе вырезка висит поверх сцены отдельным слоем.
-   Тень уходит вниз-вправо, к источнику света в кадре */
-.cinema-figure-body {
-  filter: drop-shadow(18px 26px 42px rgba(0, 0, 0, 0.5)) saturate(0.92) sepia(0.1);
+/* Окно падает на текстовую колонку: на тёмном фото умножение почти не видно.
+   Тени — на 3–5% темнее бумаги, блики — чуть теплее неё */
+html[data-daytime="morning"] .window-light { --sun: #FFF5EA; --shade: #F2F0F3; --skew: -22deg; --wx: 38%; }
+html[data-daytime="evening"] .window-light { --sun: #FFEFDB; --shade: #F1EEF1; --skew: 24deg; --wx: 52%; }
+
+/* Размытие на самом движущемся слое: браузер растеризует его один раз и дальше только сдвигает */
+.window-light > i {
+  position: absolute;
+  top: -6%;
+  bottom: -6%;
+  left: var(--wx);
+  width: 50%;
+  transform: skewX(var(--skew));
+  filter: blur(11px);
+  background:
+    linear-gradient(0deg, transparent 47%, var(--shade) 47%, var(--shade) 50%, transparent 50%),
+    repeating-linear-gradient(90deg, var(--sun) 0 21%, var(--shade) 21% 25%);
 }
 
-/* Контактная тень: без неё человек не стоит на полу, а парит над ним */
-.cinema-figure-ground {
-  background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 72%);
+@keyframes sun-drift {
+  from { translate: -4% 0; }
+  to { translate: 4% 0; }
 }
 
-/* Блоки ниже первого экрана проявляются при прокрутке. Скрываем их только
-   когда JS действительно включил движение, иначе без него текста не будет */
-[data-reveal] {
-  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+/* Пометки от руки (MarkLayer). Умножение оставляет текст под маркером тёмным */
+.mark-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  mix-blend-mode: multiply;
 }
 
-body.motion-ready [data-reveal]:not(.is-visible) {
-  opacity: 0;
-  transform: translateY(26px);
+.mark-layer path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* Задержки строк живут в CSS, а не в разметке: так их можно переопределить
-   под узкий экран, где кадр никуда не едет и ждать нечего */
-.cinema-copy > * {
-  animation: cinema-copy 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Точка на карте форматов (FormatMap). Пока её не ставили — пустое кольцо в центре */
+.format-marker {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 9999px;
+  border: 2px solid var(--color-accent);
+  background: var(--color-paper);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    left 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.3s,
+    box-shadow 0.3s;
 }
 
-.cinema-copy > *:nth-child(1) { animation-delay: 2.4s; }
-.cinema-copy > *:nth-child(2) { animation-delay: 2.52s; }
-.cinema-copy > *:nth-child(3) { animation-delay: 2.64s; }
-.cinema-copy > *:nth-child(4) { animation-delay: 2.76s; }
-
-@media (max-width: 767px) {
-  /* На телефоне композиция никуда не едет — ждать нечего */
-  .cinema-copy > *:nth-child(1) { animation-delay: 1.5s; }
-  .cinema-copy > *:nth-child(2) { animation-delay: 1.62s; }
-  .cinema-copy > *:nth-child(3) { animation-delay: 1.74s; }
-  .cinema-copy > *:nth-child(4) { animation-delay: 1.86s; }
+.format-marker.is-picked {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
-/* Уважаем системную настройку «уменьшить движение» */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    /* Без сброса задержки контент со ступенчатым появлением остался бы
-       невидимым всё время delay — сокращения одной длительности мало */
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+.format-plane.is-dragging .format-marker {
+  cursor: grabbing;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+@keyframes marker-pulse {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 35%, transparent); }
+  to { box-shadow: 0 0 0 14px color-mix(in srgb, var(--color-accent) 0%, transparent); }
+}
+
+/* Подстановки в письме (LetterComposer): пунктир — «можно выбрать своё» */
+.letter-slot {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  color: var(--color-accent);
+  cursor: pointer;
+  border-radius: 2px;
+  border-bottom: 1.5px dashed color-mix(in srgb, var(--color-accent) 50%, transparent);
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.letter-slot:hover,
+.letter-slot.is-open {
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-accent);
+}
+
+.letter-slot.is-open {
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.letter-slot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@keyframes ink-in {
+  from { opacity: 0; filter: blur(3px); }
+}
+
+@keyframes choice-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .window-light > i {
+    animation: sun-drift 38s ease-in-out infinite alternate;
+  }
+
+  .format-marker:not(.is-picked) {
+    animation: marker-pulse 2.2s ease-out infinite;
+  }
+
+  .letter-fresh {
+    animation: ink-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .letter-choice {
+    animation: choice-in 0.35s both;
   }
 }
+
+/* Нарисованная стрелка у ссылки: линия толщиной с букву Montserrat Light,
+   при наведении на ссылку утолщается на ту же величину, что и текст */
+.arrow-link { stroke-width: 0.068em; transition: transform .3s, stroke-width .2s; }
+.group:hover .arrow-link { stroke-width: 0.076em; }

@@ -1,21 +1,29 @@
-import EditorialSection from '@/components/ui/EditorialSection';
-import { aboutSection } from '@/content/site';
+import EditorialSection from '@/components/EditorialSection';
+import MarkLayer from '@/components/MarkLayer';
+import { marked } from '@/lib/marked';
 import { formatTypography } from '@/lib/typography';
 
 export default function About() {
-  const { id, number, title, headline, columns } = aboutSection;
-
   return (
-    <EditorialSection id={id} number={number} title={title}>
-      <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-16 max-w-4xl text-ink text-balance">
-        {formatTypography(headline)}
-      </h3>
+    <EditorialSection id="profile" number="01" title="Обо мне">
+      {/* Журнальная цитата с пометками от руки: слой пометок внутри заголовка,
+          чтобы ехать вместе с ним в анимации .reveal */}
+      <h2 className="reveal relative font-serif text-3xl md:text-4xl lg:text-5xl leading-tight md:leading-snug mb-8 max-w-4xl text-ink text-balance">
+        {marked('Управленческую реальность я знаю изнутри: решения приходится принимать при неполной информации, расхождении интересов и высокой цене ошибки.', [
+          { phrase: 'изнутри', kind: 'underline' },
+          { phrase: 'высокой цене ошибки', kind: 'circle' },
+        ])}
+        <MarkLayer />
+      </h2>
 
       {/* Две колонки текста */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 text-base leading-relaxed text-muted max-w-4xl font-light text-pretty">
-        {columns.map((column) => (
-          <p key={column}>{formatTypography(column)}</p>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 text-base leading-relaxed text-muted max-w-4xl font-light">
+        <p className="reveal">
+          {formatTypography("Двадцать лет в управлении и бизнесе. Последние шесть — в e-commerce: развитие направления продаж на маркетплейсах с оборотом более 900 млн рублей в год. Управление командами и коммерческими процессами — от ассортимента и контента до логистики и аналитики площадок.")}
+        </p>
+        <p className="reveal">
+          {formatTypography("Психологическое образование с фокусом на краткосрочные и доказательные методы, подготовка в области коучинга, практика консультирования. Профессиональный интерес лежит на пересечении психологии и управления: что происходит с руководителем в момент сложного решения.")}
+        </p>
       </div>
     </EditorialSection>
   );
