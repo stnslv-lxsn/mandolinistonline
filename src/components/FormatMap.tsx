@@ -45,6 +45,9 @@ export default function FormatMap({ stages, prompt, axes, cta, fits, markerLabel
   const [quadrant, setQuadrant] = useState<Quadrant | null>(null);
   const [dragging, setDragging] = useState(false);
   const tapStart = useRef<{ x: number; y: number } | null>(null);
+  // Мышь или перо зажаты на карте: точку можно тянуть с любого места
+  const planePress = useRef<{ x: number; y: number } | null>(null);
+  const markerRef = useRef<HTMLButtonElement>(null);
 
   const place = (x: number, y: number) => {
     const next = { x: clamp(x), y: clamp(y) };
@@ -58,8 +61,9 @@ export default function FormatMap({ stages, prompt, axes, cta, fits, markerLabel
     place((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
   };
 
-  // Точку тянут за саму точку. По остальной карте — только тап: протяжка пальцем
-  // остаётся прокруткой страницы, иначе на телефоне квадрат во всю ширину её бы блокировал
+  // Пальцем точку тянут за саму точку, по остальной карте — только тап: протяжка
+  // остаётся прокруткой страницы, иначе на телефоне квадрат во всю ширину её бы блокировал.
+  // Мышью и пером — с любого места карты (onPlaneDown): прокручивать там нечего
   const onMarkerDown = (event: PointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -73,12 +77,39 @@ export default function FormatMap({ stages, prompt, axes, cta, fits, markerLabel
 
   const onPlaneDown = (event: PointerEvent<HTMLDivElement>) => {
     // Нажатие на саму точку обрабатывает onMarkerDown
-    if (!(event.target instanceof HTMLButtonElement)) tapStart.current = { x: event.clientX, y: event.clientY };
+    if (event.target instanceof HTMLButtonElement) return;
+    if (event.pointerType === 'touch') {
+      tapStart.current = { x: event.clientX, y: event.clientY };
+      return;
+    }
+    // Щелчок ставит точку с плавным переездом; если потянуть, она поедет за курсором
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    planePress.current = { x: event.clientX, y: event.clientY };
+    markerRef.current?.focus({ preventScroll: true });
+    placeFromEvent(event);
+  };
+  const onPlaneMove = (event: PointerEvent<HTMLDivElement>) => {
+    const start = planePress.current;
+    if (!start) return;
+    if (!dragging && Math.hypot(event.clientX - start.x, event.clientY - start.y) < 3) return;
+    setDragging(true);
+    placeFromEvent(event);
   };
   const onPlaneUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (planePress.current) {
+      planePress.current = null;
+      setDragging(false);
+      return;
+    }
     const start = tapStart.current;
     tapStart.current = null;
     if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) < 10) placeFromEvent(event);
+  };
+  const onPlaneCancel = () => {
+    tapStart.current = null;
+    planePress.current = null;
+    setDragging(false);
   };
 
   const onMarkerKey = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -104,8 +135,9 @@ export default function FormatMap({ stages, prompt, axes, cta, fits, markerLabel
         <div
           ref={planeRef}
           onPointerDown={onPlaneDown}
+          onPointerMove={onPlaneMove}
           onPointerUp={onPlaneUp}
-          onPointerCancel={() => { tapStart.current = null; }}
+          onPointerCancel={onPlaneCancel}
           className={cn('format-plane relative aspect-square border border-rule select-none cursor-pointer touch-pan-y', dragging && 'is-dragging')}
         >
           {(Object.keys(QUADRANTS) as Quadrant[]).map((key) => (
@@ -133,6 +165,7 @@ export default function FormatMap({ stages, prompt, axes, cta, fits, markerLabel
           <span aria-hidden="true" className="absolute right-2 bottom-[calc(50%+6px)] text-[11px] leading-tight text-muted text-right">{axes.right} →</span>
 
           <button
+            ref={markerRef}
             type="button"
             aria-label={markerLabel}
             aria-describedby="format-map-result"
