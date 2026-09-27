@@ -29,8 +29,10 @@ const cases = [
   ['firefox', 'Firefox desktop 1440', desktop(1440, 900)],
 ];
 
-// Картинки в лог: base64 кусками, чтобы их можно было собрать обратно из лога
-const IMAGES = new Set(['iPhone 13 (390@3)', 'Firefox 390@3', 'Pixel 7 (412@2.625)', 'Safari desktop 1440@2']);
+// Картинки в лог: base64 кусками, чтобы их можно было собрать обратно из лога.
+// Печатаются до результатов: результаты тогда читаются коротким хвостом лога
+const IMAGES = new Set(['iPhone 13 (390@3)', 'Firefox 390@3']);
+const images = [];
 function printImage(name, buf) {
   const b64 = buf.toString('base64');
   const size = 3000;
@@ -126,7 +128,7 @@ async function runCase([engine, name, options]) {
 
     if (IMAGES.has(name)) {
       const hero = await page.$('section');
-      printImage(`${name} hero`, await hero.screenshot({ type: 'jpeg', quality: 55, scale: 'css' }));
+      images.push([`${name} hero`, await hero.screenshot({ type: 'jpeg', quality: 45, scale: 'css' })]);
     }
 
     // Разделы: после прокрутки к каждому блоку .reveal он должен быть полностью виден
@@ -177,7 +179,7 @@ async function runCase([engine, name, options]) {
   return result;
 }
 
-for (const c of cases) {
-  const r = await runCase(c);
-  console.log(`RESULT|${JSON.stringify(r)}`);
-}
+const results = [];
+for (const c of cases) results.push(await runCase(c));
+for (const [name, buf] of images) printImage(name, buf);
+for (const r of results) console.log(`RESULT|${JSON.stringify(r)}`);
