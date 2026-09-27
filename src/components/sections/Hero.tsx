@@ -5,7 +5,10 @@ export default function Hero() {
   // на 45% ширины, справа текст на 55%. Тонкая рамка цвета акцента — только вокруг
   // текстовой части: сверху, справа и снизу, со стороны фото её нет, по высоте она
   // равна снимку. Пустое место справа оставлено намеренно.
-  // На телефоне фото сверху на 46% высоты экрана, текст в рамке под ним.
+  // На телефоне фото сверху целиком, в пропорциях кадра: при фиксированной высоте
+  // низ снимка обрезался и выглядел перекрытым блоком текста. Текст в рамке под фото,
+  // рамка вдвое тоньше, 0,5 px. Она нарисована тенью внутрь: border тоньше 1 px
+  // Chrome округляет до 1 px, а тень рисует как есть.
   //
   // Без анимаций появления, как у Егора.
   //
@@ -16,7 +19,7 @@ export default function Hero() {
       <div className="relative grid w-full grid-cols-1 overflow-hidden bg-paper md:aspect-[1539/1109] md:h-[min(calc(100svh-14rem),calc((100vw-6rem)*0.7206),793px)] md:w-auto md:max-w-[1100px] md:grid-cols-[45%_55%]">
 
         {/* Портрет — файл public/portrait.webp из версии Егора без изменений (1331x2000) */}
-        <div className="relative h-[46svh] md:h-full">
+        <div className="relative aspect-[1331/2000] md:aspect-auto md:h-full">
           <img
             src="/portrait.webp"
             alt="Юлия Радионова"
@@ -27,7 +30,7 @@ export default function Hero() {
         </div>
 
         {/* Текст в рамке */}
-        <div className="flex flex-col justify-center gap-6 border border-forest px-6 py-10 md:border-l-0 md:py-0 md:pl-20 md:pr-12">
+        <div className="flex flex-col justify-center gap-6 border-forest px-6 py-10 shadow-[inset_0_0_0_0.5px_var(--color-forest)] md:border md:border-l-0 md:py-0 md:shadow-none md:pl-20 md:pr-12">
           <p className="font-serif italic text-sm md:text-xl text-muted">
             {formatTypography('Бизнес-консультант, исследователь')}
           </p>
