@@ -91,3 +91,25 @@ body {
    при наведении на ссылку утолщается на ту же величину, что и текст */
 .arrow-link { stroke-width: 0.068em; transition: transform .3s, stroke-width .2s; }
 .group:hover .arrow-link { stroke-width: 0.076em; }
+
+/* Тонкая рамка на телефоне: 0,5 px вокруг текста первого экрана (Hero.tsx).
+   Рамка 1 px на псевдоэлементе двойного размера, уменьшенном вдвое. Проще не выходит:
+   border тоньше 1 px Chrome округляет до 1 px, а тень в 0,5 px Firefox не рисует вовсе.
+   Так линия одинаковая со всех сторон в Chrome и Safari; в Firefox видна, но стороны
+   могут отличаться на одну точку экрана. С md рамку рисует обычный border */
+.hairline-frame { position: relative; }
+.hairline-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  border: 1px solid var(--color-forest);
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+@media (min-width: 48rem) {
+  .hairline-frame::after { content: none; }
+}

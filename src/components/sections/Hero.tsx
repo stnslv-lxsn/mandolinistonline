@@ -8,8 +8,7 @@ export default function Hero() {
   // равна снимку. Пустое место справа оставлено намеренно.
   // На телефоне фото сверху целиком, в пропорциях кадра: при фиксированной высоте
   // низ снимка обрезался и выглядел перекрытым блоком текста. Текст в рамке под фото,
-  // рамка вдвое тоньше, 0,5 px. Она нарисована тенью внутрь: border тоньше 1 px
-  // Chrome округляет до 1 px, а тень рисует как есть.
+  // рамка вдвое тоньше, 0,5 px: класс .hairline-frame в globals.css, там же почему так.
   // Обрезка содержимого карточки (overflow-hidden) — только с md, где у карточки
   // фиксированная высота. На телефоне она подрезала рамку: когда край блока приходится
   // на полпикселя экрана (Android с плотностью 2,625 или 2,75, увеличенная страница),
@@ -35,7 +34,7 @@ export default function Hero() {
         </div>
 
         {/* Текст в рамке */}
-        <div className="flex flex-col justify-center gap-6 border-forest px-6 py-10 shadow-[inset_0_0_0_0.5px_var(--color-forest)] md:border md:border-l-0 md:py-0 md:shadow-none md:pl-20 md:pr-12">
+        <div className="flex flex-col justify-center gap-6 hairline-frame border-forest px-6 py-10 md:border md:border-l-0 md:py-0 md:pl-20 md:pr-12">
           <p className="font-serif italic text-sm md:text-xl text-muted">
             {formatTypography(personRole)}
           </p>
