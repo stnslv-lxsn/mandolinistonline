@@ -10,6 +10,10 @@ export default function Hero() {
   // низ снимка обрезался и выглядел перекрытым блоком текста. Текст в рамке под фото,
   // рамка вдвое тоньше, 0,5 px. Она нарисована тенью внутрь: border тоньше 1 px
   // Chrome округляет до 1 px, а тень рисует как есть.
+  // Обрезка содержимого карточки (overflow-hidden) — только с md, где у карточки
+  // фиксированная высота. На телефоне она подрезала рамку: когда край блока приходится
+  // на полпикселя экрана (Android с плотностью 2,625 или 2,75, увеличенная страница),
+  // правая и нижняя линии выходили бледнее левой.
   //
   // Без анимаций появления, как у Егора.
   //
@@ -17,7 +21,7 @@ export default function Hero() {
   // ширина: иначе на планшете (768–1024 px) карточка вылезала бы за край экрана
   return (
     <section className="relative flex min-h-svh w-full px-4 pt-20 pb-12 md:items-center md:justify-center md:px-12 md:py-28">
-      <div className="relative grid w-full grid-cols-1 overflow-hidden bg-paper md:aspect-[1539/1109] md:h-[min(calc(100svh-14rem),calc((100vw-6rem)*0.7206),793px)] md:w-auto md:max-w-[1100px] md:grid-cols-[45%_55%]">
+      <div className="relative grid w-full grid-cols-1 bg-paper md:aspect-[1539/1109] md:h-[min(calc(100svh-14rem),calc((100vw-6rem)*0.7206),793px)] md:w-auto md:max-w-[1100px] md:grid-cols-[45%_55%] md:overflow-hidden">
 
         {/* Портрет — файл public/portrait.webp из версии Егора без изменений (1331x2000) */}
         <div className="relative aspect-[1331/2000] md:aspect-auto md:h-full">
