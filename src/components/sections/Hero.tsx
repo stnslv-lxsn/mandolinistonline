@@ -1,3 +1,4 @@
+import { personName, personRole, positioning } from '@/lib/site';
 import { formatTypography } from '@/lib/typography';
 
 export default function Hero() {
@@ -32,13 +33,13 @@ export default function Hero() {
         {/* Текст в рамке */}
         <div className="flex flex-col justify-center gap-6 border-forest px-6 py-10 shadow-[inset_0_0_0_0.5px_var(--color-forest)] md:border md:border-l-0 md:py-0 md:shadow-none md:pl-20 md:pr-12">
           <p className="font-serif italic text-sm md:text-xl text-muted">
-            {formatTypography('Бизнес-консультант, исследователь')}
+            {formatTypography(personRole)}
           </p>
           <h1 className="font-serif text-[2rem] md:text-[2.75rem] lg:text-[3.25rem] leading-[1.05] md:leading-[0.95] tracking-tight text-ink">
-            {formatTypography('Юлия Радионова')}
+            {formatTypography(personName)}
           </h1>
           <p className="font-sans text-[15px] md:text-[17px] text-muted leading-relaxed text-balance">
-            {formatTypography('Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.')}
+            {formatTypography(positioning)}
           </p>
           <a
             href="#contact"

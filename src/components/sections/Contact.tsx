@@ -1,15 +1,11 @@
 import EditorialSection from '@/components/EditorialSection';
-import { contactEmail as email } from '@/lib/site';
+import { contactEmail as email, socials } from '@/lib/site';
 import { formatTypography } from '@/lib/typography';
 
 const [emailName, emailDomain] = email.split('@');
 
 // Ссылки контактов: акцентный синий; поведение при наведении — .link в globals.css
 const contactLink = 'link text-forest';
-
-const socials = [
-  { label: 'ВКонтакте', href: 'https://vk.ru/yulsun_vk' },
-];
 
 export default function Contact() {
   return (

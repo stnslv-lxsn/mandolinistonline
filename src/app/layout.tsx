@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant, Montserrat } from "next/font/google";
-import { siteUrl } from "@/lib/site";
+import { personName, positioning, siteUrl } from "@/lib/site";
 import { formatTypography } from "@/lib/typography";
 import "./globals.css";
 
@@ -16,12 +16,12 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-const title = formatTypography("Юлия Радионова | Бизнес-консультант");
-const siteName = formatTypography("Юлия Радионова");
+const title = formatTypography(`${personName} | Бизнес-консультант`);
+const siteName = formatTypography(personName);
 
 // Описание уходит и в превью ссылок в мессенджерах и соцсетях, поэтому тоже через типограф.
 // Картинку превью Next берёт из opengraph-image.jpg рядом с этим файлом
-const description = formatTypography("Работаю с собственниками и руководителями в ситуациях, где нет очевидно правильного решения и цена ошибки высока.");
+const description = formatTypography(positioning);
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

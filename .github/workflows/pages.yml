@@ -18,7 +18,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Полная история: по ней sitemap.ts ставит страницам даты изменения.
+      # При неглубоком клоне дат в sitemap не будет
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
