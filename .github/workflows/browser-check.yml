@@ -1,0 +1,36 @@
+name: Browser check
+
+# Проверка живого сайта в Chromium, WebKit (движок Safari) и Firefox.
+# Сам сайт не собирает и не деплоит, только открывает и измеряет
+on:
+  push:
+    branches: [claude/design-motion-colors-vmdl94]
+    paths:
+      - .github/browser-check/**
+      - .github/workflows/browser-check.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: .github/browser-check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm init -y > /dev/null && npm install --no-audit --no-fund playwright@latest
+
+      - run: npx playwright install --with-deps chromium firefox webkit
+
+      - run: node check.mjs
+        env:
+          BASE_URL: https://radionova.pro
