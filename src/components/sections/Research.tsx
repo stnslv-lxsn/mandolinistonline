@@ -55,18 +55,20 @@ export default function Research() {
             >
               <span className="link-part">Смотреть выпуски</span>
               {/* Стрелка нарисована, а не набрана символом «→»: у глифа тонкая линия и длинный
-                  хвост. Толщина линии как у букв Montserrat Light, при наведении утолщается
-                  вместе с текстом (.link-part) */}
+                  хвост. Толщина линии как у букв Montserrat Light (.arrow-link в globals.css),
+                  при наведении утолщается вместе с текстом (.link-part). Рисунок начинается
+                  с x = 2: хвост на 2 единицы (около 2 px) короче исходного, viewBox и ширина
+                  урезаны на столько же, поэтому масштаб, головка и отступ от текста прежние */}
               <svg
                 aria-hidden="true"
-                viewBox="0 0 16 10"
+                viewBox="2 0 14 10"
                 fill="none"
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="arrow-link h-[0.6em] w-[0.95em] transition-transform duration-300 group-hover:translate-x-1"
+                className="arrow-link h-[0.6em] w-[0.83125em] transition-transform duration-300 group-hover:translate-x-1"
               >
-                <path d="M1 5h14M11 1l4 4-4 4" vectorEffect="non-scaling-stroke" />
+                <path d="M3 5h12M11 1l4 4-4 4" vectorEffect="non-scaling-stroke" />
               </svg>
             </Link>
           </div>
