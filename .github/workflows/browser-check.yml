@@ -36,6 +36,10 @@ jobs:
         env:
           BASE_URL: https://radionova.pro
 
+      - run: node frame-variants.mjs
+        env:
+          BASE_URL: https://radionova.pro
+
       # Скриншоты — в ту же ветку; [skip ci], чтобы коммит не запускал проверки заново
       - name: Commit screenshots
         run: |
