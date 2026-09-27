@@ -1,12 +1,16 @@
 // Проверка живого сайта в трёх движках: Chromium, WebKit (движок Safari) и Firefox.
-// Запускается из .github/workflows/browser-check.yml, результат — в логе.
+// Запускается из .github/workflows/browser-check.yml: итог — строки RESULT в логе,
+// скриншоты — в .github/browser-check/shots (workflow коммитит их в ветку).
 // Linux-сборка WebKit в Playwright — тот же движок разметки, что у Safari, но
 // рисует по-своему, поэтому сглаживание тонких линий на iPhone может отличаться.
+import { mkdirSync } from 'node:fs';
 import { chromium, firefox, webkit, devices } from 'playwright';
 
 const BASE = (process.env.BASE_URL || 'https://radionova.pro').replace(/\/$/, '');
 const bust = `?check=${Date.now()}`;
 const engines = { chromium, firefox, webkit };
+const SHOTS = new URL('./shots/', import.meta.url).pathname;
+mkdirSync(SHOTS, { recursive: true });
 
 const mobile = (width, height, scale) => ({ viewport: { width, height }, deviceScaleFactor: scale, isMobile: true, hasTouch: true });
 const desktop = (width, height, scale = 1) => ({ viewport: { width, height }, deviceScaleFactor: scale });
@@ -16,39 +20,31 @@ const pick = (name, fallback) => (devices[name] ? { ...devices[name] } : fallbac
 // Профиль устройства без привязки к движку: движок задаём сами
 const strip = (profile) => Object.fromEntries(Object.entries(profile).filter(([key]) => key !== 'defaultBrowserType'));
 
+// [движок, имя, профиль, файл скриншотов или null]
 const cases = [
-  ['webkit', 'iPhone 13 (390@3)', strip(pick('iPhone 13', mobile(390, 664, 3)))],
-  ['webkit', 'iPhone 15 Pro Max (430@3)', strip(pick('iPhone 15 Pro Max', mobile(430, 739, 3)))],
-  ['webkit', 'iPhone SE (375@2)', mobile(375, 667, 2)],
-  ['webkit', 'iPad Mini (768@2)', strip(pick('iPad Mini', mobile(768, 1024, 2)))],
-  ['webkit', 'Safari desktop 1440@2', desktop(1440, 900, 2)],
-  ['chromium', 'Pixel 7 (412@2.625)', strip(pick('Pixel 7', mobile(412, 839, 2.625)))],
-  ['chromium', 'Android 393@2.75', mobile(393, 851, 2.75)],
-  ['chromium', 'Chrome desktop 1440', desktop(1440, 900)],
-  ['firefox', 'Firefox 390@3', ffMobile(390, 844, 3)],
-  ['firefox', 'Firefox desktop 1440', desktop(1440, 900)],
+  ['webkit', 'iPhone 13 (390@3)', strip(pick('iPhone 13', mobile(390, 664, 3))), 'webkit-iphone13'],
+  ['webkit', 'iPhone 15 Pro Max (430@3)', strip(pick('iPhone 15 Pro Max', mobile(430, 739, 3))), 'webkit-iphone15promax'],
+  ['webkit', 'iPhone SE (375@2)', mobile(375, 667, 2), 'webkit-iphonese'],
+  ['webkit', 'iPad Mini (768@2)', strip(pick('iPad Mini', mobile(768, 1024, 2))), null],
+  ['webkit', 'Safari desktop 1440@2', desktop(1440, 900, 2), 'webkit-desktop'],
+  ['chromium', 'Pixel 7 (412@2.625)', strip(pick('Pixel 7', mobile(412, 839, 2.625))), 'chromium-pixel7'],
+  ['chromium', 'Android 393@2.75', mobile(393, 851, 2.75), null],
+  ['chromium', 'Chrome desktop 1440', desktop(1440, 900), null],
+  ['firefox', 'Firefox 390@3', ffMobile(390, 844, 3), 'firefox-390'],
+  ['firefox', 'Firefox desktop 1440', desktop(1440, 900), null],
 ];
 
-// Картинки в лог: base64 кусками, чтобы их можно было собрать обратно из лога.
-// Печатаются до результатов: результаты тогда читаются коротким хвостом лога
-const IMAGES = new Set(['iPhone 13 (390@3)', 'Firefox 390@3']);
-const images = [];
-function printImage(name, buf) {
-  const b64 = buf.toString('base64');
-  const size = 3000;
-  const total = Math.ceil(b64.length / size);
-  for (let i = 0; i < total; i++) console.log(`IMG|${name}|${i + 1}/${total}|${b64.slice(i * size, (i + 1) * size)}`);
-}
+const wait = (page, ms) => page.waitForTimeout(ms);
+const instantScroll = (page, top) => page.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), top);
 
 async function frameProfile(page) {
   // Толщина рамки текстового блока первого экрана с каждой стороны, в физических пикселях
   await page.evaluate(() => {
-    document.documentElement.style.scrollBehavior = 'auto';
     const box = document.querySelector('section h1').parentElement;
     box.id = 'hero-text';
     window.scrollTo({ top: box.getBoundingClientRect().top + window.scrollY - 40, behavior: 'instant' });
   });
-  await page.waitForTimeout(300);
+  await wait(page, 300);
   const rect = await page.evaluate(() => {
     const r = document.getElementById('hero-text').getBoundingClientRect();
     return { l: r.left, r: r.right, t: r.top, b: r.bottom, d: devicePixelRatio, h: innerHeight };
@@ -63,7 +59,8 @@ async function frameProfile(page) {
     const g = c.getContext('2d', { willReadFrequently: true });
     g.drawImage(img, 0, 0);
     const data = g.getImageData(0, 0, c.width, c.height).data;
-    const d = rect.d;
+    // Скриншот может быть не в физических пикселях (так бывает в Firefox): масштаб берём по факту
+    const d = img.width / innerWidth;
     const midX = Math.round((rect.l + rect.r) / 2 * d);
     const midY = Math.round((rect.t + Math.min(rect.b, rect.h)) / 2 * d);
     const red = (x, y) => data[(y * c.width + x) * 4];
@@ -74,6 +71,8 @@ async function frameProfile(page) {
     };
     const around = (c0, f) => [...Array(9)].map((_, i) => f(Math.floor(c0) - 4 + i));
     return {
+      shotScale: +d.toFixed(3),
+      dpr: rect.d,
       left: scan(around(rect.l * d, (x) => [x, midY])),
       right: scan(around(rect.r * d, (x) => [x, midY])),
       bottom: rect.b < rect.h ? scan(around(rect.b * d, (y) => [midX, y])) : 'offscreen',
@@ -81,20 +80,89 @@ async function frameProfile(page) {
   }, { b64: shot.toString('base64'), rect });
 }
 
-async function runCase([engine, name, options]) {
+// Сведения о блоке .reveal: где стоит, видим ли и на каком шаге его анимация
+const describeReveal = () => {
+  window.__revealInfo = (el) => {
+    const r = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    const anim = el.getAnimations()[0];
+    const timing = anim?.effect?.getComputedTiming?.();
+    return {
+      section: el.closest('section')?.id || (el.closest('footer') ? 'footer' : ''),
+      tag: el.tagName.toLowerCase(),
+      text: (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 40),
+      top: Math.round(r.top), bottom: Math.round(r.bottom), vh: innerHeight,
+      y: Math.round(scrollY), maxY: document.documentElement.scrollHeight - innerHeight,
+      opacity: +Number(cs.opacity).toFixed(2),
+      progress: timing?.progress == null ? null : +timing.progress.toFixed(2),
+      animations: el.getAnimations().length,
+      timeline: cs.animationTimeline, range: cs.animationRange,
+    };
+  };
+};
+
+async function revealCheck(page, prefix) {
+  await page.evaluate(describeReveal);
+  const count = await page.evaluate(() => document.querySelectorAll('.reveal').length);
+
+  // Проход 1: каждый блок программно в центр экрана, как при переходе по якорю
+  const programmatic = [];
+  for (let i = 0; i < count; i++) {
+    await page.evaluate((n) => document.querySelectorAll('.reveal')[n].scrollIntoView({ block: 'center', behavior: 'instant' }), i);
+    await wait(page, 150);
+    const info = await page.evaluate((n) => window.__revealInfo(document.querySelectorAll('.reveal')[n]), i);
+    if (info.opacity < 0.95) {
+      await wait(page, 1000);
+      info.opacityAfter1s = await page.evaluate((n) => +Number(getComputedStyle(document.querySelectorAll('.reveal')[n]).opacity).toFixed(2), i);
+      await page.evaluate(() => window.scrollBy({ top: 1, behavior: 'instant' }));
+      await wait(page, 200);
+      info.opacityAfterNudge = await page.evaluate((n) => +Number(getComputedStyle(document.querySelectorAll('.reveal')[n]).opacity).toFixed(2), i);
+      if (prefix && programmatic.length < 3) await page.screenshot({ path: `${SHOTS}${prefix}-hidden-${programmatic.length + 1}.jpg`, type: 'jpeg', quality: 60, scale: 'css' });
+      programmatic.push(info);
+    }
+  }
+
+  // Проход 2: сверху вниз мелкими шагами, как при прокрутке пальцем; блоки, целиком
+  // оказавшиеся в окне, должны быть видны
+  await instantScroll(page, 0);
+  await wait(page, 300);
+  const natural = new Map();
+  for (let step = 0; step < 400; step++) {
+    const done = await page.evaluate(() => {
+      window.scrollBy({ top: Math.round(innerHeight / 6), behavior: 'instant' });
+      return window.scrollY + innerHeight >= document.documentElement.scrollHeight - 2;
+    });
+    await wait(page, 80);
+    const bad = await page.evaluate(() => [...document.querySelectorAll('.reveal')]
+      .map((el, n) => [n, el.getBoundingClientRect()])
+      .filter(([, r]) => r.top >= 0 && r.bottom <= innerHeight && r.height > 0)
+      .map(([n]) => [n, window.__revealInfo(document.querySelectorAll('.reveal')[n])])
+      .filter(([, info]) => info.opacity < 0.95));
+    // Блок только что въехал: даём анимации догнать прокрутку, считаем со следующего шага
+    for (const [n, info] of bad) natural.set(n, (natural.get(n) || []).concat(info));
+    if (done) break;
+  }
+  const stuck = [...natural.values()].filter((list) => list.length >= 3).map((list) => list[list.length - 1]);
+  return { count, programmatic, naturalStuck: stuck };
+}
+
+async function runCase([engine, name, options, prefix]) {
   const browser = await engines[engine].launch();
   const context = await browser.newContext(options);
   const page = await context.newPage();
   const problems = [];
-  page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
-  page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) problems.push(`console.${m.type()}: ${m.text()}`); });
-  page.on('requestfailed', (r) => problems.push(`requestfailed: ${r.url()} ${r.failure()?.errorText}`));
-  page.on('response', (r) => { if (r.status() >= 400) problems.push(`http ${r.status()}: ${r.url()}`); });
+  let phase = 'load';
+  page.on('pageerror', (e) => problems.push(`[${phase}] pageerror: ${e.message}`));
+  page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) problems.push(`[${phase}] console.${m.type()}: ${m.text()}`); });
+  page.on('requestfailed', (r) => problems.push(`[${phase}] requestfailed: ${r.url()} ${r.failure()?.errorText}`));
+  page.on('response', (r) => { if (r.status() >= 400) problems.push(`[${phase}] http ${r.status()}: ${r.url()}`); });
 
   const result = { engine, name, version: browser.version() };
   try {
     await page.goto(`${BASE}/${bust}`, { waitUntil: 'networkidle', timeout: 60000 });
-    await page.waitForTimeout(800);
+    await wait(page, 800);
+    phase = 'home';
+    await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
 
     Object.assign(result, await page.evaluate(() => {
       const img = document.querySelector('section img');
@@ -116,48 +184,36 @@ async function runCase([engine, name, options]) {
         overflowX: document.documentElement.scrollWidth - innerWidth,
         photoRatioShown: +(photo.height / (photo.width * img.naturalHeight / img.naturalWidth)).toFixed(3),
         photoLoaded: img.complete && img.naturalWidth > 0,
-        textBox: [photo.left, photo.bottom, box.getBoundingClientRect().width].map(Math.round),
-        frame: { shadow: cs.boxShadow, border: [cs.borderTopWidth, cs.borderRightWidth, cs.borderBottomWidth, cs.borderLeftWidth].join(' ') },
+        frameCss: { shadow: cs.boxShadow.split(', rgb').pop(), border: [cs.borderTopWidth, cs.borderRightWidth, cs.borderBottomWidth, cs.borderLeftWidth].join(' ') },
         fonts: [...document.fonts].filter((f) => f.status === 'loaded').length,
-        h1Font: getComputedStyle(document.querySelector('h1')).fontFamily.split(',')[0],
         jsonLd: ld,
       };
     }));
 
     result.frameInk = await frameProfile(page);
-
-    if (IMAGES.has(name)) {
-      const hero = await page.$('section');
-      images.push([`${name} hero`, await hero.screenshot({ type: 'jpeg', quality: 45, scale: 'css' })]);
+    if (prefix) {
+      await instantScroll(page, 0);
+      await wait(page, 300);
+      await page.screenshot({ path: `${SHOTS}${prefix}-top.jpg`, type: 'jpeg', quality: 60, scale: 'css' });
     }
 
-    // Разделы: после прокрутки к каждому блоку .reveal он должен быть полностью виден
-    result.revealHidden = await page.evaluate(async () => {
-      const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-      const hidden = [];
-      for (const el of document.querySelectorAll('.reveal')) {
-        el.scrollIntoView({ block: 'center', behavior: 'instant' });
-        await wait(120);
-        const o = Number(getComputedStyle(el).opacity);
-        if (o < 0.95) hidden.push(`${el.tagName.toLowerCase()}:${o.toFixed(2)}`);
-      }
-      return hidden;
-    });
+    result.reveal = await revealCheck(page, prefix);
 
     // Мобильное меню открывается и закрывается (Escape)
     const burger = await page.$('button[aria-label="Открыть меню"]');
     if (burger && await burger.isVisible()) {
-      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+      await instantScroll(page, 0);
       await burger.click();
-      await page.waitForTimeout(700);
+      await wait(page, 700);
       const opened = await page.evaluate(() => document.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded'));
       await page.keyboard.press('Escape');
-      await page.waitForTimeout(700);
+      await wait(page, 700);
       const closed = await page.evaluate(() => document.querySelector('button[aria-expanded]')?.getAttribute('aria-expanded'));
       result.mobileMenu = `${opened}->${closed}`;
     }
 
     // Имя в шапке ведёт с /podcast на главную
+    phase = 'podcast';
     try {
       await page.goto(`${BASE}/podcast${bust}`, { waitUntil: 'networkidle', timeout: 60000 });
       await page.click('header a[href="/"]', { timeout: 10000 });
@@ -167,6 +223,7 @@ async function runCase([engine, name, options]) {
       result.logoFromPodcast = `failed: ${e.message.split('\n')[0]}`;
     }
 
+    phase = 'files';
     for (const path of ['/podcast', '/sitemap.xml', '/robots.txt', '/yandex_2e12dd98a82a79a5.html']) {
       const r = await page.goto(`${BASE}${path}${bust}`, { waitUntil: 'load', timeout: 60000 });
       result[path] = r?.status();
@@ -179,7 +236,4 @@ async function runCase([engine, name, options]) {
   return result;
 }
 
-const results = [];
-for (const c of cases) results.push(await runCase(c));
-for (const [name, buf] of images) printImage(name, buf);
-for (const r of results) console.log(`RESULT|${JSON.stringify(r)}`);
+for (const c of cases) console.log(`RESULT|${JSON.stringify(await runCase(c))}`);
