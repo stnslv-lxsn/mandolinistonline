@@ -1,0 +1,34 @@
+name: Load test radionova.pro
+
+on:
+  push:
+    branches: [loadtest]
+  workflow_dispatch:
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [1, 2, 3, 4]   # 4 runners x 50 VUs = 200 concurrent users
+    steps:
+      - uses: actions/checkout@v4
+      - uses: grafana/setup-k6-action@v1
+      - name: Wait for next full minute (synchronized start)
+        run: sleep $(( 60 - $(date +%s) % 60 ))
+      - name: Run k6
+        run: k6 run -e VUS=50 --summary-export=summary-${{ matrix.node }}.json load.js 2>&1 | tee out.txt
+        continue-on-error: true
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Runner ${{ matrix.node }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          sed -n '/THRESHOLDS/,$p' out.txt | grep -v '^running' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: summary-${{ matrix.node }}
+          path: summary-${{ matrix.node }}.json
